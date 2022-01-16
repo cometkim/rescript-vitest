@@ -1,0 +1,39 @@
+{
+  "name": "rescript-vitest",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Hyeseong Kim <hey@hyeseong.kim>",
+    "email": "hey@hyeseong.kim"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cometkim/rescript-vitest.git"
+  },
+  "keywords": [
+    "testing",
+    "rescript",
+    "vite",
+    "vitest"
+  ],
+  "scripts": {
+    "build": "rescript build",
+    "test": "vitest"
+  },
+  "files": [
+    "bsconfig.json",
+    "src/Vitest.res"
+  ],
+  "peerDependencies": {
+    "vite": "^2.0.0"
+  },
+  "dependencies": {
+    "@ryyppy/rescript-promise": "^2.1.0",
+    "rescript": "^9.1.4",
+    "vitest": "^0.1.13"
+  },
+  "devDependencies": {
+    "@jihchi/vite-plugin-rescript": "^2.0.1",
+    "vite": "^2.7.12"
+  }
+}

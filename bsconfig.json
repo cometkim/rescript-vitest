@@ -1,0 +1,26 @@
+{
+  "name": "rescript-vitest",
+  "namespace": false,
+  "refmt": 3,
+  "suffix": ".js",
+  "sources": [
+    {
+      "dir": "src"
+    },
+    {
+      "dir": "tests",
+      "dev": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "bs-dependencies": [
+    "@ryyppy/rescript-promise"
+  ],
+  "bs-dev-dependencies": [
+  ]
+}
