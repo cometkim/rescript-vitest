@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jihchi/vite-plugin-rescript@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@jihchi/vite-plugin-rescript@npm:2.0.1"
+"@jihchi/vite-plugin-rescript@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@jihchi/vite-plugin-rescript@npm:2.0.2"
   dependencies:
     chalk: ^4.1.2
     execa: ^5.1.1
@@ -22,7 +22,7 @@ __metadata:
   peerDependencies:
     rescript: ^9.1.3
     vite: ^2.4.4
-  checksum: 8f6868807383a2aa7b93158007adc411bff12f25e955852de9f7b22584b2d363b075000e8af4c8b2218860b437cdfb274e80a93ac353d455a249b84d9614b141
+  checksum: 108758661992290b5691eb4b6c6c50a3bc218d3a8048417703dc9c2ac7cabdfc5dc57f309c866e8b2193d30a9b55b0359c07e056cf884cd361445b940c4e798d
   languageName: node
   linkType: hard
 
@@ -1135,7 +1135,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "rescript-vitest@workspace:."
   dependencies:
-    "@jihchi/vite-plugin-rescript": ^2.0.1
+    "@jihchi/vite-plugin-rescript": ^2.0.2
     "@ryyppy/rescript-promise": ^2.1.0
     rescript: ^9.1.4
     vite: ^2.7.12

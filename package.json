@@ -33,7 +33,7 @@
     "vitest": "^0.1.13"
   },
   "devDependencies": {
-    "@jihchi/vite-plugin-rescript": "^2.0.1",
+    "@jihchi/vite-plugin-rescript": "^2.0.2",
     "vite": "^2.7.12"
   }
 }
