@@ -1,9 +1,9 @@
 {
   "name": "rescript-vitest",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "author": {
-    "name": "Hyeseong Kim <hey@hyeseong.kim>",
+    "name": "Hyeseong Kim",
     "email": "hey@hyeseong.kim"
   },
   "repository": {
