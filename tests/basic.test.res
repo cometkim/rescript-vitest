@@ -4,7 +4,7 @@ open Vitest
 test("Math.sqrt()", t => {
   open Expect
 
-  t->hasAssertions(3)
+  t->assertions(3)
 
   expect(Math.sqrt(4.0))->toBe(2.0)
   expect(Math.sqrt(144.0))->toBe(12.0)
