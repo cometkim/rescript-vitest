@@ -22,7 +22,7 @@ open Vitest
 describe("Hello, Vitest", () => {
   test("This is a test case", t => {
     // t is `expect` object for suite-wide assertions
-    t->hasAssertions(3)
+    t->assertions(3)
 
     // Test using the `Expect` module
     expect(1 + 2)->Expect.toBe(3)
