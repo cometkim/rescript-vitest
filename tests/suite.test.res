@@ -1,7 +1,7 @@
 open Js
 open Vitest
 
-Concurrent.describe("suite name", () => {
+describe("suite name", () => {
   it("foo", _ => {
     Assert.equal(Math.sqrt(4.0), 2.0)
   })
@@ -15,6 +15,8 @@ Concurrent.describe("suite name", () => {
   it("snapshot", _ => {
     expect({"foo": "bar"})->toMatchSnapshot
   })
+
+  ()
 })
 
 Todo.test("vi.fn()")
