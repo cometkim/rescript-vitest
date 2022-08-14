@@ -118,14 +118,16 @@ module Concurrent = {
   type concurrent_test
   type concurrent_it
 
-  @module("vitest") @val
-  external concurrent_describe: concurrent_describe = "describe"
+  %%private(
+    @module("vitest") @val
+    external concurrent_describe: concurrent_describe = "describe"
 
-  @module("vitest") @val
-  external concurrent_test: concurrent_test = "test"
+    @module("vitest") @val
+    external concurrent_test: concurrent_test = "test"
 
-  @module("vitest") @val
-  external concurrent_it: concurrent_it = "it"
+    @module("vitest") @val
+    external concurrent_it: concurrent_it = "it"
+  )
 
   @send
   external describe: (
@@ -163,14 +165,16 @@ module Only = {
   type only_test
   type only_it
 
-  @module("vitest") @val
-  external only_describe: only_describe = "describe"
+  %%private(
+    @module("vitest") @val
+    external only_describe: only_describe = "describe"
 
-  @module("vitest") @val
-  external only_test: only_test = "test"
+    @module("vitest") @val
+    external only_test: only_test = "test"
 
-  @module("vitest") @val
-  external only_it: only_it = "it"
+    @module("vitest") @val
+    external only_it: only_it = "it"
+  )
 
   @send
   external describe: (
@@ -221,14 +225,16 @@ module Only = {
     type concurrent_test
     type concurrent_it
 
-    @get
-    external concurrent_describe: only_describe => concurrent_describe = "only"
+    %%private(
+      @get
+      external concurrent_describe: only_describe => concurrent_describe = "only"
 
-    @get
-    external concurrent_test: only_test => concurrent_test = "only"
+      @get
+      external concurrent_test: only_test => concurrent_test = "only"
 
-    @get
-    external concurrent_it: only_it => concurrent_it = "only"
+      @get
+      external concurrent_it: only_it => concurrent_it = "only"
+    )
 
     @send
     external describe: (
@@ -267,14 +273,16 @@ module Skip = {
   type skip_test
   type skip_it
 
-  @module("vitest") @val
-  external skip_describe: skip_describe = "describe"
+  %%private(
+    @module("vitest") @val
+    external skip_describe: skip_describe = "describe"
 
-  @module("vitest") @val
-  external skip_test: skip_test = "test"
+    @module("vitest") @val
+    external skip_test: skip_test = "test"
 
-  @module("vitest") @val
-  external skip_it: skip_it = "it"
+    @module("vitest") @val
+    external skip_it: skip_it = "it"
+  )
 
   @send
   external describe: (
@@ -325,14 +333,16 @@ module Skip = {
     type concurrent_test
     type concurrent_it
 
-    @get
-    external concurrent_describe: skip_describe => concurrent_describe = "skip"
+    %%private(
+      @get
+      external concurrent_describe: skip_describe => concurrent_describe = "skip"
 
-    @get
-    external concurrent_test: skip_test => concurrent_test = "skip"
+      @get
+      external concurrent_test: skip_test => concurrent_test = "skip"
 
-    @get
-    external concurrent_it: skip_it => concurrent_it = "skip"
+      @get
+      external concurrent_it: skip_it => concurrent_it = "skip"
+    )
 
     @send
     external describe: (
@@ -371,14 +381,16 @@ module Todo = {
   type todo_test
   type todo_it
 
-  @module("vitest") @val
-  external todo_describe: todo_describe = "describe"
+  %%private(
+    @module("vitest") @val
+    external todo_describe: todo_describe = "describe"
 
-  @module("vitest") @val
-  external todo_test: todo_test = "test"
+    @module("vitest") @val
+    external todo_test: todo_test = "test"
 
-  @module("vitest") @val
-  external todo_it: todo_it = "it"
+    @module("vitest") @val
+    external todo_it: todo_it = "it"
+  )
 
   @send external describe: (todo_describe, string) => unit = "todo"
   @inline let describe = name => todo_describe->describe(name)
