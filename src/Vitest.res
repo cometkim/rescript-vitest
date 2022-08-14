@@ -5,9 +5,9 @@ type suite
 @module("vitest") @val
 external suite: suite = "expect"
 
-@send external hasAssertions: (suite, int) => unit = "hasAssertions"
+@send external assertions: (suite, int) => unit = "assertions"
 
-@send external hasAnyAssertions: suite => unit = "hasAssertions"
+@send external hasAssertions: suite => unit = "hasAssertions"
 
 type expected<'a>
 
@@ -427,6 +427,7 @@ external afterAllPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>
 @inline
 let afterAllPromise = (~timeout=?, callback) =>
   afterAllPromise(callback, timeout->Js.Undefined.fromOption)
+
 module Expect = {
   @send external not: expected<'a> => expected<'a> = "not"
 
