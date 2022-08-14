@@ -557,7 +557,7 @@ module Expect = {
 module Assert = {
   type t
 
-  @module("vitest") @val external assert_obj: t = "assert"
+  %%private(@module("vitest") @val external assert_obj: t = "assert")
 
   @send external equal: (t, 'a, 'a, Js.undefined<string>) => unit = "equal"
 
@@ -574,7 +574,7 @@ module Assert = {
 module Vi = {
   type t
 
-  @module("vitest") @val external vi_obj: t = "vi"
+  %%private(@module("vitest") @val external vi_obj: t = "vi")
 
   @send external advanceTimersByTime: (t, int) => t = "advanceTimersByTime"
   @inline let advanceTimersByTime = ms => vi_obj->advanceTimersByTime(ms)
