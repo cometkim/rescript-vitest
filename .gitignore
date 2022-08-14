@@ -2,8 +2,8 @@
 .merlin
 *.log
 
-*.js
-!vite.config.js
+*.mjs
+!vite.config.mjs
 
 /lib/
 node_modules/

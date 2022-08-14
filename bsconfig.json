@@ -2,7 +2,7 @@
   "name": "rescript-vitest",
   "namespace": false,
   "refmt": 3,
-  "suffix": ".js",
+  "suffix": ".mjs",
   "sources": [
     {
       "dir": "src"

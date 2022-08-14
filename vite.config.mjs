@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
-import createReScriptPlugin from '@jihchi/vite-plugin-rescript';
+import rescript from '@jihchi/vite-plugin-rescript';
 
 export default defineConfig({
   test: {
   },
   plugins: [
-    createReScriptPlugin(),
+    rescript(),
   ],
 })
