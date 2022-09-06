@@ -16,429 +16,227 @@ external unwrap: expected<'a> => 'a = "%identity"
 
 external wrap: 'a => expected<'a> = "%identity"
 
-module type Runner = {
-  let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let test: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let testPromise: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
-  let it: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let itPromise: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
-}
+@module("vitest") @val
+external describe: (string, @uncurry (unit => unit)) => unit = "describe"
 
-module type ConcurrentRunner = {
-  let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let test: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
-  let it: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
-}
+@module("vitest") @val
+external test: (string, @uncurry (unit => unit)) => unit = "test"
 
-module MakeRunner = (Runner: Runner) => {
-  @inline
-  let describe = (name, ~timeout=?, callback) =>
-    Runner.describe(
-      name,
-      () => {
-        callback()
-        Js.undefined
-      },
-      timeout->Js.Undefined.fromOption,
-    )
+@module("vitest") @val
+external testWithTimeout: (string, @uncurry (unit => unit), int) => unit = "test"
 
-  @inline
-  let test = (name, ~timeout=?, callback) =>
-    Runner.test(
-      name,
-      () => {
-        callback(suite)
-        Js.undefined
-      },
-      timeout->Js.Undefined.fromOption,
-    )
+@module("vitest") @val
+external testPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "test"
 
-  @inline
-  let testPromise = (name, ~timeout=?, callback) =>
-    Runner.testPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+@module("vitest") @val
+external testPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit = "test"
 
-  @inline
-  let it = (name, ~timeout=?, callback) =>
-    Runner.it(
-      name,
-      () => {
-        callback(suite)
-        Js.undefined
-      },
-      timeout->Js.Undefined.fromOption,
-    )
+@module("vitest") @val
+external it: (string, @uncurry (unit => unit)) => unit = "it"
 
-  @inline
-  let itPromise = (name, ~timeout=?, callback) =>
-    Runner.itPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
-}
+@module("vitest") @val
+external itWithTimeout: (string, @uncurry (unit => unit), int) => unit = "it"
 
-module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
-  @inline
-  let describe = (name, ~timeout=?, callback) =>
-    Runner.describe(
-      name,
-      () => {
-        callback()
-        Js.undefined
-      },
-      timeout->Js.Undefined.fromOption,
-    )
+@module("vitest") @val
+external itPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "it"
 
-  @inline
-  let test = (name, ~timeout=?, callback) =>
-    Runner.test(name, () => callback(suite), timeout->Js.Undefined.fromOption)
-
-  @inline
-  let it = (name, ~timeout=?, callback) =>
-    Runner.it(name, () => callback(suite), timeout->Js.Undefined.fromOption)
-}
-
-include MakeRunner({
-  @module("vitest") @val
-  external describe: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit =
-    "describe"
-
-  @module("vitest") @val
-  external test: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "test"
-
-  @module("vitest") @val
-  external testPromise: (string, @uncurry (unit => Promise.t<unit>), Js.undefined<int>) => unit =
-    "test"
-
-  @module("vitest") @val
-  external it: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "it"
-
-  @module("vitest") @val
-  external itPromise: (string, @uncurry (unit => Promise.t<unit>), Js.undefined<int>) => unit = "it"
-})
+@module("vitest") @val
+external itPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit = "it"
 
 module Concurrent = {
-  type concurrent_describe
-  type concurrent_test
-  type concurrent_it
+  @module("vitest") @scope("describe") @val
+  external describe: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-  %%private(
-    @module("vitest") @val
-    external concurrent_describe: concurrent_describe = "describe"
+  @module("vitest") @scope("test") @val
+  external test: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-    @module("vitest") @val
-    external concurrent_test: concurrent_test = "test"
+  @module("vitest") @scope("test") @val
+  external testWithTimeout: (string, @uncurry (unit => unit), int) => unit = "concurrent"
 
-    @module("vitest") @val
-    external concurrent_it: concurrent_it = "it"
-  )
+  @module("vitest") @scope("test") @val
+  external testPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "concurrent"
 
-  @send
-  external describe: (
-    concurrent_describe,
-    string,
-    @uncurry (unit => Js.undefined<unit>),
-    Js.undefined<int>,
-  ) => unit = "concurrent"
+  @module("vitest") @scope("test") @val
+  external testPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
+    "concurrent"
 
-  @send
-  external test: (
-    concurrent_test,
-    string,
-    @uncurry (unit => Promise.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "concurrent"
+  @module("vitest") @scope("it") @val
+  external it: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-  @send
-  external it: (
-    concurrent_it,
-    string,
-    @uncurry (unit => Promise.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "concurrent"
+  @module("vitest") @scope("it") @val
+  external itWithTimeout: (string, @uncurry (unit => unit), int) => unit = "concurrent"
 
-  include MakeConcurrentRunner({
-    let describe = concurrent_describe->describe
-    let test = concurrent_test->test
-    let it = concurrent_it->it
-  })
+  @module("vitest") @scope("it") @val
+  external itPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "concurrent"
+
+  @module("vitest") @scope("it") @val
+  external itPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
+    "concurrent"
 }
 
 module Only = {
-  type only_describe
-  type only_test
-  type only_it
+  @module("vitest") @scope("describe") @val
+  external describe: (string, @uncurry (unit => unit)) => unit = "only"
 
-  %%private(
-    @module("vitest") @val
-    external only_describe: only_describe = "describe"
+  @module("vitest") @scope("test") @val
+  external test: (string, @uncurry (unit => unit)) => unit = "only"
 
-    @module("vitest") @val
-    external only_test: only_test = "test"
+  @module("vitest") @scope("test") @val
+  external testWithTimeout: (string, @uncurry (unit => unit), int) => unit = "only"
 
-    @module("vitest") @val
-    external only_it: only_it = "it"
-  )
+  @module("vitest") @scope("test") @val
+  external testPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "only"
 
-  @send
-  external describe: (
-    only_describe,
-    string,
-    @uncurry (unit => Js.undefined<unit>),
-    Js.undefined<int>,
-  ) => unit = "only"
-
-  @send
-  external test: (
-    only_test,
-    string,
-    @uncurry (unit => Js.undefined<unit>),
-    Js.undefined<int>,
-  ) => unit = "only"
-
-  @send
-  external testPromise: (
-    only_test,
-    string,
-    @uncurry (unit => Promise.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "only"
-
-  @send
-  external it: (only_it, string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit =
+  @module("vitest") @scope("test") @val
+  external testPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
     "only"
 
-  @send
-  external itPromise: (
-    only_it,
-    string,
-    @uncurry (unit => Promise.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "only"
+  @module("vitest") @scope("it") @val
+  external it: (string, @uncurry (unit => unit)) => unit = "only"
 
-  include MakeRunner({
-    let describe = only_describe->describe
-    let test = only_test->test
-    let testPromise = only_test->testPromise
-    let it = only_it->it
-    let itPromise = only_it->itPromise
-  })
+  @module("vitest") @scope("it") @val
+  external itWithTimeout: (string, @uncurry (unit => unit), int) => unit = "only"
+
+  @module("vitest") @scope("it") @val
+  external itPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "only"
+
+  @module("vitest") @scope("it") @val
+  external itPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit = "only"
 
   module Concurrent = {
-    type concurrent_describe
-    type concurrent_test
-    type concurrent_it
+    @module("vitest") @scope("describe.only") @val
+    external describe: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-    %%private(
-      @get
-      external concurrent_describe: only_describe => concurrent_describe = "only"
+    @module("vitest") @scope("test.only") @val
+    external test: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-      @get
-      external concurrent_test: only_test => concurrent_test = "only"
+    @module("vitest") @scope("test.only") @val
+    external testWithTimeout: (string, @uncurry (unit => unit), int) => unit = "concurrent"
 
-      @get
-      external concurrent_it: only_it => concurrent_it = "only"
-    )
+    @module("vitest") @scope("test.only") @val
+    external testPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "concurrent"
 
-    @send
-    external describe: (
-      concurrent_describe,
-      string,
-      @uncurry (unit => Js.undefined<unit>),
-      Js.undefined<int>,
-    ) => unit = "concurrent"
+    @module("vitest") @scope("test.only") @val
+    external testPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
+      "concurrent"
 
-    @send
-    external test: (
-      concurrent_test,
-      string,
-      @uncurry (unit => Promise.t<unit>),
-      Js.undefined<int>,
-    ) => unit = "concurrent"
+    @module("vitest") @scope("it.only") @val
+    external it: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-    @send
-    external it: (
-      concurrent_it,
-      string,
-      @uncurry (unit => Promise.t<unit>),
-      Js.undefined<int>,
-    ) => unit = "concurrent"
+    @module("vitest") @scope("it.only") @val
+    external itWithTimeout: (string, @uncurry (unit => unit), int) => unit = "concurrent"
 
-    include MakeConcurrentRunner({
-      let describe = only_describe->concurrent_describe->describe
-      let test = only_test->concurrent_test->test
-      let it = only_it->concurrent_it->it
-    })
+    @module("vitest") @scope("it.only") @val
+    external itPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "concurrent"
+
+    @module("vitest") @scope("it.only") @val
+    external itPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
+      "concurrent"
   }
 }
 
 module Skip = {
-  type skip_describe
-  type skip_test
-  type skip_it
+  @module("vitest") @scope("describe") @val
+  external describe: (string, @uncurry (unit => unit)) => unit = "skip"
 
-  %%private(
-    @module("vitest") @val
-    external skip_describe: skip_describe = "describe"
+  @module("vitest") @scope("test") @val
+  external test: (string, @uncurry (unit => unit)) => unit = "skip"
 
-    @module("vitest") @val
-    external skip_test: skip_test = "test"
+  @module("vitest") @scope("test") @val
+  external testWithTimeout: (string, @uncurry (unit => unit), int) => unit = "skip"
 
-    @module("vitest") @val
-    external skip_it: skip_it = "it"
-  )
+  @module("vitest") @scope("test") @val
+  external testPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "skip"
 
-  @send
-  external describe: (
-    skip_describe,
-    string,
-    @uncurry (unit => Js.undefined<unit>),
-    Js.undefined<int>,
-  ) => unit = "skip"
-
-  @send
-  external test: (
-    skip_test,
-    string,
-    @uncurry (unit => Js.undefined<unit>),
-    Js.undefined<int>,
-  ) => unit = "skip"
-
-  @send
-  external testPromise: (
-    skip_test,
-    string,
-    @uncurry (unit => Promise.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "skip"
-
-  @send
-  external it: (skip_it, string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit =
+  @module("vitest") @scope("test") @val
+  external testPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
     "skip"
 
-  @send
-  external itPromise: (
-    skip_it,
-    string,
-    @uncurry (unit => Promise.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "skip"
+  @module("vitest") @scope("it") @val
+  external it: (string, @uncurry (unit => unit)) => unit = "skip"
 
-  include MakeRunner({
-    let describe = skip_describe->describe
-    let test = skip_test->test
-    let testPromise = skip_test->testPromise
-    let it = skip_it->it
-    let itPromise = skip_it->itPromise
-  })
+  @module("vitest") @scope("it") @val
+  external itWithTimeout: (string, @uncurry (unit => unit), int) => unit = "skip"
+
+  @module("vitest") @scope("it") @val
+  external itPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "skip"
+
+  @module("vitest") @scope("it") @val
+  external itPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit = "skip"
 
   module Concurrent = {
-    type concurrent_describe
-    type concurrent_test
-    type concurrent_it
+    @module("vitest") @scope("describe.skip") @val
+    external describe: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-    %%private(
-      @get
-      external concurrent_describe: skip_describe => concurrent_describe = "skip"
+    @module("vitest") @scope("test.skip") @val
+    external test: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-      @get
-      external concurrent_test: skip_test => concurrent_test = "skip"
+    @module("vitest") @scope("test.skip") @val
+    external testWithTimeout: (string, @uncurry (unit => unit), int) => unit = "concurrent"
 
-      @get
-      external concurrent_it: skip_it => concurrent_it = "skip"
-    )
+    @module("vitest") @scope("test.skip") @val
+    external testPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "concurrent"
 
-    @send
-    external describe: (
-      concurrent_describe,
-      string,
-      @uncurry (unit => Js.undefined<unit>),
-      Js.undefined<int>,
-    ) => unit = "concurrent"
+    @module("vitest") @scope("test.skip") @val
+    external testPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
+      "concurrent"
 
-    @send
-    external test: (
-      concurrent_test,
-      string,
-      @uncurry (unit => Promise.t<unit>),
-      Js.undefined<int>,
-    ) => unit = "concurrent"
+    @module("vitest") @scope("it.skip") @val
+    external it: (string, @uncurry (unit => unit)) => unit = "concurrent"
 
-    @send
-    external it: (
-      concurrent_it,
-      string,
-      @uncurry (unit => Promise.t<unit>),
-      Js.undefined<int>,
-    ) => unit = "concurrent"
+    @module("vitest") @scope("it.skip") @val
+    external itWithTimeout: (string, @uncurry (unit => unit), int) => unit = "concurrent"
 
-    include MakeConcurrentRunner({
-      let describe = skip_describe->concurrent_describe->describe
-      let test = skip_test->concurrent_test->test
-      let it = skip_it->concurrent_it->it
-    })
+    @module("vitest") @scope("it.skip") @val
+    external itPromise: (string, @uncurry (unit => Promise.t<unit>)) => unit = "concurrent"
+
+    @module("vitest") @scope("it.skip") @val
+    external itPromiseWithTimeout: (string, @uncurry (unit => Promise.t<unit>), int) => unit =
+      "concurrent"
   }
 }
 
 module Todo = {
-  type todo_describe
-  type todo_test
-  type todo_it
+  @module("vitest") @scope("describe") @val
+  external describe: string => unit = "todo"
 
-  %%private(
-    @module("vitest") @val
-    external todo_describe: todo_describe = "describe"
+  @module("vitest") @scope("test") @val
+  external test: string => unit = "todo"
 
-    @module("vitest") @val
-    external todo_test: todo_test = "test"
-
-    @module("vitest") @val
-    external todo_it: todo_it = "it"
-  )
-
-  @send external describe: (todo_describe, string) => unit = "todo"
-  @inline let describe = name => todo_describe->describe(name)
-
-  @send external test: (todo_test, string) => unit = "todo"
-  @inline let test = name => todo_test->test(name)
-
-  @send external it: (todo_it, string) => unit = "todo"
-  @inline let it = name => todo_it->it(name)
+  @module("vitest") @scope("it") @val
+  external it: string => unit = "it"
 }
 
 @module("vitest") @val external beforeEach: (@uncurry (unit => unit)) => unit = "beforeEach"
 
 @module("vitest") @val
-external beforeEachPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
-  "beforeEach"
+external beforeEachPromise: (@uncurry (unit => Promise.t<'a>)) => unit = "beforeEach"
 
-@inline
-let beforeEachPromise = (~timeout=?, callback) =>
-  beforeEachPromise(callback, timeout->Js.Undefined.fromOption)
+@module("vitest") @val
+external beforeEachPromiseWithTimeout: (@uncurry (unit => Promise.t<'a>), int) => unit =
+  "beforeEach"
 
 @module("vitest") external beforeAll: (@uncurry (unit => unit)) => unit = "beforeAll"
 
 @module("vitest")
-external beforeAllPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
-  "beforeAll"
+external beforeAllPromise: (@uncurry (unit => Promise.t<'a>)) => unit = "beforeAll"
 
-@inline
-let beforeAllPromise = (~timeout=?, callback) =>
-  beforeAllPromise(callback, timeout->Js.Undefined.fromOption)
+@module("vitest")
+external beforeAllPromiseWithTimeout: (@uncurry (unit => Promise.t<'a>), int) => unit = "beforeAll"
 
 @module("vitest") external afterEach: (@uncurry (unit => unit)) => unit = "afterEach"
 
 @module("vitest")
-external afterEachPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
-  "afterEach"
-
-@inline
-let afterEachPromise = (~timeout=?, callback) =>
-  afterEachPromise(callback, timeout->Js.Undefined.fromOption)
+external afterEachPromise: (@uncurry (unit => Promise.t<'a>)) => unit = "afterEach"
 
 @module("vitest")
-external afterAllPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
-  "afterAll"
+external afterEachPromiseWithTimeout: (@uncurry (unit => Promise.t<'a>), int) => unit = "afterEach"
 
-@inline
-let afterAllPromise = (~timeout=?, callback) =>
-  afterAllPromise(callback, timeout->Js.Undefined.fromOption)
+@module("vitest")
+external afterAllPromise: (@uncurry (unit => Promise.t<'a>)) => unit = "afterAll"
+
+@module("vitest")
+external afterAllPromiseWithTimeout: (@uncurry (unit => Promise.t<'a>), int) => unit = "afterAll"
 
 module Expect = {
   @send external not: expected<'a> => expected<'a> = "not"
@@ -555,51 +353,38 @@ module Expect = {
 }
 
 module Assert = {
-  type t
+  @module("vitest") @scope("assert") @val external equal: ('a, 'a) => unit = "equal"
+  @module("vitest") @scope("assert") @val
+  external equalWithMessage: ('a, 'a, string) => unit = "equal"
 
-  %%private(@module("vitest") @val external assert_obj: t = "assert")
-
-  @send external equal: (t, 'a, 'a, Js.undefined<string>) => unit = "equal"
-
-  @inline
-  let equal = (~message=?, a, b) => assert_obj->equal(a, b, message->Js.Undefined.fromOption)
-
-  @send external deepEqual: (t, 'a, 'a, Js.undefined<string>) => unit = "deepEqual"
-
-  @inline
-  let deepEqual = (~message=?, a, b) =>
-    assert_obj->deepEqual(a, b, message->Js.Undefined.fromOption)
+  @module("vitest") @scope("assert") @val external deepEqual: ('a, 'a) => unit = "deepEqual"
+  @module("vitest") @scope("assert") @val
+  external deepEqualWithMessage: ('a, 'a, string) => unit = "deepEqual"
 }
 
 module Vi = {
-  type t
+  @module("vitest") @scope("vi") @val
+  external advanceTimersByTime: int => unit = "advanceTimersByTime"
 
-  %%private(@module("vitest") @val external vi_obj: t = "vi")
+  @module("vitest") @scope("vi") @val
+  external advanceTimersToNextTimer: unit => unit = "advanceTimersToNextTimer"
 
-  @send external advanceTimersByTime: (t, int) => t = "advanceTimersByTime"
-  @inline let advanceTimersByTime = ms => vi_obj->advanceTimersByTime(ms)
+  @module("vitest") @scope("vi") @val external runAllTimers: unit => unit = "runAllTimers"
 
-  @send external advanceTimersToNextTimer: t => t = "advanceTimersToNextTimer"
-  @inline let advanceTimersToNextTimer = () => vi_obj->advanceTimersToNextTimer
+  @module("vitest") @scope("vi") @val
+  external runOnlyPendingTimers: unit => unit = "runOnlyPendingTimers"
 
-  @send external runAllTimers: t => t = "runAllTimers"
-  @inline let runAllTimers = () => vi_obj->runAllTimers
+  @module("vitest") @scope("vi") @val external useFakeTimers: unit => unit = "useFakeTimers"
 
-  @send external runOnlyPendingTimers: t => t = "runOnlyPendingTimers"
-  @inline let runOnlyPendingTimers = () => vi_obj->runOnlyPendingTimers
+  @module("vitest") @scope("vi") @val external useRealTimers: unit => unit = "useRealTimers"
 
-  @send external useFakeTimers: t => t = "useFakeTimers"
-  @inline let useFakeTimers = () => vi_obj->useFakeTimers
+  @module("vitest") @scope("vi") @val
+  external mockCurrentDate: Js.Date.t => unit = "mockCurrentDate"
 
-  @send external useRealTimers: t => t = "useRealTimers"
-  @inline let useRealTimers = () => vi_obj->useRealTimers
+  @module("vitest") @scope("vi") @val
+  external restoreCurrentDate: Js.Date.t => unit = "restoreCurrentDate"
 
-  @send external mockCurrentDate: (t, Js.Date.t) => t = "mockCurrentDate"
-  @inline let mockCurrentDate = date => vi_obj->mockCurrentDate(date)
-
-  @send external restoreCurrentDate: (t, Js.Date.t) => t = "restoreCurrentDate"
-  @inline let restoreCurrentDate = date => vi_obj->restoreCurrentDate(date)
-
-  @send external getMockedDate: t => Js.null<Js.Date.t> = "getMockedDate"
-  @inline let getMockedDate = () => vi_obj->getMockedDate->Js.Null.toOption
+  // TODO: This should probably actually be getMockedSystemTime.
+  @module("vitest") @scope("vi") @val
+  external getMockedDate: unit => Js.null<Js.Date.t> = "getMockedDate"
 }
