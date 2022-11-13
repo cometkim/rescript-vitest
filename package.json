@@ -30,11 +30,11 @@
   },
   "dependencies": {
     "@ryyppy/rescript-promise": "^2.1.0",
-    "vitest": "^0.21.1"
+    "vitest": "^0.25.1"
   },
   "devDependencies": {
-    "@jihchi/vite-plugin-rescript": "^4.0.1",
+    "@jihchi/vite-plugin-rescript": "^4.1.1",
     "rescript": "^10.0.1",
-    "vite": "^3.0.7"
+    "vite": "^3.2.3"
   }
 }
