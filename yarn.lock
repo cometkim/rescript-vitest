@@ -1186,7 +1186,7 @@ __metadata:
   dependencies:
     "@jihchi/vite-plugin-rescript": ^4.0.1
     "@ryyppy/rescript-promise": ^2.1.0
-    rescript: ^9.1.4
+    rescript: ^10.0.1
     vite: ^3.0.7
     vitest: ^0.21.1
   peerDependencies:
@@ -1195,15 +1195,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"rescript@npm:^9.1.4":
-  version: 9.1.4
-  resolution: "rescript@npm:9.1.4"
+"rescript@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "rescript@npm:10.0.1"
   bin:
     bsc: bsc
     bsrefmt: bsrefmt
     bstracing: lib/bstracing
     rescript: rescript
-  checksum: 3c503580f968b4d4409830093c57f85b5590f7372250345427b3a7c1f5ccb08009e1edd89b4a3dcbb3ee95ee4dcad9c337ece4d1f8fdaa10e22ed04b8a7495c0
+  checksum: 59ae153c7f6c8ab7130becffc0ae6bcf0cfb21517ff6587548d74ed68fcd5f4e48f14e5de823f71edbc4d0f65b629c132d2a553467bd7c8c2f31ed9d5fb2881c
   languageName: node
   linkType: hard
 
