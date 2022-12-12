@@ -11,6 +11,8 @@ external suite: suite = "expect"
 
 type expected<'a>
 
+external cast_expeceted: expected<'a> => expected<'b> = "%identity"
+
 @module("vitest") external expect: 'a => expected<'a> = "expect"
 external unwrap: expected<'a> => 'a = "%identity"
 
@@ -464,6 +466,20 @@ module Expect = {
   // @send external toBeInstanceOf: (expected<'a>, ?) => unit = "toBeInstanceOf"
 
   @send external toEqual: (expected<'a>, 'a) => unit = "toEqual"
+
+  @inline
+  let toBeSome = (~some=?, expected: expected<option<'a>>) => {
+    expected->cast_expeceted->not->toBeUndefined
+    switch some {
+    | Some(id) => expected->toEqual(id)
+    | None => ()
+    }
+  }
+
+  @inline
+  let toBeNone = (expected: expected<option<'a>>) => {
+    expected->cast_expeceted->toBeUndefined
+  }
 
   @send external toStrictEqual: (expected<'a>, 'a) => unit = "toStrictEqual"
 
