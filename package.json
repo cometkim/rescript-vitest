@@ -17,6 +17,8 @@
     "vitest"
   ],
   "scripts": {
+    "prepack": "yarn clean && yarn build",
+    "clean": "rescript clean",
     "build": "rescript build",
     "test": "vitest"
   },
