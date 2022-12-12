@@ -447,33 +447,38 @@ external afterAllPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<
 let afterAllPromise = (~timeout=?, callback) =>
   afterAllPromise(callback, timeout->Js.Undefined.fromOption)
 
-module Expect = {
+module Matchers = (
+  Config: {
+    type return<'a>
+    let emptyReturn: return<'a>
+  },
+) => {
   @get external not: expected<'a> => expected<'a> = "not"
 
-  @send external toBe: (expected<'a>, 'a) => unit = "toBe"
+  @send external toBe: (expected<'a>, 'a) => Config.return<'a> = "toBe"
 
-  @send external eq: (expected<'a>, 'a) => unit = "eq"
+  @send external eq: (expected<'a>, 'a) => Config.return<'a> = "eq"
 
-  @send external toBeDefined: expected<Js.undefined<'a>> => unit = "toBeDefined"
+  @send external toBeDefined: expected<Js.undefined<'a>> => Config.return<'a> = "toBeDefined"
 
-  @send external toBeUndefined: expected<Js.undefined<'a>> => unit = "toBeUndefined"
+  @send external toBeUndefined: expected<Js.undefined<'a>> => Config.return<'a> = "toBeUndefined"
 
-  @send external toBeTruthy: expected<'a> => unit = "toBeTruthy"
+  @send external toBeTruthy: expected<'a> => Config.return<'a> = "toBeTruthy"
 
-  @send external toBeFalsy: expected<'a> => unit = "toBeFalsy"
+  @send external toBeFalsy: expected<'a> => Config.return<'a> = "toBeFalsy"
 
-  @send external toBeNull: expected<Js.null<'a>> => unit = "toBeNull"
+  @send external toBeNull: expected<Js.null<'a>> => Config.return<'a> = "toBeNull"
 
-  // @send external toBeInstanceOf: (expected<'a>, ?) => unit = "toBeInstanceOf"
+  // @send external toBeInstanceOf: (expected<'a>, ?) => Config.return<'a> = "toBeInstanceOf"
 
-  @send external toEqual: (expected<'a>, 'a) => unit = "toEqual"
+  @send external toEqual: (expected<'a>, 'a) => Config.return<'a> = "toEqual"
 
   @inline
   let toBeSome = (~some=?, expected: expected<option<'a>>) => {
-    expected->cast_expeceted->not->toBeUndefined
+    expected->cast_expeceted->not->toBeUndefined->ignore
     switch some {
     | Some(id) => expected->toEqual(id)
-    | None => ()
+    | None => Config.emptyReturn
     }
   }
 
@@ -482,20 +487,22 @@ module Expect = {
     expected->cast_expeceted->toBeUndefined
   }
 
-  @send external toStrictEqual: (expected<'a>, 'a) => unit = "toStrictEqual"
+  @send external toStrictEqual: (expected<'a>, 'a) => Config.return<'a> = "toStrictEqual"
 
-  @send external toContain: (expected<array<'a>>, 'a) => unit = "toContain"
+  @send external toContain: (expected<array<'a>>, 'a) => Config.return<'a> = "toContain"
 
-  @send external toContainEqual: (expected<array<'a>>, 'a) => unit = "toContainEqual"
+  @send external toContainEqual: (expected<array<'a>>, 'a) => Config.return<'a> = "toContainEqual"
 
-  @send external toMatchSnapshot: expected<'a> => unit = "toMatchSnapshot"
+  @send external toMatchSnapshot: expected<'a> => Config.return<'a> = "toMatchSnapshot"
 
   @send
-  external toThrow: (expected<unit => 'a>, Js.undefined<string>) => unit = "toThrow"
+  external toThrow: (expected<unit => 'a>, Js.undefined<string>) => Config.return<'a> = "toThrow"
   @inline
   let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
 
-  @send external toThrowError: (expected<unit => 'a>, Js.undefined<string>) => unit = "toThrowError"
+  @send
+  external toThrowError: (expected<unit => 'a>, Js.undefined<string>) => Config.return<'a> =
+    "toThrowError"
   @inline
   let toThrowError = (~message=?, expected) =>
     expected->toThrowError(message->Js.Undefined.fromOption)
@@ -504,54 +511,55 @@ module Expect = {
     type t = int
     type expected = expected<t>
 
-    @send external toBeGreaterThan: (expected, t) => unit = "toBeGreaterThan"
+    @send external toBeGreaterThan: (expected, t) => Config.return<'a> = "toBeGreaterThan"
 
-    @send external toBeGreaterThanOrEqual: (expected, t) => unit = "toBeGreaterThanOrEqual"
+    @send
+    external toBeGreaterThanOrEqual: (expected, t) => Config.return<'a> = "toBeGreaterThanOrEqual"
 
-    @send external toBeLessThan: (expected, t) => unit = "toBeLessThan"
+    @send external toBeLessThan: (expected, t) => Config.return<'a> = "toBeLessThan"
 
-    @send external toBeLessThanOrEqual: (expected, t) => unit = "toBeLessThanOrEqual"
+    @send external toBeLessThanOrEqual: (expected, t) => Config.return<'a> = "toBeLessThanOrEqual"
   }
 
   module Float = {
     type t = float
     type expected = expected<t>
 
-    @send external toBeNaN: expected => unit = "toBeNaN"
+    @send external toBeNaN: expected => Config.return<'a> = "toBeNaN"
 
     @send
-    external toBeClosedTo: (expected, t, int) => unit = "toBeClosedTo"
+    external toBeClosedTo: (expected, t, int) => Config.return<'a> = "toBeClosedTo"
 
     @send
-    external toBeGreaterThan: (expected, t) => unit = "toBeGreaterThan"
+    external toBeGreaterThan: (expected, t) => Config.return<'a> = "toBeGreaterThan"
 
     @send
-    external toBeGreaterThanOrEqual: (expected, t) => unit = "toBeGreaterThanOrEqual"
+    external toBeGreaterThanOrEqual: (expected, t) => Config.return<'a> = "toBeGreaterThanOrEqual"
 
     @send
-    external toBeLessThan: (expected, t) => unit = "toBeLessThan"
+    external toBeLessThan: (expected, t) => Config.return<'a> = "toBeLessThan"
 
     @send
-    external toBeLessThanOrEqual: (expected, t) => unit = "toBeLessThanOrEqual"
+    external toBeLessThanOrEqual: (expected, t) => Config.return<'a> = "toBeLessThanOrEqual"
   }
 
   module String = {
     type t = string
     type expected = expected<t>
 
-    @send external toContain: (expected, t) => unit = "toContain"
+    @send external toContain: (expected, t) => Config.return<'a> = "toContain"
 
-    @send external toHaveLength: (expected, int) => unit = "toHaveLength"
+    @send external toHaveLength: (expected, int) => Config.return<'a> = "toHaveLength"
 
-    @send external toMatch: (expected, Js.Re.t) => unit = "toMatch"
+    @send external toMatch: (expected, Js.Re.t) => Config.return<'a> = "toMatch"
   }
 
   module Array = {
-    @send external toContain: (expected<array<'a>>, 'a) => unit = "toContain"
+    @send external toContain: (expected<array<'a>>, 'a) => Config.return<'a> = "toContain"
 
-    @send external toHaveLength: (expected<array<'a>>, int) => unit = "toHaveLength"
+    @send external toHaveLength: (expected<array<'a>>, int) => Config.return<'a> = "toHaveLength"
 
-    @send external toMatch: (expected<array<'a>>, array<'a>) => unit = "toMatchObject"
+    @send external toMatch: (expected<array<'a>>, array<'a>) => Config.return<'a> = "toMatchObject"
   }
 
   module List = {
@@ -572,24 +580,33 @@ module Expect = {
   }
 
   module Dict = {
-    @send external toHaveProperty: (expected<Js.Dict.t<'a>>, string, 'a) => unit = "toHaveProperty"
+    @send
+    external toHaveProperty: (expected<Js.Dict.t<'a>>, string, 'a) => Config.return<'a> =
+      "toHaveProperty"
 
-    @send external toHaveKey: (expected<Js.Dict.t<'a>>, string) => unit = "toHaveProperty"
+    @send
+    external toHaveKey: (expected<Js.Dict.t<'a>>, string) => Config.return<'a> = "toHaveProperty"
 
-    @send external toMatch: (expected<Js.Dict.t<'a>>, Js.Dict.t<'a>) => unit = "toMatchObject"
+    @send
+    external toMatch: (expected<Js.Dict.t<'a>>, Js.Dict.t<'a>) => Config.return<'a> =
+      "toMatchObject"
   }
+}
+
+module Expect = {
+  include Matchers({
+    type return<'a> = unit
+    let emptyReturn = ()
+  })
 
   module Promise = {
-    type resolved
-    type rejected
+    @get external rejects: expected<Js.Promise2.t<'a>> => expected<'a> = "rejects"
+    @get external resolves: expected<Js.Promise2.t<'a>> => expected<'a> = "resolves"
 
-    @get external rejects: expected<Js.Promise2.t<'a>> => rejected = "rejects"
-    @send external toThrow: (rejected, Js.undefined<string>) => Js.Promise2.t<unit> = "toThrow"
-    @inline
-    let toThrow = (~message=?, rejected) => rejected->toThrow(message->Js.Undefined.fromOption)
-
-    @get external resolves: expected<Js.Promise2.t<'a>> => resolved = "resolves"
-    @send external toEqual: (resolved, 'a) => Js.Promise2.t<unit> = "toEqual"
+    include Matchers({
+      type return<'a> = Js.Promise2.t<unit>
+      let emptyReturn = Js.Promise2.resolve()
+    })
   }
 }
 
