@@ -11,7 +11,7 @@ external suite: suite = "expect"
 
 type expected<'a>
 
-external cast_expeceted: expected<'a> => expected<'b> = "%identity"
+%%private(external cast_expeceted: expected<'a> => expected<'b> = "%identity")
 
 @module("vitest") external expect: 'a => expected<'a> = "expect"
 external unwrap: expected<'a> => 'a = "%identity"
