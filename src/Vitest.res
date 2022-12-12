@@ -627,6 +627,18 @@ module Expect = {
       type return<'a> = Js.Promise2.t<unit>
       let emptyReturn = Js.Promise2.resolve()
     })
+
+    @send
+    external toThrow: (expected<'a>, Js.undefined<string>) => Js.Promise2.t<unit> = "toThrow"
+    @inline
+    let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
+
+    @send
+    external toThrowError: (expected<'a>, Js.undefined<string>) => Js.Promise2.t<unit> =
+      "toThrowError"
+    @inline
+    let toThrowError = (~message=?, expected) =>
+      expected->toThrowError(message->Js.Undefined.fromOption)
   }
 }
 
