@@ -25,3 +25,13 @@ test("JSON", _ => {
   expect(output)->Expect.eq(`{"foo":"hello","bar":"world"}`)
   Assert.deepEqual(parse(output), input, ~message="matches original")
 })
+
+exception TestError
+
+let throwExn = () => {
+  raise(TestError)
+}
+
+test("Exn", _ => {
+  expect(() => throwExn())->Expect.toThrowError
+})

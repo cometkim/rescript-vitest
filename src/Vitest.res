@@ -473,6 +473,11 @@ module Expect = {
 
   @send external toMatchSnapshot: expected<'a> => unit = "toMatchSnapshot"
 
+  @send
+  external toThrow: (expected<unit => 'a>, Js.undefined<string>) => unit = "toThrow"
+  @inline
+  let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
+
   @send external toThrowError: (expected<unit => 'a>, Js.undefined<string>) => unit = "toThrowError"
   @inline
   let toThrowError = (~message=?, expected) =>
@@ -555,6 +560,19 @@ module Expect = {
     @send external toHaveKey: (expected<Js.Dict.t<'a>>, string) => unit = "toHaveProperty"
 
     @send external toMatch: (expected<Js.Dict.t<'a>>, Js.Dict.t<'a>) => unit = "toMatchObject"
+  }
+
+  module Promise = {
+    type resolved
+    type rejected
+
+    @get external rejects: expected<Js.Promise2.t<'a>> => rejected = "rejects"
+    @send external toThrow: (rejected, Js.undefined<string>) => Js.Promise2.t<unit> = "toThrow"
+    @inline
+    let toThrow = (~message=?, rejected) => rejected->toThrow(message->Js.Undefined.fromOption)
+
+    @get external resolves: expected<Js.Promise2.t<'a>> => resolved = "resolves"
+    @send external toEqual: (resolved, 'a) => Js.Promise2.t<unit> = "toEqual"
   }
 }
 
