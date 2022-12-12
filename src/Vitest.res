@@ -11,12 +11,13 @@ external suite: suite = "expect"
 
 type expected<'a>
 
-%%private(external cast_expeceted: expected<'a> => expected<'b> = "%identity")
-
 @module("vitest") external expect: 'a => expected<'a> = "expect"
-external unwrap: expected<'a> => 'a = "%identity"
 
-external wrap: 'a => expected<'a> = "%identity"
+%%private(
+  external cast_expeceted: expected<'a> => expected<'b> = "%identity"
+  external unwrap: expected<'a> => 'a = "%identity"
+  external wrap: 'a => expected<'a> = "%identity"
+)
 
 module type Runner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
