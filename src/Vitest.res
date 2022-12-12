@@ -445,7 +445,7 @@ let afterAllPromise = (~timeout=?, callback) =>
   afterAllPromise(callback, timeout->Js.Undefined.fromOption)
 
 module Expect = {
-  @send external not: expected<'a> => expected<'a> = "not"
+  @get external not: expected<'a> => expected<'a> = "not"
 
   @send external toBe: (expected<'a>, 'a) => unit = "toBe"
 

@@ -12,6 +12,10 @@ describe("suite name", () => {
     expect(1 + 1)->eq(2)
   })
 
+  it("not", _ => {
+    expect(1 + 2)->not->eq(4)
+  })
+
   it("snapshot", _ => {
     expect({"foo": "bar"})->toMatchSnapshot
   })
