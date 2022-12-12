@@ -19,15 +19,15 @@ external wrap: 'a => expected<'a> = "%identity"
 module type Runner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
   let test: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let testPromise: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
+  let testPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
   let it: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let itPromise: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
+  let itPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
 }
 
 module type ConcurrentRunner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let test: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
-  let it: (string, unit => Promise.t<unit>, Js.undefined<int>) => unit
+  let test: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let it: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
 }
 
 module MakeRunner = (Runner: Runner) => {
@@ -103,14 +103,18 @@ include MakeRunner({
   external test: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "test"
 
   @module("vitest") @val
-  external testPromise: (string, @uncurry (unit => Promise.t<unit>), Js.undefined<int>) => unit =
-    "test"
+  external testPromise: (
+    string,
+    @uncurry (unit => Js.Promise2.t<unit>),
+    Js.undefined<int>,
+  ) => unit = "test"
 
   @module("vitest") @val
   external it: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "it"
 
   @module("vitest") @val
-  external itPromise: (string, @uncurry (unit => Promise.t<unit>), Js.undefined<int>) => unit = "it"
+  external itPromise: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
+    "it"
 })
 
 module Concurrent = {
@@ -141,7 +145,7 @@ module Concurrent = {
   external test: (
     concurrent_test,
     string,
-    @uncurry (unit => Promise.t<unit>),
+    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<int>,
   ) => unit = "concurrent"
 
@@ -149,7 +153,7 @@ module Concurrent = {
   external it: (
     concurrent_it,
     string,
-    @uncurry (unit => Promise.t<unit>),
+    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<int>,
   ) => unit = "concurrent"
 
@@ -196,7 +200,7 @@ module Only = {
   external testPromise: (
     only_test,
     string,
-    @uncurry (unit => Promise.t<unit>),
+    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<int>,
   ) => unit = "only"
 
@@ -208,7 +212,7 @@ module Only = {
   external itPromise: (
     only_it,
     string,
-    @uncurry (unit => Promise.t<unit>),
+    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<int>,
   ) => unit = "only"
 
@@ -248,7 +252,7 @@ module Only = {
     external test: (
       concurrent_test,
       string,
-      @uncurry (unit => Promise.t<unit>),
+      @uncurry (unit => Js.Promise2.t<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -256,7 +260,7 @@ module Only = {
     external it: (
       concurrent_it,
       string,
-      @uncurry (unit => Promise.t<unit>),
+      @uncurry (unit => Js.Promise2.t<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -304,7 +308,7 @@ module Skip = {
   external testPromise: (
     skip_test,
     string,
-    @uncurry (unit => Promise.t<unit>),
+    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<int>,
   ) => unit = "skip"
 
@@ -316,7 +320,7 @@ module Skip = {
   external itPromise: (
     skip_it,
     string,
-    @uncurry (unit => Promise.t<unit>),
+    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<int>,
   ) => unit = "skip"
 
@@ -356,7 +360,7 @@ module Skip = {
     external test: (
       concurrent_test,
       string,
-      @uncurry (unit => Promise.t<unit>),
+      @uncurry (unit => Js.Promise2.t<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -364,7 +368,7 @@ module Skip = {
     external it: (
       concurrent_it,
       string,
-      @uncurry (unit => Promise.t<unit>),
+      @uncurry (unit => Js.Promise2.t<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -405,7 +409,7 @@ module Todo = {
 @module("vitest") @val external beforeEach: (@uncurry (unit => unit)) => unit = "beforeEach"
 
 @module("vitest") @val
-external beforeEachPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
+external beforeEachPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
   "beforeEach"
 
 @inline
@@ -415,7 +419,7 @@ let beforeEachPromise = (~timeout=?, callback) =>
 @module("vitest") external beforeAll: (@uncurry (unit => unit)) => unit = "beforeAll"
 
 @module("vitest")
-external beforeAllPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
+external beforeAllPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
   "beforeAll"
 
 @inline
@@ -425,7 +429,7 @@ let beforeAllPromise = (~timeout=?, callback) =>
 @module("vitest") external afterEach: (@uncurry (unit => unit)) => unit = "afterEach"
 
 @module("vitest")
-external afterEachPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
+external afterEachPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
   "afterEach"
 
 @inline
@@ -433,7 +437,7 @@ let afterEachPromise = (~timeout=?, callback) =>
   afterEachPromise(callback, timeout->Js.Undefined.fromOption)
 
 @module("vitest")
-external afterAllPromise: (@uncurry (unit => Promise.t<'a>), Js.Undefined.t<int>) => unit =
+external afterAllPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
   "afterAll"
 
 @inline

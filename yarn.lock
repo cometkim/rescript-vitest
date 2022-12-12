@@ -200,13 +200,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ryyppy/rescript-promise@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@ryyppy/rescript-promise@npm:2.1.0"
-  checksum: 47761ce48800e3e169d2fc6d0d381a15dd7a724e3d7a31297b5cffec30273d46f310dd9f96452fc027523950d4ab5c02a1a21d94bb06190070a30bcfc2783308
-  languageName: node
-  linkType: hard
-
 "@tootallnate/once@npm:1":
   version: 1.1.2
   resolution: "@tootallnate/once@npm:1.1.2"
@@ -1238,25 +1231,24 @@ __metadata:
   resolution: "rescript-vitest@workspace:."
   dependencies:
     "@jihchi/vite-plugin-rescript": ^4.1.1
-    "@ryyppy/rescript-promise": ^2.1.0
-    rescript: ^10.0.1
+    rescript: ^10.1.0
     vite: ^4.0.0
     vitest: ^0.25.7
   peerDependencies:
-    rescript: ^9.1.0 || ^10.0.0
+    rescript: ^10.1.0
     vite: ^2.0.0 || ^3.0.0 || ^4.0.0
   languageName: unknown
   linkType: soft
 
-"rescript@npm:^10.0.1":
-  version: 10.0.1
-  resolution: "rescript@npm:10.0.1"
+"rescript@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "rescript@npm:10.1.0"
   bin:
     bsc: bsc
     bsrefmt: bsrefmt
     bstracing: lib/bstracing
     rescript: rescript
-  checksum: 59ae153c7f6c8ab7130becffc0ae6bcf0cfb21517ff6587548d74ed68fcd5f4e48f14e5de823f71edbc4d0f65b629c132d2a553467bd7c8c2f31ed9d5fb2881c
+  checksum: b0b6ffbe7e6fc52098ccdeea30dff886dff4cf09c8cd85bdfa2b6cd7a854f35c167aa96e03f1590070315c344b85f24f311aa8ac26d3e96a763730a03bb99d7d
   languageName: node
   linkType: hard
 

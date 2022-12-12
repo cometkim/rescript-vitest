@@ -1,7 +1,6 @@
 {
   "name": "rescript-vitest",
   "namespace": false,
-  "refmt": 3,
   "suffix": ".mjs",
   "sources": [
     {
@@ -19,7 +18,6 @@
     }
   ],
   "bs-dependencies": [
-    "@ryyppy/rescript-promise"
   ],
   "bs-dev-dependencies": [
   ]
