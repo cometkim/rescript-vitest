@@ -23,8 +23,10 @@ module type Runner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
   let test: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
   let testPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let testAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
   let it: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
   let itPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let itAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
 }
 
 module type ConcurrentRunner = {
@@ -61,6 +63,9 @@ module MakeRunner = (Runner: Runner) => {
     Runner.testPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
   @inline
+  let testAsync = testPromise
+
+  @inline
   let it = (name, ~timeout=?, callback) =>
     Runner.it(
       name,
@@ -74,6 +79,9 @@ module MakeRunner = (Runner: Runner) => {
   @inline
   let itPromise = (name, ~timeout=?, callback) =>
     Runner.itPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+
+  @inline
+  let itAsync = itPromise
 }
 
 module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
@@ -113,10 +121,18 @@ include MakeRunner({
   ) => unit = "test"
 
   @module("vitest") @val
+  external testAsync: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
+    "test"
+
+  @module("vitest") @val
   external it: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "it"
 
   @module("vitest") @val
   external itPromise: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
+    "it"
+
+  @module("vitest") @val
+  external itAsync: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
     "it"
 })
 
@@ -223,8 +239,10 @@ module Only = {
     let describe = only_describe->describe
     let test = only_test->test
     let testPromise = only_test->testPromise
+    let testAsync = testPromise
     let it = only_it->it
     let itPromise = only_it->itPromise
+    let itAsync = itPromise
   })
 
   module Concurrent = {
@@ -331,8 +349,10 @@ module Skip = {
     let describe = skip_describe->describe
     let test = skip_test->test
     let testPromise = skip_test->testPromise
+    let testAsync = testPromise
     let it = skip_it->it
     let itPromise = skip_it->itPromise
+    let itAsync = itPromise
   })
 
   module Concurrent = {
