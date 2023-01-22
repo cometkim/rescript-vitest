@@ -38,6 +38,13 @@ Each.test3([(1, 3, "4"), (6, 3, "9")], "test3: sum %i+%i=%s", (a, b, sum) => {
   expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
+Each.test3Async([(1, 3, "4"), (6, 3, "9")], "test3: sum %i+%i=%s", (a, b, sum) =>
+  {
+    expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
+    expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  }->echoAsync
+)
+
 Each.test4([(1, 3, 5, "9"), (6, 3, 2, "11")], "test4: sum %i+%i+%i=%s", (a, b, c, sum) => {
   expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
   expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
