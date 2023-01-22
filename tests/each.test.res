@@ -67,3 +67,16 @@ Each.test5([(1, 3, 5, 2, "11"), (6, 3, 2, 8, "19")], "test5: sum %i+%i+%i+%i=%s"
   expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
   expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
 })
+
+Each.test5Async([(1, 3, 5, 2, "11"), (6, 3, 2, 8, "19")], "test5: sum %i+%i+%i+%i=%s", (
+  a,
+  b,
+  c,
+  d,
+  sum,
+) =>
+  {
+    expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
+    expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  }->echoAsync
+)
