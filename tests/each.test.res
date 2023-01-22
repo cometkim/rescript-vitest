@@ -1,5 +1,7 @@
 open Vitest
 
+let echoAsync = async msg => msg
+
 Each.testObject(
   [{"a": 3, "b": 5, "sum": 8}, {"a": 6, "b": 2, "sum": 8}],
   "obj: sum $a+$b=$sum",
@@ -7,6 +9,16 @@ Each.testObject(
     expect(i["a"] + i["b"])->Expect.toBe(i["sum"])
     expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
   },
+)
+
+Each.testObjectAsync(
+  [{"a": 3, "b": 5, "sum": 8}, {"a": 6, "b": 2, "sum": 8}],
+  "objAsync: sum $a+$b=$sum",
+  i =>
+    {
+      expect(i["a"] + i["b"])->Expect.toBe(i["sum"])
+      expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
+    }->echoAsync,
 )
 
 Each.test2([(1, "1"), (6, "6")], "test2: %i=%s", (a, b) => {

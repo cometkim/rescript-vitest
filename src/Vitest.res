@@ -419,6 +419,15 @@ module Each = {
   ) => unit = "each"
 
   @send
+  external _testObjAsync: (
+    ~test: test,
+    ~cases: array<'a>,
+    . ~name: string,
+    ~f: 'a => Js.Promise2.t<unit>,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
   external _test2: (
     ~test: test,
     ~cases: array<('a, 'b)>,
@@ -457,6 +466,10 @@ module Each = {
   @inline
   let testObject = (cases, name, ~timeout=?, f) =>
     _testObj(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let testObjectAsync = (cases, name, ~timeout=?, f) =>
+    _testObjAsync(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test2 = (cases, name, ~timeout=?, f) =>
