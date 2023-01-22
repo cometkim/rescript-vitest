@@ -419,6 +419,15 @@ module Each = {
   ) => unit = "each"
 
   @send
+  external _test2: (
+    ~test: test,
+    ~cases: array<('a, 'b)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b) => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
   external _test3: (
     ~test: test,
     ~cases: array<('a, 'b, 'c)>,
@@ -430,6 +439,10 @@ module Each = {
   @inline
   let testObject = (cases, name, ~timeout=?, f) =>
     _testObj(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let test2 = (cases, name, ~timeout=?, f) =>
+    _test2(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test3 = (cases, name, ~timeout=?, f) =>

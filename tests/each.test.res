@@ -9,6 +9,11 @@ Each.testObject(
   },
 )
 
+Each.test2([(1, "1"), (6, "6")], "test2: %i=%s", (a, b) => {
+  expect(a->Js.Int.toString)->Expect.toBe(b)
+  expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+})
+
 Each.test3([(1, 3, "4"), (6, 3, "9")], "test3: sum %i+%i=%s", (a, b, sum) => {
   expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
   expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
