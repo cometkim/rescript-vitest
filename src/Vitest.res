@@ -418,9 +418,22 @@ module Each = {
     ~timeout: Js.undefined<int>,
   ) => unit = "each"
 
+  @send
+  external _test3: (
+    ~test: test,
+    ~cases: array<('a, 'b, 'c)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c) => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
   @inline
   let testObject = (cases, name, ~timeout=?, f) =>
     _testObj(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let test3 = (cases, name, ~timeout=?, f) =>
+    _test3(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 }
 
 module Todo = {
