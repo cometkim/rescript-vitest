@@ -62,7 +62,7 @@ module MakeRunner = (Runner: Runner) => {
   let testPromise = (name, ~timeout=?, callback) =>
     Runner.testPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  @inline
+  // @inline
   let testAsync = testPromise
 
   @inline
@@ -80,7 +80,7 @@ module MakeRunner = (Runner: Runner) => {
   let itPromise = (name, ~timeout=?, callback) =>
     Runner.itPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  @inline
+  // @inline
   let itAsync = itPromise
 }
 
@@ -401,6 +401,26 @@ module Skip = {
       let it = skip_it->concurrent_it->it
     })
   }
+}
+
+module Each = {
+  type test
+
+  @module("vitest") @val
+  external _test: test = "test"
+
+  @send
+  external _testObj: (
+    ~test: test,
+    ~cases: array<'a>,
+    . ~name: string,
+    ~f: 'a => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @inline
+  let testObject = (cases, name, ~timeout=?, f) =>
+    _testObj(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 }
 
 module Todo = {
