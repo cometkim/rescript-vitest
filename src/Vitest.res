@@ -414,7 +414,7 @@ module Each = {
     ~test: test,
     ~cases: array<'a>,
     . ~name: string,
-    ~f: 'a => unit,
+    ~f: @uncurry 'a => unit,
     ~timeout: Js.undefined<int>,
   ) => unit = "each"
 
@@ -423,7 +423,7 @@ module Each = {
     ~test: test,
     ~cases: array<'a>,
     . ~name: string,
-    ~f: 'a => Js.Promise2.t<unit>,
+    ~f: @uncurry 'a => Js.Promise2.t<unit>,
     ~timeout: Js.undefined<int>,
   ) => unit = "each"
 
