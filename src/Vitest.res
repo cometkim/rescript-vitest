@@ -407,235 +407,277 @@ module Each = {
   type test
   type describe
 
-  @module("vitest") @val
-  external _test: test = "test"
+  module External = {
+    @module("vitest") @val
+    external _test: test = "test"
 
-  @module("vitest") @val
-  external _describe: describe = "describe"
+    @module("vitest") @val
+    external _describe: describe = "describe"
 
-  @send
-  external _testObj: (
-    ~test: test,
-    ~cases: array<'a>,
-    . ~name: string,
-    ~f: @uncurry 'a => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _testObj: (
+      ~test: test,
+      ~cases: array<'a>,
+      . ~name: string,
+      ~f: @uncurry 'a => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _testObjAsync: (
-    ~test: test,
-    ~cases: array<'a>,
-    . ~name: string,
-    ~f: @uncurry 'a => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _testObjAsync: (
+      ~test: test,
+      ~cases: array<'a>,
+      . ~name: string,
+      ~f: @uncurry 'a => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test2: (
-    ~test: test,
-    ~cases: array<('a, 'b)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test2: (
+      ~test: test,
+      ~cases: array<('a, 'b)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test2Async: (
-    ~test: test,
-    ~cases: array<('a, 'b)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test2Async: (
+      ~test: test,
+      ~cases: array<('a, 'b)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test3: (
-    ~test: test,
-    ~cases: array<('a, 'b, 'c)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test3: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test3Async: (
-    ~test: test,
-    ~cases: array<('a, 'b, 'c)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test3Async: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test4: (
-    ~test: test,
-    ~cases: array<('a, 'b, 'c, 'd)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test4: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c, 'd)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test4Async: (
-    ~test: test,
-    ~cases: array<('a, 'b, 'c, 'd)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test4Async: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c, 'd)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test5: (
-    ~test: test,
-    ~cases: array<('a, 'b, 'c, 'd, 'e)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test5: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c, 'd, 'e)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
 
-  @send
-  external _test5Async: (
-    ~test: test,
-    ~cases: array<('a, 'b, 'c, 'd, 'e)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    @send
+    external _test5Async: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c, 'd, 'e)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describeObj: (
+      ~describe: describe,
+      ~cases: array<'a>,
+      . ~name: string,
+      ~f: @uncurry 'a => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describeObjAsync: (
+      ~describe: describe,
+      ~cases: array<'a>,
+      . ~name: string,
+      ~f: @uncurry 'a => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe2: (
+      ~describe: describe,
+      ~cases: array<('a, 'b)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe2Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe3: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe3Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe4: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c, 'd)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe4Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c, 'd)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe5: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c, 'd, 'e)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external _describe5Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c, 'd, 'e)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+  }
 
   @inline
   let test = (cases, name, ~timeout=?, f) =>
-    _testObj(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._testObj(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let testAsync = (cases, name, ~timeout=?, f) =>
-    _testObjAsync(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._testObjAsync(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test2 = (cases, name, ~timeout=?, f) =>
-    _test2(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test2(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test2Async = (cases, name, ~timeout=?, f) =>
-    _test2Async(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test2Async(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test3 = (cases, name, ~timeout=?, f) =>
-    _test3(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test3(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test3Async = (cases, name, ~timeout=?, f) =>
-    _test3Async(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test3Async(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test4 = (cases, name, ~timeout=?, f) =>
-    _test4(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test4(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test4Async = (cases, name, ~timeout=?, f) =>
-    _test4Async(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test4Async(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test5 = (cases, name, ~timeout=?, f) =>
-    _test5(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._test5(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let test5Async = (cases, name, ~timeout=?, f) =>
-    _test5Async(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @send
-  external _describeObj: (
-    ~describe: describe,
-    ~cases: array<'a>,
-    . ~name: string,
-    ~f: @uncurry 'a => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describeObjAsync: (
-    ~describe: describe,
-    ~cases: array<'a>,
-    . ~name: string,
-    ~f: @uncurry 'a => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe2: (
-    ~describe: describe,
-    ~cases: array<('a, 'b)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe2Async: (
-    ~describe: describe,
-    ~cases: array<('a, 'b)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe3: (
-    ~describe: describe,
-    ~cases: array<('a, 'b, 'c)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe3Async: (
-    ~describe: describe,
-    ~cases: array<('a, 'b, 'c)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe4: (
-    ~describe: describe,
-    ~cases: array<('a, 'b, 'c, 'd)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe4Async: (
-    ~describe: describe,
-    ~cases: array<('a, 'b, 'c, 'd)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe5: (
-    ~describe: describe,
-    ~cases: array<('a, 'b, 'c, 'd, 'e)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
-
-  @send
-  external _describe5Async: (
-    ~describe: describe,
-    ~cases: array<('a, 'b, 'c, 'd, 'e)>,
-    . ~name: string,
-    ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
-    ~timeout: Js.undefined<int>,
-  ) => unit = "each"
+    External._test5Async(~test=External._test, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let describe = (cases, name, ~timeout=?, f) =>
-    _describeObj(~describe=_describe, ~cases)(.
+    External._describeObj(~describe=External._describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -643,7 +685,7 @@ module Each = {
 
   @inline
   let describeAsync = (cases, name, ~timeout=?, f) =>
-    _describeObjAsync(~describe=_describe, ~cases)(.
+    External._describeObjAsync(~describe=External._describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -651,11 +693,15 @@ module Each = {
 
   @inline
   let describe2 = (cases, name, ~timeout=?, f) =>
-    _describe2(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._describe2(~describe=External._describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let describe2Async = (cases, name, ~timeout=?, f) =>
-    _describe2Async(~describe=_describe, ~cases)(.
+    External._describe2Async(~describe=External._describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -663,11 +709,15 @@ module Each = {
 
   @inline
   let describe3 = (cases, name, ~timeout=?, f) =>
-    _describe3(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._describe3(~describe=External._describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let describe3Async = (cases, name, ~timeout=?, f) =>
-    _describe3Async(~describe=_describe, ~cases)(.
+    External._describe3Async(~describe=External._describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -675,11 +725,15 @@ module Each = {
 
   @inline
   let describe4 = (cases, name, ~timeout=?, f) =>
-    _describe4(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._describe4(~describe=External._describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let describe4Async = (cases, name, ~timeout=?, f) =>
-    _describe4Async(~describe=_describe, ~cases)(.
+    External._describe4Async(~describe=External._describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -687,11 +741,15 @@ module Each = {
 
   @inline
   let describe5 = (cases, name, ~timeout=?, f) =>
-    _describe5(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+    External._describe5(~describe=External._describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 
   @inline
   let describe5Async = (cases, name, ~timeout=?, f) =>
-    _describe5Async(~describe=_describe, ~cases)(.
+    External._describe5Async(~describe=External._describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
