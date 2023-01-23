@@ -13,9 +13,24 @@ Each.test(sumObj, "test: sum $a+$b=$sum", i => {
   expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
 })
 
-Each.describe(sumObj, "describe: sum $a+$b=$sum", i => {
-  test("correct", _ => expect(i["a"] + i["b"])->Expect.toBe(i["sum"]))
-  test("incorrect", _ => expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"]))
+Each.test2(sum2, "test2: %i=%s", (a, b) => {
+  expect(a->Js.Int.toString)->Expect.toBe(b)
+  expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+})
+
+Each.test3(sum3, "test3: sum %i+%i=%s", (a, b, sum) => {
+  expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
+  expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+})
+
+Each.test4(sum4, "test4: sum %i+%i+%i=%s", (a, b, c, sum) => {
+  expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
+  expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+})
+
+Each.test5(sum5, "test5: sum %i+%i+%i+%i=%s", (a, b, c, d, sum) => {
+  expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
+  expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 Each.testAsync(sumObj, "testAsync: sum $a+$b=$sum", i =>
@@ -25,23 +40,6 @@ Each.testAsync(sumObj, "testAsync: sum $a+$b=$sum", i =>
   }->echoAsync
 )
 
-Each.describeAsync(sumObj, "describeAsync: sum $a+$b=$sum", i =>
-  {
-    test("correct", _ => expect(i["a"] + i["b"])->Expect.toBe(i["sum"]))
-    test("incorrect", _ => expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"]))
-  }->echoAsync
-)
-
-Each.test2(sum2, "test2: %i=%s", (a, b) => {
-  expect(a->Js.Int.toString)->Expect.toBe(b)
-  expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
-})
-
-Each.describe2(sum2, "describe2: %i=%s", (a, b) => {
-  test("correct", _ => expect(a->Js.Int.toString)->Expect.toBe(b))
-  test("incorrect", _ => expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b))
-})
-
 Each.test2Async(sum2, "test2Async: %i=%s", (a, b) =>
   {
     expect(a->Js.Int.toString)->Expect.toBe(b)
@@ -49,16 +47,35 @@ Each.test2Async(sum2, "test2Async: %i=%s", (a, b) =>
   }->echoAsync
 )
 
-Each.describe2Async(sum2, "describe2Async: %i=%s", (a, b) =>
+Each.test3Async(sum3, "test3Async: sum %i+%i=%s", (a, b, sum) =>
   {
-    test("correct", _ => expect(a->Js.Int.toString)->Expect.toBe(b))
-    test("incorrect", _ => expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b))
+    expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
+    expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
   }->echoAsync
 )
 
-Each.test3(sum3, "test3: sum %i+%i=%s", (a, b, sum) => {
-  expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-  expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+Each.test4Async(sum4, "test4Async: sum %i+%i+%i=%s", (a, b, c, sum) =>
+  {
+    expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
+    expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  }->echoAsync
+)
+
+Each.test5Async(sum5, "test5Async: sum %i+%i+%i+%i=%s", (a, b, c, d, sum) =>
+  {
+    expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
+    expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  }->echoAsync
+)
+
+Each.describe(sumObj, "describe: sum $a+$b=$sum", i => {
+  test("correct", _ => expect(i["a"] + i["b"])->Expect.toBe(i["sum"]))
+  test("incorrect", _ => expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"]))
+})
+
+Each.describe2(sum2, "describe2: %i=%s", (a, b) => {
+  test("correct", _ => expect(a->Js.Int.toString)->Expect.toBe(b))
+  test("incorrect", _ => expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b))
 })
 
 Each.describe3(sum3, "describe3: sum %i+%i=%s", (a, b, sum) => {
@@ -66,10 +83,26 @@ Each.describe3(sum3, "describe3: sum %i+%i=%s", (a, b, sum) => {
   test("incorrect", _ => expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum))
 })
 
-Each.test3Async(sum3, "test3Async: sum %i+%i=%s", (a, b, sum) =>
+Each.describe4(sum4, "describe4: sum %i+%i+%i=%s", (a, b, c, sum) => {
+  test("correct", _ => expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum))
+  test("incorrect", _ => expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum))
+})
+
+Each.describe5(sum5, "describe5: sum %i+%i+%i+%i=%s", (a, b, c, d, sum) => {
+  test("correct", _ => expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum))
+  test("incorrect", _ => expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum))
+})
+
+Each.describeAsync(sumObj, "describeAsync: sum $a+$b=$sum", i =>
   {
-    expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-    expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    test("correct", _ => expect(i["a"] + i["b"])->Expect.toBe(i["sum"]))
+    test("incorrect", _ => expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"]))
+  }->echoAsync
+)
+Each.describe2Async(sum2, "describe2Async: %i=%s", (a, b) =>
+  {
+    test("correct", _ => expect(a->Js.Int.toString)->Expect.toBe(b))
+    test("incorrect", _ => expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b))
   }->echoAsync
 )
 
@@ -80,44 +113,10 @@ Each.describe3Async(sum3, "describe3Async: sum %i+%i=%s", (a, b, sum) =>
   }->echoAsync
 )
 
-Each.test4(sum4, "test4: sum %i+%i+%i=%s", (a, b, c, sum) => {
-  expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-  expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
-})
-
-Each.describe4(sum4, "describe4: sum %i+%i+%i=%s", (a, b, c, sum) => {
-  test("correct", _ => expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum))
-  test("incorrect", _ => expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum))
-})
-
-Each.test4Async(sum4, "test4Async: sum %i+%i+%i=%s", (a, b, c, sum) =>
-  {
-    expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-    expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
-  }->echoAsync
-)
-
 Each.describe4Async(sum4, "describe4Async: sum %i+%i+%i=%s", (a, b, c, sum) =>
   {
     test("correct", _ => expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum))
     test("incorrect", _ => expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum))
-  }->echoAsync
-)
-
-Each.test5(sum5, "test5: sum %i+%i+%i+%i=%s", (a, b, c, d, sum) => {
-  expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-  expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
-})
-
-Each.describe5(sum5, "describe5: sum %i+%i+%i+%i=%s", (a, b, c, d, sum) => {
-  test("correct", _ => expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum))
-  test("incorrect", _ => expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum))
-})
-
-Each.test5Async(sum5, "test5Async: sum %i+%i+%i+%i=%s", (a, b, c, d, sum) =>
-  {
-    expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-    expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
   }->echoAsync
 )
 
