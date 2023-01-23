@@ -681,36 +681,36 @@ module Each: EachType = {
     Ext.testObj(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
-  let testAsync = (cases, name, ~timeout=?, f) =>
-    Ext.testObjAsync(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
   let test2 = (cases, name, ~timeout=?, f) =>
     Ext.test2(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
-  let test2Async = (cases, name, ~timeout=?, f) =>
-    Ext.test2Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test3 = (cases, name, ~timeout=?, f) =>
     Ext.test3(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
-  let test3Async = (cases, name, ~timeout=?, f) =>
-    Ext.test3Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
   let test4 = (cases, name, ~timeout=?, f) =>
     Ext.test4(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
-  let test4Async = (cases, name, ~timeout=?, f) =>
-    Ext.test4Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
   let test5 = (cases, name, ~timeout=?, f) =>
     Ext.test5(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let testAsync = (cases, name, ~timeout=?, f) =>
+    Ext.testObjAsync(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let test2Async = (cases, name, ~timeout=?, f) =>
+    Ext.test2Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let test3Async = (cases, name, ~timeout=?, f) =>
+    Ext.test3Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let test4Async = (cases, name, ~timeout=?, f) =>
+    Ext.test4Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test5Async = (cases, name, ~timeout=?, f) =>
@@ -725,24 +725,8 @@ module Each: EachType = {
     )
 
   @inline
-  let describeAsync = (cases, name, ~timeout=?, f) =>
-    Ext.describeObjAsync(~describe=Ext.describe, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
-
-  @inline
   let describe2 = (cases, name, ~timeout=?, f) =>
     Ext.describe2(~describe=Ext.describe, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
-
-  @inline
-  let describe2Async = (cases, name, ~timeout=?, f) =>
-    Ext.describe2Async(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -757,14 +741,6 @@ module Each: EachType = {
     )
 
   @inline
-  let describe3Async = (cases, name, ~timeout=?, f) =>
-    Ext.describe3Async(~describe=Ext.describe, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
-
-  @inline
   let describe4 = (cases, name, ~timeout=?, f) =>
     Ext.describe4(~describe=Ext.describe, ~cases)(.
       ~name,
@@ -773,16 +749,40 @@ module Each: EachType = {
     )
 
   @inline
-  let describe4Async = (cases, name, ~timeout=?, f) =>
-    Ext.describe4Async(~describe=Ext.describe, ~cases)(.
+  let describe5 = (cases, name, ~timeout=?, f) =>
+    Ext.describe5(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
     )
 
   @inline
-  let describe5 = (cases, name, ~timeout=?, f) =>
-    Ext.describe5(~describe=Ext.describe, ~cases)(.
+  let describeAsync = (cases, name, ~timeout=?, f) =>
+    Ext.describeObjAsync(~describe=Ext.describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe2Async = (cases, name, ~timeout=?, f) =>
+    Ext.describe2Async(~describe=Ext.describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe3Async = (cases, name, ~timeout=?, f) =>
+    Ext.describe3Async(~describe=Ext.describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe4Async = (cases, name, ~timeout=?, f) =>
+    Ext.describe4Async(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
