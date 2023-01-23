@@ -403,7 +403,88 @@ module Skip = {
   }
 }
 
-module Each = {
+module type EachType = {
+  let test: (array<'a>, string, ~timeout: int=?, 'a => unit) => unit
+  let test2: (array<('a, 'b)>, string, ~timeout: int=?, ('a, 'b) => unit) => unit
+  let test3: (array<('a, 'b, 'c)>, string, ~timeout: int=?, ('a, 'b, 'c) => unit) => unit
+  let test4: (array<('a, 'b, 'c, 'd)>, string, ~timeout: int=?, ('a, 'b, 'c, 'd) => unit) => unit
+  let test5: (
+    array<('a, 'b, 'c, 'd, 'e)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd, 'e) => unit,
+  ) => unit
+
+  let testAsync: (array<'a>, string, ~timeout: int=?, 'a => Js.Promise2.t<unit>) => unit
+  let test2Async: (
+    array<('a, 'b)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b) => Js.Promise2.t<unit>,
+  ) => unit
+  let test3Async: (
+    array<('a, 'b, 'c)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c) => Js.Promise2.t<unit>,
+  ) => unit
+  let test4Async: (
+    array<('a, 'b, 'c, 'd)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+  ) => unit
+  let test5Async: (
+    array<('a, 'b, 'c, 'd, 'e)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+  ) => unit
+
+  let describe: (array<'a>, string, ~timeout: int=?, 'a => unit) => unit
+  let describe2: (array<('a, 'b)>, string, ~timeout: int=?, ('a, 'b) => unit) => unit
+  let describe3: (array<('a, 'b, 'c)>, string, ~timeout: int=?, ('a, 'b, 'c) => unit) => unit
+  let describe4: (
+    array<('a, 'b, 'c, 'd)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd) => unit,
+  ) => unit
+  let describe5: (
+    array<('a, 'b, 'c, 'd, 'e)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd, 'e) => unit,
+  ) => unit
+
+  let describeAsync: (array<'a>, string, ~timeout: int=?, 'a => Js.Promise2.t<unit>) => unit
+  let describe2Async: (
+    array<('a, 'b)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b) => Js.Promise2.t<unit>,
+  ) => unit
+  let describe3Async: (
+    array<('a, 'b, 'c)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c) => Js.Promise2.t<unit>,
+  ) => unit
+  let describe4Async: (
+    array<('a, 'b, 'c, 'd)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+  ) => unit
+  let describe5Async: (
+    array<('a, 'b, 'c, 'd, 'e)>,
+    string,
+    ~timeout: int=?,
+    ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+  ) => unit
+}
+
+module Each: EachType = {
   module Ext = {
     type test
     type describe
@@ -424,29 +505,11 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external testObjAsync: (
-      ~test: test,
-      ~cases: array<'a>,
-      . ~name: string,
-      ~f: @uncurry 'a => Js.Promise2.t<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
     external test2: (
       ~test: test,
       ~cases: array<('a, 'b)>,
       . ~name: string,
       ~f: @uncurry ('a, 'b) => unit,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
-    external test2Async: (
-      ~test: test,
-      ~cases: array<('a, 'b)>,
-      . ~name: string,
-      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -460,15 +523,6 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external test3Async: (
-      ~test: test,
-      ~cases: array<('a, 'b, 'c)>,
-      . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
     external test4: (
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd)>,
@@ -478,20 +532,47 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external test4Async: (
-      ~test: test,
-      ~cases: array<('a, 'b, 'c, 'd)>,
-      . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
     external test5: (
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
       ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external testObjAsync: (
+      ~test: test,
+      ~cases: array<'a>,
+      . ~name: string,
+      ~f: @uncurry 'a => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external test2Async: (
+      ~test: test,
+      ~cases: array<('a, 'b)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external test3Async: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external test4Async: (
+      ~test: test,
+      ~cases: array<('a, 'b, 'c, 'd)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -514,29 +595,11 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external describeObjAsync: (
-      ~describe: describe,
-      ~cases: array<'a>,
-      . ~name: string,
-      ~f: @uncurry 'a => Js.Promise2.t<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
     external describe2: (
       ~describe: describe,
       ~cases: array<('a, 'b)>,
       . ~name: string,
       ~f: @uncurry ('a, 'b) => unit,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
-    external describe2Async: (
-      ~describe: describe,
-      ~cases: array<('a, 'b)>,
-      . ~name: string,
-      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -550,15 +613,6 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external describe3Async: (
-      ~describe: describe,
-      ~cases: array<('a, 'b, 'c)>,
-      . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
     external describe4: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd)>,
@@ -568,20 +622,47 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external describe4Async: (
-      ~describe: describe,
-      ~cases: array<('a, 'b, 'c, 'd)>,
-      . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "each"
-
-    @send
     external describe5: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
       ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external describeObjAsync: (
+      ~describe: describe,
+      ~cases: array<'a>,
+      . ~name: string,
+      ~f: @uncurry 'a => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external describe2Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external describe3Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "each"
+
+    @send
+    external describe4Async: (
+      ~describe: describe,
+      ~cases: array<('a, 'b, 'c, 'd)>,
+      . ~name: string,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
