@@ -405,9 +405,13 @@ module Skip = {
 
 module Each = {
   type test
+  type describe
 
   @module("vitest") @val
   external _test: test = "test"
+
+  @module("vitest") @val
+  external _describe: describe = "describe"
 
   @send
   external _testObj: (
@@ -538,6 +542,160 @@ module Each = {
   @inline
   let test5Async = (cases, name, ~timeout=?, f) =>
     _test5Async(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @send
+  external _describeObj: (
+    ~describe: describe,
+    ~cases: array<'a>,
+    . ~name: string,
+    ~f: @uncurry 'a => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describeObjAsync: (
+    ~describe: describe,
+    ~cases: array<'a>,
+    . ~name: string,
+    ~f: @uncurry 'a => Js.Promise2.t<unit>,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe2: (
+    ~describe: describe,
+    ~cases: array<('a, 'b)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b) => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe2Async: (
+    ~describe: describe,
+    ~cases: array<('a, 'b)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe3: (
+    ~describe: describe,
+    ~cases: array<('a, 'b, 'c)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c) => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe3Async: (
+    ~describe: describe,
+    ~cases: array<('a, 'b, 'c)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe4: (
+    ~describe: describe,
+    ~cases: array<('a, 'b, 'c, 'd)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c, 'd) => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe4Async: (
+    ~describe: describe,
+    ~cases: array<('a, 'b, 'c, 'd)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe5: (
+    ~describe: describe,
+    ~cases: array<('a, 'b, 'c, 'd, 'e)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => unit,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @send
+  external _describe5Async: (
+    ~describe: describe,
+    ~cases: array<('a, 'b, 'c, 'd, 'e)>,
+    . ~name: string,
+    ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+    ~timeout: Js.undefined<int>,
+  ) => unit = "each"
+
+  @inline
+  let describeObject = (cases, name, ~timeout=?, f) =>
+    _describeObj(~describe=_describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describeObjectAsync = (cases, name, ~timeout=?, f) =>
+    _describeObjAsync(~describe=_describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe2 = (cases, name, ~timeout=?, f) =>
+    _describe2(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let describe2Async = (cases, name, ~timeout=?, f) =>
+    _describe2Async(~describe=_describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe3 = (cases, name, ~timeout=?, f) =>
+    _describe3(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let describe3Async = (cases, name, ~timeout=?, f) =>
+    _describe3Async(~describe=_describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe4 = (cases, name, ~timeout=?, f) =>
+    _describe4(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let describe4Async = (cases, name, ~timeout=?, f) =>
+    _describe4Async(~describe=_describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describe5 = (cases, name, ~timeout=?, f) =>
+    _describe5(~describe=_describe, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let describe5Async = (cases, name, ~timeout=?, f) =>
+    _describe5Async(~describe=_describe, ~cases)(.
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
 }
 
 module Todo = {
