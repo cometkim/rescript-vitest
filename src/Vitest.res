@@ -404,10 +404,10 @@ module Skip = {
 }
 
 module Each = {
-  type test
-  type describe
-
   module Ext = {
+    type test
+    type describe
+
     @module("vitest") @val
     external test: test = "test"
 
