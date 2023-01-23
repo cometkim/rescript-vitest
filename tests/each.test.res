@@ -7,24 +7,24 @@ let sum3 = [(1, 3, "4"), (6, 3, "9")]
 let sum4 = [(1, 3, 8, "12"), (6, 3, 2, "11"), (5, 9, 2, "16")]
 let sum5 = [(1, 3, 8, 6, "18"), (6, 3, 2, 4, "15"), (5, 9, 2, 3, "19")]
 
-Each.testObject(sumObj, "obj: sum $a+$b=$sum", i => {
+Each.test(sumObj, "test: sum $a+$b=$sum", i => {
   expect(i["a"] + i["b"])->Expect.toBe(i["sum"])
   expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
 })
 
-Each.describeObject(sumObj, "describeObj: sum $a+$b=$sum", i => {
+Each.describe(sumObj, "describe: sum $a+$b=$sum", i => {
   test("correct", _ => expect(i["a"] + i["b"])->Expect.toBe(i["sum"]))
   test("incorrect", _ => expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"]))
 })
 
-Each.testObjectAsync(sumObj, "objAsync: sum $a+$b=$sum", i =>
+Each.testAsync(sumObj, "testAsync: sum $a+$b=$sum", i =>
   {
     expect(i["a"] + i["b"])->Expect.toBe(i["sum"])
     expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
   }->echoAsync
 )
 
-Each.describeObjectAsync(sumObj, "describeObjectAsync: sum $a+$b=$sum", i =>
+Each.describeAsync(sumObj, "describeAsync: sum $a+$b=$sum", i =>
   {
     test("correct", _ => expect(i["a"] + i["b"])->Expect.toBe(i["sum"]))
     test("incorrect", _ => expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"]))

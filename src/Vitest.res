@@ -504,11 +504,11 @@ module Each = {
   ) => unit = "each"
 
   @inline
-  let testObject = (cases, name, ~timeout=?, f) =>
+  let test = (cases, name, ~timeout=?, f) =>
     _testObj(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
-  let testObjectAsync = (cases, name, ~timeout=?, f) =>
+  let testAsync = (cases, name, ~timeout=?, f) =>
     _testObjAsync(~test=_test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
@@ -634,7 +634,7 @@ module Each = {
   ) => unit = "each"
 
   @inline
-  let describeObject = (cases, name, ~timeout=?, f) =>
+  let describe = (cases, name, ~timeout=?, f) =>
     _describeObj(~describe=_describe, ~cases)(.
       ~name,
       ~f,
@@ -642,7 +642,7 @@ module Each = {
     )
 
   @inline
-  let describeObjectAsync = (cases, name, ~timeout=?, f) =>
+  let describeAsync = (cases, name, ~timeout=?, f) =>
     _describeObjAsync(~describe=_describe, ~cases)(.
       ~name,
       ~f,
