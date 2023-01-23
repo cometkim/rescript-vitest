@@ -62,7 +62,6 @@ module MakeRunner = (Runner: Runner) => {
   let testPromise = (name, ~timeout=?, callback) =>
     Runner.testPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  // @inline
   let testAsync = testPromise
 
   @inline
@@ -80,7 +79,6 @@ module MakeRunner = (Runner: Runner) => {
   let itPromise = (name, ~timeout=?, callback) =>
     Runner.itPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  // @inline
   let itAsync = itPromise
 }
 

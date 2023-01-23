@@ -20,7 +20,6 @@
     "prepack": "yarn clean && yarn build",
     "clean": "rescript clean",
     "build": "rescript build",
-    "build watch": "rescript build -w",
     "test": "vitest"
   },
   "files": [
