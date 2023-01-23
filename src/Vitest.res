@@ -30,23 +30,23 @@ module type Runner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
 
   let test: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let testPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
   let testAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
 
   let it: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let itPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
   let itAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
 
   let bench: (string, unit => Js.undefined<unit>, Js.undefined<benchOptions>) => unit
-  let benchPromise: (string, unit => Js.Promise2.t<unit>, Js.undefined<benchOptions>) => unit
   let benchAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<benchOptions>) => unit
 }
 
 module type ConcurrentRunner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let test: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
-  let it: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
-  let bench: (string, unit => Js.Promise2.t<unit>, Js.undefined<benchOptions>) => unit
+
+  let testAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+
+  let itAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+
+  let benchAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<benchOptions>) => unit
 }
 
 module MakeRunner = (Runner: Runner) => {
@@ -73,10 +73,11 @@ module MakeRunner = (Runner: Runner) => {
     )
 
   @inline
-  let testPromise = (name, ~timeout=?, callback) =>
-    Runner.testPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let testAsync = (name, ~timeout=?, callback) =>
+    Runner.testAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  let testAsync = testPromise
+  @deprecated("use testAsync instead")
+  let testPromise = testAsync
 
   @inline
   let it = (name, ~timeout=?, callback) =>
@@ -90,10 +91,11 @@ module MakeRunner = (Runner: Runner) => {
     )
 
   @inline
-  let itPromise = (name, ~timeout=?, callback) =>
-    Runner.itPromise(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let itAsync = (name, ~timeout=?, callback) =>
+    Runner.itAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  let itAsync = itPromise
+  @deprecated("use itAsync instead")
+  let itPromise = itAsync
 
   @inline
   let bench = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
@@ -107,14 +109,15 @@ module MakeRunner = (Runner: Runner) => {
     )
 
   @inline
-  let benchPromise = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
-    Runner.benchPromise(
+  let benchAsync = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
+    Runner.benchAsync(
       name,
       () => callback(suite),
       Some({time, iterations, warmupTime, warmupIterations})->Js.Undefined.fromOption,
     )
 
-  let benchAsync = benchPromise
+  @deprecated("use benchAsync instead")
+  let benchPromise = benchAsync
 }
 
 module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
@@ -130,12 +133,18 @@ module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
     )
 
   @inline
-  let test = (name, ~timeout=?, callback) =>
-    Runner.test(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let testAsync = (name, ~timeout=?, callback) =>
+    Runner.testAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+
+  @deprecated("use testAsync instead")
+  let test = testAsync
 
   @inline
-  let it = (name, ~timeout=?, callback) =>
-    Runner.it(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let itAsync = (name, ~timeout=?, callback) =>
+    Runner.itAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+
+  @deprecated("use itAsync instead")
+  let it = itAsync
 }
 
 include MakeRunner({
@@ -147,22 +156,11 @@ include MakeRunner({
   external test: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "test"
 
   @module("vitest") @val
-  external testPromise: (
-    string,
-    @uncurry (unit => Js.Promise2.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "test"
-
-  @module("vitest") @val
   external testAsync: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
     "test"
 
   @module("vitest") @val
   external it: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "it"
-
-  @module("vitest") @val
-  external itPromise: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
-    "it"
 
   @module("vitest") @val
   external itAsync: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
@@ -172,13 +170,6 @@ include MakeRunner({
   external bench: (
     string,
     @uncurry (unit => Js.undefined<unit>),
-    Js.undefined<benchOptions>,
-  ) => unit = "bench"
-
-  @module("vitest") @val
-  external benchPromise: (
-    string,
-    @uncurry (unit => Js.Promise2.t<unit>),
     Js.undefined<benchOptions>,
   ) => unit = "bench"
 
@@ -219,7 +210,7 @@ module Concurrent = {
   ) => unit = "concurrent"
 
   @send
-  external test: (
+  external testAsync: (
     concurrent_test,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -227,7 +218,7 @@ module Concurrent = {
   ) => unit = "concurrent"
 
   @send
-  external it: (
+  external itAsync: (
     concurrent_it,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -235,7 +226,7 @@ module Concurrent = {
   ) => unit = "concurrent"
 
   @send
-  external bench: (
+  external benchAsync: (
     concurrent_bench,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -244,9 +235,9 @@ module Concurrent = {
 
   include MakeConcurrentRunner({
     let describe = concurrent_describe->describe
-    let test = concurrent_test->test
-    let it = concurrent_it->it
-    let bench = concurrent_bench->bench
+    let testAsync = concurrent_test->testAsync
+    let itAsync = concurrent_it->itAsync
+    let benchAsync = concurrent_bench->benchAsync
   })
 }
 
@@ -287,7 +278,7 @@ module Only = {
   ) => unit = "only"
 
   @send
-  external testPromise: (
+  external testAsync: (
     only_test,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -299,7 +290,7 @@ module Only = {
     "only"
 
   @send
-  external itPromise: (
+  external itAsync: (
     only_it,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -315,7 +306,7 @@ module Only = {
   ) => unit = "only"
 
   @send
-  external benchPromise: (
+  external benchAsync: (
     only_bench,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -326,16 +317,13 @@ module Only = {
     let describe = only_describe->describe
 
     let test = only_test->test
-    let testPromise = only_test->testPromise
-    let testAsync = testPromise
+    let testAsync = only_test->testAsync
 
     let it = only_it->it
-    let itPromise = only_it->itPromise
-    let itAsync = itPromise
+    let itAsync = only_it->itAsync
 
     let bench = only_bench->bench
-    let benchPromise = only_bench->benchPromise
-    let benchAsync = benchPromise
+    let benchAsync = only_bench->benchAsync
   })
 
   module Concurrent = {
@@ -367,7 +355,7 @@ module Only = {
     ) => unit = "concurrent"
 
     @send
-    external test: (
+    external testAsync: (
       concurrent_test,
       string,
       @uncurry (unit => Js.Promise2.t<unit>),
@@ -375,7 +363,7 @@ module Only = {
     ) => unit = "concurrent"
 
     @send
-    external it: (
+    external itAsync: (
       concurrent_it,
       string,
       @uncurry (unit => Js.Promise2.t<unit>),
@@ -383,7 +371,7 @@ module Only = {
     ) => unit = "concurrent"
 
     @send
-    external bench: (
+    external benchAsync: (
       concurrent_bench,
       string,
       @uncurry (unit => Js.Promise2.t<unit>),
@@ -392,9 +380,9 @@ module Only = {
 
     include MakeConcurrentRunner({
       let describe = only_describe->concurrent_describe->describe
-      let test = only_test->concurrent_test->test
-      let it = only_it->concurrent_it->it
-      let bench = only_bench->concurrent_bench->bench
+      let testAsync = only_test->concurrent_test->testAsync
+      let itAsync = only_it->concurrent_it->itAsync
+      let benchAsync = only_bench->concurrent_bench->benchAsync
     })
   }
 }
@@ -436,7 +424,7 @@ module Skip = {
   ) => unit = "skip"
 
   @send
-  external testPromise: (
+  external testAsync: (
     skip_test,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -448,7 +436,7 @@ module Skip = {
     "skip"
 
   @send
-  external itPromise: (
+  external itAsync: (
     skip_it,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -464,7 +452,7 @@ module Skip = {
   ) => unit = "skip"
 
   @send
-  external benchPromise: (
+  external benchAsync: (
     skip_bench,
     string,
     @uncurry (unit => Js.Promise2.t<unit>),
@@ -475,16 +463,13 @@ module Skip = {
     let describe = skip_describe->describe
 
     let test = skip_test->test
-    let testPromise = skip_test->testPromise
-    let testAsync = testPromise
+    let testAsync = skip_test->testAsync
 
     let it = skip_it->it
-    let itPromise = skip_it->itPromise
-    let itAsync = itPromise
+    let itAsync = skip_it->itAsync
 
     let bench = skip_bench->bench
-    let benchPromise = skip_bench->benchPromise
-    let benchAsync = benchPromise
+    let benchAsync = skip_bench->benchAsync
   })
 
   module Concurrent = {
@@ -516,7 +501,7 @@ module Skip = {
     ) => unit = "concurrent"
 
     @send
-    external test: (
+    external testAsync: (
       concurrent_test,
       string,
       @uncurry (unit => Js.Promise2.t<unit>),
@@ -524,7 +509,7 @@ module Skip = {
     ) => unit = "concurrent"
 
     @send
-    external it: (
+    external itAsync: (
       concurrent_it,
       string,
       @uncurry (unit => Js.Promise2.t<unit>),
@@ -532,7 +517,7 @@ module Skip = {
     ) => unit = "concurrent"
 
     @send
-    external bench: (
+    external benchAsync: (
       concurrent_bench,
       string,
       @uncurry (unit => Js.Promise2.t<unit>),
@@ -541,9 +526,9 @@ module Skip = {
 
     include MakeConcurrentRunner({
       let describe = skip_describe->concurrent_describe->describe
-      let test = skip_test->concurrent_test->test
-      let it = skip_it->concurrent_it->it
-      let bench = skip_bench->concurrent_bench->bench
+      let testAsync = skip_test->concurrent_test->testAsync
+      let itAsync = skip_it->concurrent_it->itAsync
+      let benchAsync = skip_bench->concurrent_bench->benchAsync
     })
   }
 }
