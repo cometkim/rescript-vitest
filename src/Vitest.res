@@ -407,15 +407,15 @@ module Each = {
   type test
   type describe
 
-  module External = {
+  module Ext = {
     @module("vitest") @val
-    external _test: test = "test"
+    external test: test = "test"
 
     @module("vitest") @val
-    external _describe: describe = "describe"
+    external describe: describe = "describe"
 
     @send
-    external _testObj: (
+    external testObj: (
       ~test: test,
       ~cases: array<'a>,
       . ~name: string,
@@ -424,7 +424,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _testObjAsync: (
+    external testObjAsync: (
       ~test: test,
       ~cases: array<'a>,
       . ~name: string,
@@ -433,7 +433,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test2: (
+    external test2: (
       ~test: test,
       ~cases: array<('a, 'b)>,
       . ~name: string,
@@ -442,7 +442,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test2Async: (
+    external test2Async: (
       ~test: test,
       ~cases: array<('a, 'b)>,
       . ~name: string,
@@ -451,7 +451,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test3: (
+    external test3: (
       ~test: test,
       ~cases: array<('a, 'b, 'c)>,
       . ~name: string,
@@ -460,7 +460,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test3Async: (
+    external test3Async: (
       ~test: test,
       ~cases: array<('a, 'b, 'c)>,
       . ~name: string,
@@ -469,7 +469,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test4: (
+    external test4: (
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd)>,
       . ~name: string,
@@ -478,7 +478,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test4Async: (
+    external test4Async: (
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd)>,
       . ~name: string,
@@ -487,7 +487,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test5: (
+    external test5: (
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
@@ -496,7 +496,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _test5Async: (
+    external test5Async: (
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
@@ -505,7 +505,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describeObj: (
+    external describeObj: (
       ~describe: describe,
       ~cases: array<'a>,
       . ~name: string,
@@ -514,7 +514,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describeObjAsync: (
+    external describeObjAsync: (
       ~describe: describe,
       ~cases: array<'a>,
       . ~name: string,
@@ -523,7 +523,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe2: (
+    external describe2: (
       ~describe: describe,
       ~cases: array<('a, 'b)>,
       . ~name: string,
@@ -532,7 +532,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe2Async: (
+    external describe2Async: (
       ~describe: describe,
       ~cases: array<('a, 'b)>,
       . ~name: string,
@@ -541,7 +541,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe3: (
+    external describe3: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c)>,
       . ~name: string,
@@ -550,7 +550,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe3Async: (
+    external describe3Async: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c)>,
       . ~name: string,
@@ -559,7 +559,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe4: (
+    external describe4: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd)>,
       . ~name: string,
@@ -568,7 +568,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe4Async: (
+    external describe4Async: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd)>,
       . ~name: string,
@@ -577,7 +577,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe5: (
+    external describe5: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
@@ -586,7 +586,7 @@ module Each = {
     ) => unit = "each"
 
     @send
-    external _describe5Async: (
+    external describe5Async: (
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
@@ -597,87 +597,47 @@ module Each = {
 
   @inline
   let test = (cases, name, ~timeout=?, f) =>
-    External._testObj(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.testObj(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let testAsync = (cases, name, ~timeout=?, f) =>
-    External._testObjAsync(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.testObjAsync(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test2 = (cases, name, ~timeout=?, f) =>
-    External._test2(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test2(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test2Async = (cases, name, ~timeout=?, f) =>
-    External._test2Async(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test2Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test3 = (cases, name, ~timeout=?, f) =>
-    External._test3(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test3(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test3Async = (cases, name, ~timeout=?, f) =>
-    External._test3Async(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test3Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test4 = (cases, name, ~timeout=?, f) =>
-    External._test4(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test4(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test4Async = (cases, name, ~timeout=?, f) =>
-    External._test4Async(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test4Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test5 = (cases, name, ~timeout=?, f) =>
-    External._test5(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test5(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let test5Async = (cases, name, ~timeout=?, f) =>
-    External._test5Async(~test=External._test, ~cases)(.
-      ~name,
-      ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
-    )
+    Ext.test5Async(~test=Ext.test, ~cases)(. ~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
 
   @inline
   let describe = (cases, name, ~timeout=?, f) =>
-    External._describeObj(~describe=External._describe, ~cases)(.
+    Ext.describeObj(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -685,7 +645,7 @@ module Each = {
 
   @inline
   let describeAsync = (cases, name, ~timeout=?, f) =>
-    External._describeObjAsync(~describe=External._describe, ~cases)(.
+    Ext.describeObjAsync(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -693,7 +653,7 @@ module Each = {
 
   @inline
   let describe2 = (cases, name, ~timeout=?, f) =>
-    External._describe2(~describe=External._describe, ~cases)(.
+    Ext.describe2(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -701,7 +661,7 @@ module Each = {
 
   @inline
   let describe2Async = (cases, name, ~timeout=?, f) =>
-    External._describe2Async(~describe=External._describe, ~cases)(.
+    Ext.describe2Async(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -709,7 +669,7 @@ module Each = {
 
   @inline
   let describe3 = (cases, name, ~timeout=?, f) =>
-    External._describe3(~describe=External._describe, ~cases)(.
+    Ext.describe3(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -717,7 +677,7 @@ module Each = {
 
   @inline
   let describe3Async = (cases, name, ~timeout=?, f) =>
-    External._describe3Async(~describe=External._describe, ~cases)(.
+    Ext.describe3Async(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -725,7 +685,7 @@ module Each = {
 
   @inline
   let describe4 = (cases, name, ~timeout=?, f) =>
-    External._describe4(~describe=External._describe, ~cases)(.
+    Ext.describe4(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -733,7 +693,7 @@ module Each = {
 
   @inline
   let describe4Async = (cases, name, ~timeout=?, f) =>
-    External._describe4Async(~describe=External._describe, ~cases)(.
+    Ext.describe4Async(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -741,7 +701,7 @@ module Each = {
 
   @inline
   let describe5 = (cases, name, ~timeout=?, f) =>
-    External._describe5(~describe=External._describe, ~cases)(.
+    Ext.describe5(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
@@ -749,7 +709,7 @@ module Each = {
 
   @inline
   let describe5Async = (cases, name, ~timeout=?, f) =>
-    External._describe5Async(~describe=External._describe, ~cases)(.
+    Ext.describe5Async(~describe=Ext.describe, ~cases)(.
       ~name,
       ~f,
       ~timeout=timeout->Js.Undefined.fromOption,
