@@ -30,23 +30,23 @@ module type Runner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
 
   let test: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let testAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let testAsync: (string, unit => promise<unit>, Js.undefined<int>) => unit
 
   let it: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-  let itAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let itAsync: (string, unit => promise<unit>, Js.undefined<int>) => unit
 
   let bench: (string, unit => Js.undefined<unit>, Js.undefined<benchOptions>) => unit
-  let benchAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<benchOptions>) => unit
+  let benchAsync: (string, unit => promise<unit>, Js.undefined<benchOptions>) => unit
 }
 
 module type ConcurrentRunner = {
   let describe: (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
 
-  let testAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let testAsync: (string, unit => promise<unit>, Js.undefined<int>) => unit
 
-  let itAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<int>) => unit
+  let itAsync: (string, unit => promise<unit>, Js.undefined<int>) => unit
 
-  let benchAsync: (string, unit => Js.Promise2.t<unit>, Js.undefined<benchOptions>) => unit
+  let benchAsync: (string, unit => promise<unit>, Js.undefined<benchOptions>) => unit
 }
 
 module MakeRunner = (Runner: Runner) => {
@@ -156,15 +156,13 @@ include MakeRunner({
   external test: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "test"
 
   @module("vitest") @val
-  external testAsync: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
-    "test"
+  external testAsync: (string, @uncurry (unit => promise<unit>), Js.undefined<int>) => unit = "test"
 
   @module("vitest") @val
   external it: (string, @uncurry (unit => Js.undefined<unit>), Js.undefined<int>) => unit = "it"
 
   @module("vitest") @val
-  external itAsync: (string, @uncurry (unit => Js.Promise2.t<unit>), Js.undefined<int>) => unit =
-    "it"
+  external itAsync: (string, @uncurry (unit => promise<unit>), Js.undefined<int>) => unit = "it"
 
   @module("vitest") @val
   external bench: (
@@ -176,7 +174,7 @@ include MakeRunner({
   @module("vitest") @val
   external benchAsync: (
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<benchOptions>,
   ) => unit = "bench"
 })
@@ -213,7 +211,7 @@ module Concurrent = {
   external testAsync: (
     concurrent_test,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<int>,
   ) => unit = "concurrent"
 
@@ -221,7 +219,7 @@ module Concurrent = {
   external itAsync: (
     concurrent_it,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<int>,
   ) => unit = "concurrent"
 
@@ -229,7 +227,7 @@ module Concurrent = {
   external benchAsync: (
     concurrent_bench,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<benchOptions>,
   ) => unit = "concurrent"
 
@@ -281,7 +279,7 @@ module Only = {
   external testAsync: (
     only_test,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<int>,
   ) => unit = "only"
 
@@ -290,12 +288,8 @@ module Only = {
     "only"
 
   @send
-  external itAsync: (
-    only_it,
-    string,
-    @uncurry (unit => Js.Promise2.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "only"
+  external itAsync: (only_it, string, @uncurry (unit => promise<unit>), Js.undefined<int>) => unit =
+    "only"
 
   @send
   external bench: (
@@ -309,7 +303,7 @@ module Only = {
   external benchAsync: (
     only_bench,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<benchOptions>,
   ) => unit = "only"
 
@@ -358,7 +352,7 @@ module Only = {
     external testAsync: (
       concurrent_test,
       string,
-      @uncurry (unit => Js.Promise2.t<unit>),
+      @uncurry (unit => promise<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -366,7 +360,7 @@ module Only = {
     external itAsync: (
       concurrent_it,
       string,
-      @uncurry (unit => Js.Promise2.t<unit>),
+      @uncurry (unit => promise<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -374,7 +368,7 @@ module Only = {
     external benchAsync: (
       concurrent_bench,
       string,
-      @uncurry (unit => Js.Promise2.t<unit>),
+      @uncurry (unit => promise<unit>),
       Js.undefined<benchOptions>,
     ) => unit = "concurrent"
 
@@ -427,7 +421,7 @@ module Skip = {
   external testAsync: (
     skip_test,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<int>,
   ) => unit = "skip"
 
@@ -436,12 +430,8 @@ module Skip = {
     "skip"
 
   @send
-  external itAsync: (
-    skip_it,
-    string,
-    @uncurry (unit => Js.Promise2.t<unit>),
-    Js.undefined<int>,
-  ) => unit = "skip"
+  external itAsync: (skip_it, string, @uncurry (unit => promise<unit>), Js.undefined<int>) => unit =
+    "skip"
 
   @send
   external bench: (
@@ -455,7 +445,7 @@ module Skip = {
   external benchAsync: (
     skip_bench,
     string,
-    @uncurry (unit => Js.Promise2.t<unit>),
+    @uncurry (unit => promise<unit>),
     Js.undefined<benchOptions>,
   ) => unit = "skip"
 
@@ -504,7 +494,7 @@ module Skip = {
     external testAsync: (
       concurrent_test,
       string,
-      @uncurry (unit => Js.Promise2.t<unit>),
+      @uncurry (unit => promise<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -512,7 +502,7 @@ module Skip = {
     external itAsync: (
       concurrent_it,
       string,
-      @uncurry (unit => Js.Promise2.t<unit>),
+      @uncurry (unit => promise<unit>),
       Js.undefined<int>,
     ) => unit = "concurrent"
 
@@ -520,7 +510,7 @@ module Skip = {
     external benchAsync: (
       concurrent_bench,
       string,
-      @uncurry (unit => Js.Promise2.t<unit>),
+      @uncurry (unit => promise<unit>),
       Js.undefined<benchOptions>,
     ) => unit = "concurrent"
 
@@ -545,30 +535,25 @@ module type EachType = {
     ('a, 'b, 'c, 'd, 'e) => unit,
   ) => unit
 
-  let testAsync: (array<'a>, string, ~timeout: int=?, 'a => Js.Promise2.t<unit>) => unit
-  let test2Async: (
-    array<('a, 'b)>,
-    string,
-    ~timeout: int=?,
-    ('a, 'b) => Js.Promise2.t<unit>,
-  ) => unit
+  let testAsync: (array<'a>, string, ~timeout: int=?, 'a => promise<unit>) => unit
+  let test2Async: (array<('a, 'b)>, string, ~timeout: int=?, ('a, 'b) => promise<unit>) => unit
   let test3Async: (
     array<('a, 'b, 'c)>,
     string,
     ~timeout: int=?,
-    ('a, 'b, 'c) => Js.Promise2.t<unit>,
+    ('a, 'b, 'c) => promise<unit>,
   ) => unit
   let test4Async: (
     array<('a, 'b, 'c, 'd)>,
     string,
     ~timeout: int=?,
-    ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+    ('a, 'b, 'c, 'd) => promise<unit>,
   ) => unit
   let test5Async: (
     array<('a, 'b, 'c, 'd, 'e)>,
     string,
     ~timeout: int=?,
-    ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+    ('a, 'b, 'c, 'd, 'e) => promise<unit>,
   ) => unit
 
   let describe: (array<'a>, string, ~timeout: int=?, 'a => unit) => unit
@@ -587,30 +572,25 @@ module type EachType = {
     ('a, 'b, 'c, 'd, 'e) => unit,
   ) => unit
 
-  let describeAsync: (array<'a>, string, ~timeout: int=?, 'a => Js.Promise2.t<unit>) => unit
-  let describe2Async: (
-    array<('a, 'b)>,
-    string,
-    ~timeout: int=?,
-    ('a, 'b) => Js.Promise2.t<unit>,
-  ) => unit
+  let describeAsync: (array<'a>, string, ~timeout: int=?, 'a => promise<unit>) => unit
+  let describe2Async: (array<('a, 'b)>, string, ~timeout: int=?, ('a, 'b) => promise<unit>) => unit
   let describe3Async: (
     array<('a, 'b, 'c)>,
     string,
     ~timeout: int=?,
-    ('a, 'b, 'c) => Js.Promise2.t<unit>,
+    ('a, 'b, 'c) => promise<unit>,
   ) => unit
   let describe4Async: (
     array<('a, 'b, 'c, 'd)>,
     string,
     ~timeout: int=?,
-    ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+    ('a, 'b, 'c, 'd) => promise<unit>,
   ) => unit
   let describe5Async: (
     array<('a, 'b, 'c, 'd, 'e)>,
     string,
     ~timeout: int=?,
-    ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+    ('a, 'b, 'c, 'd, 'e) => promise<unit>,
   ) => unit
 }
 
@@ -675,7 +655,7 @@ module Each: EachType = {
       ~test: test,
       ~cases: array<'a>,
       . ~name: string,
-      ~f: @uncurry 'a => Js.Promise2.t<unit>,
+      ~f: @uncurry 'a => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -684,7 +664,7 @@ module Each: EachType = {
       ~test: test,
       ~cases: array<('a, 'b)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -693,7 +673,7 @@ module Each: EachType = {
       ~test: test,
       ~cases: array<('a, 'b, 'c)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b, 'c) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -702,7 +682,7 @@ module Each: EachType = {
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -711,7 +691,7 @@ module Each: EachType = {
       ~test: test,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -765,7 +745,7 @@ module Each: EachType = {
       ~describe: describe,
       ~cases: array<'a>,
       . ~name: string,
-      ~f: @uncurry 'a => Js.Promise2.t<unit>,
+      ~f: @uncurry 'a => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -774,7 +754,7 @@ module Each: EachType = {
       ~describe: describe,
       ~cases: array<('a, 'b)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -783,7 +763,7 @@ module Each: EachType = {
       ~describe: describe,
       ~cases: array<('a, 'b, 'c)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b, 'c) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -792,7 +772,7 @@ module Each: EachType = {
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c, 'd) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b, 'c, 'd) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
 
@@ -801,7 +781,7 @@ module Each: EachType = {
       ~describe: describe,
       ~cases: array<('a, 'b, 'c, 'd, 'e)>,
       . ~name: string,
-      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => Js.Promise2.t<unit>,
+      ~f: @uncurry ('a, 'b, 'c, 'd, 'e) => promise<unit>,
       ~timeout: Js.undefined<int>,
     ) => unit = "each"
   }
@@ -956,7 +936,7 @@ module Todo = {
 @module("vitest") @val external beforeEach: (@uncurry (unit => unit)) => unit = "beforeEach"
 
 @module("vitest") @val
-external beforeEachPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
+external beforeEachPromise: (@uncurry (unit => promise<'a>), Js.Undefined.t<int>) => unit =
   "beforeEach"
 
 @inline
@@ -966,7 +946,7 @@ let beforeEachPromise = (~timeout=?, callback) =>
 @module("vitest") external beforeAll: (@uncurry (unit => unit)) => unit = "beforeAll"
 
 @module("vitest")
-external beforeAllPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
+external beforeAllPromise: (@uncurry (unit => promise<'a>), Js.Undefined.t<int>) => unit =
   "beforeAll"
 
 @inline
@@ -976,7 +956,7 @@ let beforeAllPromise = (~timeout=?, callback) =>
 @module("vitest") external afterEach: (@uncurry (unit => unit)) => unit = "afterEach"
 
 @module("vitest")
-external afterEachPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
+external afterEachPromise: (@uncurry (unit => promise<'a>), Js.Undefined.t<int>) => unit =
   "afterEach"
 
 @inline
@@ -984,8 +964,7 @@ let afterEachPromise = (~timeout=?, callback) =>
   afterEachPromise(callback, timeout->Js.Undefined.fromOption)
 
 @module("vitest")
-external afterAllPromise: (@uncurry (unit => Js.Promise2.t<'a>), Js.Undefined.t<int>) => unit =
-  "afterAll"
+external afterAllPromise: (@uncurry (unit => promise<'a>), Js.Undefined.t<int>) => unit = "afterAll"
 
 @inline
 let afterAllPromise = (~timeout=?, callback) =>
@@ -1144,22 +1123,21 @@ module Expect = {
   })
 
   module Promise = {
-    @get external rejects: expected<Js.Promise2.t<'a>> => expected<'a> = "rejects"
-    @get external resolves: expected<Js.Promise2.t<'a>> => expected<'a> = "resolves"
+    @get external rejects: expected<promise<'a>> => expected<'a> = "rejects"
+    @get external resolves: expected<promise<'a>> => expected<'a> = "resolves"
 
     include Matchers({
-      type return<'a> = Js.Promise2.t<unit>
+      type return<'a> = promise<unit>
       let emptyReturn = Js.Promise2.resolve()
     })
 
     @send
-    external toThrow: (expected<'a>, Js.undefined<string>) => Js.Promise2.t<unit> = "toThrow"
+    external toThrow: (expected<'a>, Js.undefined<string>) => promise<unit> = "toThrow"
     @inline
     let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
 
     @send
-    external toThrowError: (expected<'a>, Js.undefined<string>) => Js.Promise2.t<unit> =
-      "toThrowError"
+    external toThrowError: (expected<'a>, Js.undefined<string>) => promise<unit> = "toThrowError"
     @inline
     let toThrowError = (~message=?, expected) =>
       expected->toThrowError(message->Js.Undefined.fromOption)
