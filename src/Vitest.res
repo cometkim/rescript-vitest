@@ -1051,7 +1051,7 @@ module Matchers = (
     @send external toBeNaN: expected => Config.return<'a> = "toBeNaN"
 
     @send
-    external toBeClosedTo: (expected, t, int) => Config.return<'a> = "toBeClosedTo"
+    external toBeCloseTo: (expected, t, int) => Config.return<'a> = "toBeCloseTo"
 
     @send
     external toBeGreaterThan: (expected, t) => Config.return<'a> = "toBeGreaterThan"
