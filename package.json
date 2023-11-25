@@ -31,12 +31,12 @@
     "vite": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "dependencies": {
-    "vitest": "^0.31.0"
+    "vitest": "^0.34.6"
   },
   "devDependencies": {
-    "@jihchi/vite-plugin-rescript": "^5.0.0",
+    "@jihchi/vite-plugin-rescript": "^5.5.0",
     "rescript": "^10.1.4",
-    "vite": "^4.3.5"
+    "vite": "^5.0.2"
   },
   "packageManager": "yarn@4.0.2"
 }
