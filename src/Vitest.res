@@ -1193,3 +1193,33 @@ module Vi = {
   @send external getMockedDate: t => Js.null<Js.Date.t> = "getMockedDate"
   @inline let getMockedDate = () => vi_obj->getMockedDate->Js.Null.toOption
 }
+
+@scope("import.meta") @val
+external inSource: bool = "vitest"
+
+module InSource = {
+  // Note:
+  // If it goes out of module scope, `import.meta.vitest` will not be bound.
+  // Therefore, `MakeRunner` cannot be reused here.
+
+  @scope("import.meta.vitest") @val
+  external describe: (string, @uncurry (unit => unit)) => unit = "describe"
+
+  @scope("import.meta.vitest") @val
+  external test: (string, @uncurry (unit => unit)) => unit = "test"
+
+  @scope("import.meta.vitest") @val
+  external testAsync: (string, @uncurry (unit => promise<unit>)) => unit = "test"
+
+  @scope("import.meta.vitest") @val
+  external it: (string, @uncurry (unit => unit)) => unit = "it"
+
+  @scope("import.meta.vitest") @val
+  external itAsync: (string, @uncurry (unit => promise<unit>)) => unit = "it"
+
+  @scope("import.meta.vitest") @val
+  external bench: (string, @uncurry (unit => unit)) => unit = "it"
+
+  @scope("import.meta.vitest") @val
+  external benchAsync: (string, @uncurry (unit => promise<unit>)) => unit = "it"
+}

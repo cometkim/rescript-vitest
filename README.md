@@ -10,13 +10,15 @@
 
 ReScript v10.1+ is required since v1.0.0. To use `Js.Promise2` and `async`/`await` for tests.
 
-## Usage
-
-### Config
+## Config
 
 Configure with plain `vite.config.js`.
 
 You can use [vite-plugin-rescript](https://github.com/jihchi/vite-plugin-rescript) to build ReScript automatically before the test.
+
+## Usage
+
+You can find examples on [tests](./tests)
 
 ### Basic
 
@@ -43,9 +45,22 @@ describe("Hello, Vitest", () => {
 })
 ```
 
-## Examples
+### In-source testing (experimental)
 
-See [tests](./tests)
+Vitest support [in-source testing](https://vitest.dev/guide/in-source)
+
+```res
+// This if block can be removed from production code.
+// You need to define `import.meta.vitest` to `undefined`
+if Vitest.inSource {
+  open Vitest
+  open Vitest.InSource
+
+  test("In-source testing", _ => {
+    expect(1 + 2)->Expect.toBe(3)
+  })
+}
+```
 
 ## LICENCE
 
