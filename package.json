@@ -37,5 +37,6 @@
     "@jihchi/vite-plugin-rescript": "^5.0.0",
     "rescript": "^10.1.4",
     "vite": "^4.3.5"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }
