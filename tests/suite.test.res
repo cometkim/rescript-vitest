@@ -6,7 +6,7 @@ describe("suite name", () => {
     Assert.equal(Math.sqrt(4.0), 2.0)
   })
 
-  open Vitest.Expect
+  open! Vitest.Expect
 
   it("bar", _ => {
     expect(1 + 1)->eq(2)
