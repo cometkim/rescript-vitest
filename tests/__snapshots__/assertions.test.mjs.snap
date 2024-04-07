@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Expect > toMatchSnapshot 1`] = `1`;
+
+exports[`Expect > toMatchSnapshot 2`] = `2`;
+
+exports[`Expect > toMatchSnapshot 3`] = `"one"`;
+
+exports[`Expect > toMatchSnapshot 4`] = `true`;
+
+exports[`Expect > toMatchSnapshot 5`] = `
+{
+  "foo": "bar",
+}
+`;
