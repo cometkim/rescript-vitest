@@ -9,14 +9,25 @@ external suite: suite = "expect"
 
 @send external hasAssertions: suite => unit = "hasAssertions"
 
-type expected<'a>
+/** Chai Assertion object */
+type assertion<'a>
 
-@module("vitest") external expect: 'a => expected<'a> = "expect"
+type expected<'a> = assertion<'a>
+
+@module("vitest") external expect: 'a => assertion<'a> = "expect"
+
+type reinforcement<'a, 'b> = (assertion<'a>, 'a => 'b) => assertion<'b>
 
 %%private(
-  external cast_expeceted: expected<'a> => expected<'b> = "%identity"
-  external unwrap: expected<'a> => 'a = "%identity"
-  external wrap: 'a => expected<'a> = "%identity"
+  external coerce_assertion: assertion<'a> => assertion<'b> = "%identity"
+
+  let dangerously_reinforce_assertion: reinforcement<'a, 'b> = %raw(`
+    function(assertion, cast) {
+      let inner = assertion.__flags;
+      inner.object = cast(inner.object);
+      return assertion;
+    }
+  `)
 )
 
 type benchOptions = {
@@ -970,55 +981,54 @@ module Matchers = (
     let emptyReturn: return<'a>
   },
 ) => {
-  @get external not: expected<'a> => expected<'a> = "not"
+  @get external not: assertion<'a> => assertion<'a> = "not"
 
-  @send external toBe: (expected<'a>, 'a) => Config.return<'a> = "toBe"
+  @send external toBe: (assertion<'a>, 'a) => Config.return<'a> = "toBe"
 
-  @send external eq: (expected<'a>, 'a) => Config.return<'a> = "eq"
+  @send external eq: (assertion<'a>, 'a) => Config.return<'a> = "eq"
 
-  @send external toBeDefined: expected<Js.undefined<'a>> => Config.return<'a> = "toBeDefined"
+  @send external toBeDefined: assertion<Js.undefined<'a>> => Config.return<'a> = "toBeDefined"
 
-  @send external toBeUndefined: expected<Js.undefined<'a>> => Config.return<'a> = "toBeUndefined"
+  @send external toBeUndefined: assertion<Js.undefined<'a>> => Config.return<'a> = "toBeUndefined"
 
-  @send external toBeTruthy: expected<'a> => Config.return<'a> = "toBeTruthy"
+  @send external toBeTruthy: assertion<'a> => Config.return<'a> = "toBeTruthy"
 
-  @send external toBeFalsy: expected<'a> => Config.return<'a> = "toBeFalsy"
+  @send external toBeFalsy: assertion<'a> => Config.return<'a> = "toBeFalsy"
 
-  @send external toBeNull: expected<Js.null<'a>> => Config.return<'a> = "toBeNull"
+  @send external toBeNull: assertion<Js.null<'a>> => Config.return<'a> = "toBeNull"
 
-  // @send external toBeInstanceOf: (expected<'a>, ?) => Config.return<'a> = "toBeInstanceOf"
+  // @send external toBeInstanceOf: (assertion<'a>, ?) => Config.return<'a> = "toBeInstanceOf"
 
-  @send external toEqual: (expected<'a>, 'a) => Config.return<'a> = "toEqual"
+  @send external toEqual: (assertion<'a>, 'a) => Config.return<'a> = "toEqual"
 
   @inline
   let toBeSome = (~some=?, expected: expected<option<'a>>) => {
-    expected->cast_expeceted->not->toBeUndefined->ignore
     switch some {
     | Some(id) => expected->toEqual(id)
-    | None => Config.emptyReturn
+    | None => expected->coerce_assertion->not->toBeUndefined
     }
   }
 
   @inline
-  let toBeNone = (expected: expected<option<'a>>) => {
-    expected->cast_expeceted->toBeUndefined
+  let toBeNone = (expected: assertion<option<'a>>) => {
+    expected->coerce_assertion->toBeUndefined
   }
 
-  @send external toStrictEqual: (expected<'a>, 'a) => Config.return<'a> = "toStrictEqual"
+  @send external toStrictEqual: (assertion<'a>, 'a) => Config.return<'a> = "toStrictEqual"
 
-  @send external toContain: (expected<array<'a>>, 'a) => Config.return<'a> = "toContain"
+  @send external toContain: (assertion<array<'a>>, 'a) => Config.return<'a> = "toContain"
 
-  @send external toContainEqual: (expected<array<'a>>, 'a) => Config.return<'a> = "toContainEqual"
+  @send external toContainEqual: (assertion<array<'a>>, 'a) => Config.return<'a> = "toContainEqual"
 
-  @send external toMatchSnapshot: expected<'a> => Config.return<'a> = "toMatchSnapshot"
+  @send external toMatchSnapshot: assertion<'a> => Config.return<'a> = "toMatchSnapshot"
 
   @send
-  external toThrow: (expected<unit => 'a>, Js.undefined<string>) => Config.return<'a> = "toThrow"
+  external toThrow: (assertion<unit => 'a>, Js.undefined<string>) => Config.return<'a> = "toThrow"
   @inline
   let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
 
   @send
-  external toThrowError: (expected<unit => 'a>, Js.undefined<string>) => Config.return<'a> =
+  external toThrowError: (assertion<unit => 'a>, Js.undefined<string>) => Config.return<'a> =
     "toThrowError"
   @inline
   let toThrowError = (~message=?, expected) =>
@@ -1026,7 +1036,7 @@ module Matchers = (
 
   module Int = {
     type t = int
-    type expected = expected<t>
+    type expected = assertion<t>
 
     @send external toBeGreaterThan: (expected, t) => Config.return<'a> = "toBeGreaterThan"
 
@@ -1040,7 +1050,7 @@ module Matchers = (
 
   module Float = {
     type t = float
-    type expected = expected<t>
+    type expected = assertion<t>
 
     @send external toBeNaN: expected => Config.return<'a> = "toBeNaN"
 
@@ -1062,7 +1072,7 @@ module Matchers = (
 
   module String = {
     type t = string
-    type expected = expected<t>
+    type expected = assertion<t>
 
     @send external toContain: (expected, t) => Config.return<'a> = "toContain"
 
@@ -1082,17 +1092,17 @@ module Matchers = (
   module List = {
     @inline
     let toContain = (expected, item) => {
-      expected->unwrap->Belt.List.toArray->wrap->Array.toContain(item)
+      expected->dangerously_reinforce_assertion(Belt.List.toArray)->Array.toContain(item)
     }
 
     @inline
     let toHaveLength = (expected, length) => {
-      expected->unwrap->Belt.List.toArray->wrap->Array.toHaveLength(length)
+      expected->dangerously_reinforce_assertion(Belt.List.toArray)->Array.toHaveLength(length)
     }
 
     @inline
     let toMatch = (expected, list) => {
-      expected->unwrap->Belt.List.toArray->wrap->Array.toMatch(list->Belt.List.toArray)
+      expected->dangerously_reinforce_assertion(Belt.List.toArray)->Array.toMatch(list->Belt.List.toArray)
     }
   }
 
