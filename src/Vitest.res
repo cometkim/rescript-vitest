@@ -1084,6 +1084,8 @@ module Matchers = (
   module Array = {
     @send external toContain: (expected<array<'a>>, 'a) => Config.return<'a> = "toContain"
 
+    @send external toContainEqual: (expected<array<'a>>, 'a) => Config.return<'a> = "toContainEqual"
+
     @send external toHaveLength: (expected<array<'a>>, int) => Config.return<'a> = "toHaveLength"
 
     @send external toMatch: (expected<array<'a>>, array<'a>) => Config.return<'a> = "toMatchObject"
@@ -1093,6 +1095,11 @@ module Matchers = (
     @inline
     let toContain = (expected, item) => {
       expected->dangerously_reinforce_assertion(Belt.List.toArray)->Array.toContain(item)
+    }
+
+    @inline
+    let toContainEqual = (expected, item) => {
+      expected->dangerously_reinforce_assertion(Belt.List.toArray)->Array.toContainEqual(item)
     }
 
     @inline
