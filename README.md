@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/rescript-vitest)](https://www.npmjs.com/package/rescript-vitest)
 [![license](https://img.shields.io/github/license/cometkim/rescript-vitest)](#LICENSE)
 
-[ReScript](https://rescript-lang.org) bidnings to [Vitest](https://vitest.dev)
+[ReScript](https://rescript-lang.org) bindings to [Vitest](https://vitest.dev)
 
 ## Prerequisite
 
