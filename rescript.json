@@ -1,6 +1,6 @@
 {
   "name": "rescript-vitest",
-  "uncurried": false,
+  "uncurried": true,
   "namespace": false,
   "suffix": ".mjs",
   "sources": [
@@ -16,8 +16,6 @@
     "module": "esmodule",
     "in-source": true
   },
-  "bs-dependencies": [
-  ],
-  "bs-dev-dependencies": [
-  ]
+  "bs-dependencies": [],
+  "bs-dev-dependencies": []
 }
