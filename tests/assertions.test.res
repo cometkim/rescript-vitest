@@ -1,5 +1,29 @@
 open Vitest
 
+describe("Assert", () => {
+  test("assert_", _t => {
+    Assert.assert_(true)
+    Assert.assert_(1 == 1)
+    Assert.assert_("one" == "one")
+    Assert.assert_(1 == 1)
+  })
+
+  test("unreachable", _t => {
+    try {
+      let _ = Js.Exn.raiseError("error")
+      Assert.unreachable()
+    } catch {
+    | _ => Assert.assert_(~message="threw error", true)
+    }
+
+    try {
+      expect(true)->Expect.toBe(true)
+    } catch {
+      | _ => Assert.unreachable()
+    }
+  })
+})
+
 describe("Expect", () => {
   test("toBe", _t => {
     expect(1)->Expect.toBe(1)
@@ -248,41 +272,41 @@ describe("Expect", () => {
   })
 
   describe("Array", () => {
-        test(
-          "toContain",
-          _t => {
-            expect([1, 2, 3])->Expect.Array.toContain(2)
-            expect(["hello", "world"])->Expect.Array.toContain("world")
-            expect([true, false])->Expect.Array.toContain(false)
-            expect([1, 2, 3])->Expect.not->Expect.Array.toContain(4)
+    test(
+      "toContain",
+      _t => {
+        expect([1, 2, 3])->Expect.Array.toContain(2)
+        expect(["hello", "world"])->Expect.Array.toContain("world")
+        expect([true, false])->Expect.Array.toContain(false)
+        expect([1, 2, 3])->Expect.not->Expect.Array.toContain(4)
       },
     )
 
     test(
       "toContainEqual",
       _t => {
-          expect([1, 2, 3])->Expect.Array.toContainEqual(2)
-          expect(["hello", "world"])->Expect.Array.toContainEqual("world")
-          expect([true, false])->Expect.Array.toContainEqual(false)
+        expect([1, 2, 3])->Expect.Array.toContainEqual(2)
+        expect(["hello", "world"])->Expect.Array.toContainEqual("world")
+        expect([true, false])->Expect.Array.toContainEqual(false)
         expect([1, 2, 3])->Expect.not->Expect.Array.toContainEqual(4)
       },
     )
 
     test(
       "toHaveLength",
-          _t => {
-            expect([1, 2, 3])->Expect.Array.toHaveLength(3)
-            expect([])->Expect.Array.toHaveLength(0)
-            expect([1, 2, 3])->Expect.not->Expect.Array.toHaveLength(5)
-          },
-        )
+      _t => {
+        expect([1, 2, 3])->Expect.Array.toHaveLength(3)
+        expect([])->Expect.Array.toHaveLength(0)
+        expect([1, 2, 3])->Expect.not->Expect.Array.toHaveLength(5)
+      },
+    )
 
-        test(
-          "toMatch",
-          _t => {
-            expect([1, 2, 3])->Expect.Array.toMatch([1, 2, 3])
-            expect(["hello", "world"])->Expect.Array.toMatch(["hello", "world"])
-            expect([true, false])->Expect.Array.toMatch([true, false])
+    test(
+      "toMatch",
+      _t => {
+        expect([1, 2, 3])->Expect.Array.toMatch([1, 2, 3])
+        expect(["hello", "world"])->Expect.Array.toMatch(["hello", "world"])
+        expect([true, false])->Expect.Array.toMatch([true, false])
         expect([1, 2, 3])->Expect.not->Expect.Array.toMatch([1, 2])
       },
     )
