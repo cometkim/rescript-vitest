@@ -56,8 +56,6 @@ module type ConcurrentRunner = {
   let testAsync: (string, unit => promise<unit>, Js.undefined<int>) => unit
 
   let itAsync: (string, unit => promise<unit>, Js.undefined<int>) => unit
-
-  let benchAsync: (string, unit => promise<unit>, Js.undefined<benchOptions>) => unit
 }
 
 module MakeRunner = (Runner: Runner) => {
@@ -205,9 +203,6 @@ module Concurrent = {
 
     @module("vitest") @val
     external concurrent_it: concurrent_it = "it"
-
-    @module("vitest") @val
-    external concurrent_bench: concurrent_bench = "bench"
   )
 
   @send
@@ -234,19 +229,10 @@ module Concurrent = {
     Js.undefined<int>,
   ) => unit = "concurrent"
 
-  @send
-  external benchAsync: (
-    concurrent_bench,
-    string,
-    @uncurry (unit => promise<unit>),
-    Js.undefined<benchOptions>,
-  ) => unit = "concurrent"
-
   include MakeConcurrentRunner({
     let describe = describe(concurrent_describe)
     let testAsync = testAsync(concurrent_test)
     let itAsync = itAsync(concurrent_it)
-    let benchAsync = benchAsync(concurrent_bench)
   })
 }
 
@@ -335,7 +321,6 @@ module Only = {
     type concurrent_describe
     type concurrent_test
     type concurrent_it
-    type concurrent_bench
 
     %%private(
       @get
@@ -346,9 +331,6 @@ module Only = {
 
       @get
       external concurrent_it: only_it => concurrent_it = "only"
-
-      @get
-      external concurrent_bench: only_bench => concurrent_bench = "only"
     )
 
     @send
@@ -375,19 +357,10 @@ module Only = {
       Js.undefined<int>,
     ) => unit = "concurrent"
 
-    @send
-    external benchAsync: (
-      concurrent_bench,
-      string,
-      @uncurry (unit => promise<unit>),
-      Js.undefined<benchOptions>,
-    ) => unit = "concurrent"
-
     include MakeConcurrentRunner({
       let describe = describe(only_describe->concurrent_describe)
       let testAsync = testAsync(only_test->concurrent_test)
       let itAsync = itAsync(only_it->concurrent_it)
-      let benchAsync = benchAsync(only_bench->concurrent_bench)
     })
   }
 }
@@ -477,7 +450,6 @@ module Skip = {
     type concurrent_describe
     type concurrent_test
     type concurrent_it
-    type concurrent_bench
 
     %%private(
       @get
@@ -488,9 +460,6 @@ module Skip = {
 
       @get
       external concurrent_it: skip_it => concurrent_it = "skip"
-
-      @get
-      external concurrent_bench: skip_bench => concurrent_bench = "skip"
     )
 
     @send
@@ -517,19 +486,10 @@ module Skip = {
       Js.undefined<int>,
     ) => unit = "concurrent"
 
-    @send
-    external benchAsync: (
-      concurrent_bench,
-      string,
-      @uncurry (unit => promise<unit>),
-      Js.undefined<benchOptions>,
-    ) => unit = "concurrent"
-
     include MakeConcurrentRunner({
       let describe = describe(skip_describe->concurrent_describe)
       let testAsync = testAsync(skip_test->concurrent_test)
       let itAsync = itAsync(skip_it->concurrent_it)
-      let benchAsync = benchAsync(skip_bench->concurrent_bench)
     })
   }
 }
