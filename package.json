@@ -32,7 +32,7 @@
     "vite": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "dependencies": {
-    "vitest": "^1.5.0"
+    "vitest": "^1.6.0"
   },
   "devDependencies": {
     "@jihchi/vite-plugin-rescript": "^6.0.0",
