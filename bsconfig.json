@@ -1,6 +1,5 @@
 {
   "name": "rescript-vitest",
-  "uncurried": false,
   "namespace": false,
   "suffix": ".mjs",
   "sources": [
