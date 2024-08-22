@@ -197,13 +197,13 @@ module Concurrent = {
     external concurrent_it: concurrent_it = "it"
   )
 
-  @send
+  @get
   external describe: concurrent_describe => groupDef = "concurrent"
 
-  @send
+  @get
   external testAsync: concurrent_test => testAsyncDef = "concurrent"
 
-  @send
+  @get
   external itAsync: concurrent_it => testAsyncDef = "concurrent"
 
   include MakeConcurrentRunner({
@@ -233,25 +233,25 @@ module Only = {
     external only_bench: only_bench = "bench"
   )
 
-  @send
+  @get
   external describe: only_describe => groupDef = "only"
 
-  @send
+  @get
   external test: only_test => testDef = "only"
 
-  @send
+  @get
   external testAsync: only_test => testAsyncDef = "only"
 
-  @send
+  @get
   external it: only_it => testDef = "only"
 
-  @send
+  @get
   external itAsync: only_it => testAsyncDef = "only"
 
-  @send
+  @get
   external bench: only_bench => benchDef = "only"
 
-  @send
+  @get
   external benchAsync: only_bench => benchAsyncDef = "only"
 
   include MakeRunner({
@@ -280,13 +280,13 @@ module Only = {
       external concurrent_it: only_it => concurrent_it = "only"
     )
 
-    @send
+    @get
     external describe: concurrent_describe => groupDef = "concurrent"
 
-    @send
+    @get
     external testAsync: concurrent_test => testAsyncDef = "concurrent"
 
-    @send
+    @get
     external itAsync: concurrent_it => testAsyncDef = "concurrent"
 
     include MakeConcurrentRunner({
@@ -317,25 +317,25 @@ module Skip = {
     external skip_bench: skip_bench = "bench"
   )
 
-  @send
+  @get
   external describe: skip_describe => groupDef = "skip"
 
-  @send
+  @get
   external test: skip_test => testDef = "skip"
 
-  @send
+  @get
   external testAsync: skip_test => testAsyncDef = "skip"
 
-  @send
+  @get
   external it: skip_it => testDef = "skip"
 
-  @send
+  @get
   external itAsync: skip_it => testAsyncDef = "skip"
 
-  @send
+  @get
   external bench: skip_bench => benchDef = "skip"
 
-  @send
+  @get
   external benchAsync: skip_bench => benchAsyncDef = "skip"
 
   include MakeRunner({
@@ -364,13 +364,13 @@ module Skip = {
       external concurrent_it: skip_it => concurrent_it = "skip"
     )
 
-    @send
+    @get
     external describe: concurrent_describe => groupDef = "concurrent"
 
-    @send
+    @get
     external testAsync: concurrent_test => testAsyncDef = "concurrent"
 
-    @send
+    @get
     external itAsync: concurrent_it => testAsyncDef = "concurrent"
 
     include MakeConcurrentRunner({
