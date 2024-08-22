@@ -150,17 +150,7 @@ describe("Vi", () => {
 
     let date = Js.Date.makeWithYMD(~year=2021., ~month=1., ~date=1., ())
     let _ = Vi.setSystemTime(#Date(date))
-    // FIXME: Expect.toBeSome is not working
-    /*
-     AssertionError: expected 2021-02-01T05:00:00.000Z to not deeply equal 2021-02-01T05:00:00.000Z
-      ❯ Object.toBeSome src/Vitest.mjs:671:21
-          669|   expected.not.toBeUndefined();
-          670|   if (some !== undefined) {
-          671|     return expected.toEqual(Caml_option.valFromOption(some));
-            |                     ^
-          672|   }
-     */
-    Vi.getMockedSystemTime()->Belt.Option.getExn->expect->Expect.toStrictEqual(date)
+    Vi.getMockedSystemTime()->expect->Expect.toBeSome(~some=Some(date))
     Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThan(Js.Date.getTime(date))
 
     Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThanOrEqual(0.0)
