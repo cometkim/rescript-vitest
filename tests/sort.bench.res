@@ -1,5 +1,5 @@
 open Js
-open Vitest
+open Vitest.Benchmark
 
 describe("sort", () => {
   bench("normal", _ => {
@@ -24,4 +24,6 @@ describe("sort", () => {
     )
     ->ignore
   })
+
+  Todo.bench("todo")
 })

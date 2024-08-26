@@ -54,18 +54,9 @@ type testOptions = {
   fails?: bool,
 }
 
-type benchOptions = {
-  time: option<int>,
-  iterations: option<int>,
-  warmupTime: option<int>,
-  warmupIterations: option<int>,
-}
-
 type suiteDef = (string, suiteOptions, unit => unit) => unit
 type testDef = (string, testOptions, unit => unit) => unit
 type testAsyncDef = (string, testOptions, unit => promise<unit>) => unit
-type benchDef = (string, unit => unit, benchOptions) => unit
-type benchAsyncDef = (string, unit => promise<unit>, benchOptions) => unit
 
 module type Runner = {
   let describe: suiteDef
@@ -73,8 +64,6 @@ module type Runner = {
   let testAsync: testAsyncDef
   let it: testDef
   let itAsync: testAsyncDef
-  let bench: benchDef
-  let benchAsync: benchAsyncDef
 }
 
 module type ConcurrentRunner = {
@@ -233,20 +222,6 @@ module MakeRunner = (Runner: Runner) => {
       },
       () => callback(suite),
     )
-
-  @inline
-  let bench = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
-    Runner.bench(
-      name,
-      () => {
-        callback(suite)
-      },
-      {time, iterations, warmupTime, warmupIterations},
-    )
-
-  @inline
-  let benchAsync = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
-    Runner.benchAsync(name, () => callback(suite), {time, iterations, warmupTime, warmupIterations})
 }
 
 module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
@@ -344,12 +319,6 @@ include MakeRunner({
 
   @module("vitest") @val
   external itAsync: testAsyncDef = "it"
-
-  @module("vitest") @val
-  external bench: benchDef = "bench"
-
-  @module("vitest") @val
-  external benchAsync: benchAsyncDef = "bench"
 })
 
 module Concurrent = {
@@ -400,9 +369,6 @@ module Only = {
 
     @module("vitest") @val
     external only_it: only_it = "it"
-
-    @module("vitest") @val
-    external only_bench: only_bench = "bench"
   )
 
   @get
@@ -420,20 +386,12 @@ module Only = {
   @get
   external itAsync: only_it => testAsyncDef = "only"
 
-  @get
-  external bench: only_bench => benchDef = "only"
-
-  @get
-  external benchAsync: only_bench => benchAsyncDef = "only"
-
   include MakeRunner({
     let describe = only_describe->describe
     let test = only_test->test
     let testAsync = only_test->testAsync
     let it = only_it->it
     let itAsync = only_it->itAsync
-    let bench = only_bench->bench
-    let benchAsync = only_bench->benchAsync
   })
 
   module Concurrent = {
@@ -484,9 +442,6 @@ module Skip = {
 
     @module("vitest") @val
     external skip_it: skip_it = "it"
-
-    @module("vitest") @val
-    external skip_bench: skip_bench = "bench"
   )
 
   @get
@@ -504,20 +459,12 @@ module Skip = {
   @get
   external itAsync: skip_it => testAsyncDef = "skip"
 
-  @get
-  external bench: skip_bench => benchDef = "skip"
-
-  @get
-  external benchAsync: skip_bench => benchAsyncDef = "skip"
-
   include MakeRunner({
     let describe = skip_describe->describe
     let test = skip_test->test
     let testAsync = skip_test->testAsync
     let it = skip_it->it
     let itAsync = skip_it->itAsync
-    let bench = skip_bench->bench
-    let benchAsync = skip_bench->benchAsync
   })
 
   module Concurrent = {
@@ -1215,3 +1162,5 @@ module InSource = {
   @scope("import.meta.vitest") @val
   external benchAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
 }
+
+module Benchmark = Vitest_Benchmark

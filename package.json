@@ -20,7 +20,8 @@
     "prepack": "yarn clean && yarn build",
     "clean": "rescript clean",
     "build": "rescript build",
-    "test": "vitest"
+    "test": "vitest",
+    "bench": "vitest bench"
   },
   "files": [
     "bsconfig.json",
