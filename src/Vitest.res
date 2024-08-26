@@ -37,14 +37,14 @@ type benchOptions = {
   warmupIterations: option<int>,
 }
 
-type groupDef = (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
+type suiteDef = (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
 type testDef = (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
 type testAsyncDef = (string, unit => promise<unit>, Js.undefined<int>) => unit
 type benchDef = (string, unit => Js.undefined<unit>, Js.undefined<benchOptions>) => unit
 type benchAsyncDef = (string, unit => promise<unit>, Js.undefined<benchOptions>) => unit
 
 module type Runner = {
-  let describe: groupDef
+  let describe: suiteDef
   let test: testDef
   let testAsync: testAsyncDef
   let it: testDef
@@ -54,7 +54,7 @@ module type Runner = {
 }
 
 module type ConcurrentRunner = {
-  let describe: groupDef
+  let describe: suiteDef
   let testAsync: testAsyncDef
   let itAsync: testAsyncDef
 }
@@ -144,7 +144,7 @@ module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
 
 include MakeRunner({
   @module("vitest") @val
-  external describe: groupDef = "describe"
+  external describe: suiteDef = "describe"
 
   @module("vitest") @val
   external test: testDef = "test"
@@ -183,7 +183,7 @@ module Concurrent = {
   )
 
   @get
-  external describe: concurrent_describe => groupDef = "concurrent"
+  external describe: concurrent_describe => suiteDef = "concurrent"
 
   @get
   external testAsync: concurrent_test => testAsyncDef = "concurrent"
@@ -219,7 +219,7 @@ module Only = {
   )
 
   @get
-  external describe: only_describe => groupDef = "only"
+  external describe: only_describe => suiteDef = "only"
 
   @get
   external test: only_test => testDef = "only"
@@ -266,7 +266,7 @@ module Only = {
     )
 
     @get
-    external describe: concurrent_describe => groupDef = "concurrent"
+    external describe: concurrent_describe => suiteDef = "concurrent"
 
     @get
     external testAsync: concurrent_test => testAsyncDef = "concurrent"
@@ -303,7 +303,7 @@ module Skip = {
   )
 
   @get
-  external describe: skip_describe => groupDef = "skip"
+  external describe: skip_describe => suiteDef = "skip"
 
   @get
   external test: skip_test => testDef = "skip"
@@ -350,7 +350,7 @@ module Skip = {
     )
 
     @get
-    external describe: concurrent_describe => groupDef = "concurrent"
+    external describe: concurrent_describe => suiteDef = "concurrent"
 
     @get
     external testAsync: concurrent_test => testAsyncDef = "concurrent"
