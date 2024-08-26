@@ -957,45 +957,42 @@ module Todo = {
   @inline let it = name => todo_it->it(name)
 }
 
-@module("vitest") @val external beforeEach: (@uncurry unit => unit) => unit = "beforeEach"
+@module("vitest") @val external beforeEach: (unit => unit) => unit = "beforeEach"
 
 @module("vitest") @val
-external beforeEachPromise: (@uncurry unit => promise<'a>, Js.Undefined.t<int>) => unit =
-  "beforeEach"
+external beforeEachAsync: (unit => promise<unit>, Js.Undefined.t<int>) => unit = "beforeEach"
 
 @inline
-let beforeEachPromise = (~timeout=?, callback) =>
-  beforeEachPromise(callback, timeout->Js.Undefined.fromOption)
+let beforeEachAsync = (~timeout=?, callback) =>
+  beforeEachAsync(callback, timeout->Js.Undefined.fromOption)
 
-@module("vitest") external beforeAll: (@uncurry unit => unit) => unit = "beforeAll"
+@module("vitest") external beforeAll: (unit => unit) => unit = "beforeAll"
 
 @module("vitest")
-external beforeAllPromise: (@uncurry unit => promise<'a>, Js.Undefined.t<int>) => unit = "beforeAll"
+external beforeAllAsync: (unit => promise<unit>, Js.Undefined.t<int>) => unit = "beforeAll"
 
 @inline
-let beforeAllPromise = (~timeout=?, callback) =>
-  beforeAllPromise(callback, timeout->Js.Undefined.fromOption)
+let beforeAllAsync = (~timeout=?, callback) =>
+  beforeAllAsync(callback, timeout->Js.Undefined.fromOption)
 
-@module("vitest") external afterEach: (@uncurry unit => unit) => unit = "afterEach"
+@module("vitest") external afterEach: (unit => unit) => unit = "afterEach"
 
 @module("vitest")
-external afterEachPromise: (@uncurry unit => promise<'a>, Js.Undefined.t<int>) => unit = "afterEach"
+external afterEachAsync: (unit => promise<unit>, Js.Undefined.t<int>) => unit = "afterEach"
 
 @inline
-let afterEachPromise = (~timeout=?, callback) =>
-  afterEachPromise(callback, timeout->Js.Undefined.fromOption)
+let afterEachAsync = (~timeout=?, callback) =>
+  afterEachAsync(callback, timeout->Js.Undefined.fromOption)
 
 @module("vitest")
-external afterAll: (@uncurry unit => 'a, Js.Undefined.t<int>) => unit = "afterAll"
-
-let afterAll = (~timeout=?, callback) => afterAll(callback, timeout->Js.Undefined.fromOption)
+external afterAll: (unit => unit) => unit = "afterAll"
 
 @module("vitest")
-external afterAllPromise: (@uncurry unit => promise<'a>, Js.Undefined.t<int>) => unit = "afterAll"
+external afterAllAsync: (unit => promise<unit>, Js.Undefined.t<int>) => unit = "afterAll"
 
 @inline
-let afterAllPromise = (~timeout=?, callback) =>
-  afterAllPromise(callback, timeout->Js.Undefined.fromOption)
+let afterAllAsync = (~timeout=?, callback) =>
+  afterAllAsync(callback, timeout->Js.Undefined.fromOption)
 
 module Matchers = (
   Config: {
