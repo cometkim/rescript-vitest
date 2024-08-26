@@ -30,6 +30,30 @@ type reinforcement<'a, 'b> = (assertion<'a>, 'a => 'b) => assertion<'b>
   `)
 )
 
+type suiteOptions = {
+  timeout?: int,
+  retry?: int,
+  repeats?: int,
+  concurrent?: bool,
+  sequential?: bool,
+  skip?: bool,
+  only?: bool,
+  todo?: bool,
+  fails?: bool,
+}
+
+type testOptions = {
+  timeout?: int,
+  retry?: int,
+  repeats?: int,
+  concurrent?: bool,
+  sequential?: bool,
+  skip?: bool,
+  only?: bool,
+  todo?: bool,
+  fails?: bool,
+}
+
 type benchOptions = {
   time: option<int>,
   iterations: option<int>,
@@ -37,11 +61,11 @@ type benchOptions = {
   warmupIterations: option<int>,
 }
 
-type suiteDef = (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-type testDef = (string, unit => Js.undefined<unit>, Js.undefined<int>) => unit
-type testAsyncDef = (string, unit => promise<unit>, Js.undefined<int>) => unit
-type benchDef = (string, unit => Js.undefined<unit>, Js.undefined<benchOptions>) => unit
-type benchAsyncDef = (string, unit => promise<unit>, Js.undefined<benchOptions>) => unit
+type suiteDef = (string, suiteOptions, unit => unit) => unit
+type testDef = (string, testOptions, unit => unit) => unit
+type testAsyncDef = (string, testOptions, unit => promise<unit>) => unit
+type benchDef = (string, unit => unit, benchOptions) => unit
+type benchAsyncDef = (string, unit => promise<unit>, benchOptions) => unit
 
 module type Runner = {
   let describe: suiteDef
@@ -61,45 +85,154 @@ module type ConcurrentRunner = {
 
 module MakeRunner = (Runner: Runner) => {
   @inline
-  let describe = (name, ~timeout=?, callback) =>
+  let describe = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
     Runner.describe(
       name,
-      () => {
-        callback()
-        Js.undefined
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
       },
-      timeout->Js.Undefined.fromOption,
+      callback,
     )
 
   @inline
-  let test = (name, ~timeout=?, callback) =>
+  let test = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
     Runner.test(
       name,
-      () => {
-        callback(suite)
-        Js.undefined
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
       },
-      timeout->Js.Undefined.fromOption,
+      () => callback(suite),
     )
 
   @inline
-  let testAsync = (name, ~timeout=?, callback) =>
-    Runner.testAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let testAsync = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
+    Runner.testAsync(
+      name,
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      () => callback(suite),
+    )
 
   @inline
-  let it = (name, ~timeout=?, callback) =>
+  let it = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
     Runner.it(
       name,
-      () => {
-        callback(suite)
-        Js.undefined
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
       },
-      timeout->Js.Undefined.fromOption,
+      () => callback(suite),
     )
 
   @inline
-  let itAsync = (name, ~timeout=?, callback) =>
-    Runner.itAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let itAsync = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
+    Runner.itAsync(
+      name,
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      () => callback(suite),
+    )
 
   @inline
   let bench = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
@@ -107,39 +240,93 @@ module MakeRunner = (Runner: Runner) => {
       name,
       () => {
         callback(suite)
-        Js.undefined
       },
-      Some({time, iterations, warmupTime, warmupIterations})->Js.Undefined.fromOption,
+      {time, iterations, warmupTime, warmupIterations},
     )
 
   @inline
   let benchAsync = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
-    Runner.benchAsync(
-      name,
-      () => callback(suite),
-      Some({time, iterations, warmupTime, warmupIterations})->Js.Undefined.fromOption,
-    )
+    Runner.benchAsync(name, () => callback(suite), {time, iterations, warmupTime, warmupIterations})
 }
 
 module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
   @inline
-  let describe = (name, ~timeout=?, callback) =>
+  let describe = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
     Runner.describe(
       name,
-      () => {
-        callback()
-        Js.undefined
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
       },
-      timeout->Js.Undefined.fromOption,
+      callback,
     )
 
   @inline
-  let testAsync = (name, ~timeout=?, callback) =>
-    Runner.testAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let testAsync = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
+    Runner.testAsync(
+      name,
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      () => callback(suite),
+    )
 
   @inline
-  let itAsync = (name, ~timeout=?, callback) =>
-    Runner.itAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
+  let itAsync = (
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    callback,
+  ) =>
+    Runner.itAsync(
+      name,
+      {
+        ?timeout,
+        ?retry,
+        ?repeats,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      () => callback(suite),
+    )
 }
 
 include MakeRunner({
