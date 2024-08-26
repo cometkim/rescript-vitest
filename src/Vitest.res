@@ -325,7 +325,6 @@ module Concurrent = {
   type concurrent_describe
   type concurrent_test
   type concurrent_it
-  type concurrent_bench
 
   %%private(
     @module("vitest") @val
@@ -358,7 +357,6 @@ module Only = {
   type only_describe
   type only_test
   type only_it
-  type only_bench
 
   %%private(
     @module("vitest") @val
@@ -431,7 +429,6 @@ module Skip = {
   type skip_describe
   type skip_test
   type skip_it
-  type skip_bench
 
   %%private(
     @module("vitest") @val
