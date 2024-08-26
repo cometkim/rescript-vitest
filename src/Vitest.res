@@ -379,9 +379,9 @@ module Concurrent = {
   external itAsync: concurrent_it => testAsyncDef = "concurrent"
 
   include MakeConcurrentRunner({
-    let describe = describe(concurrent_describe)
-    let testAsync = testAsync(concurrent_test)
-    let itAsync = itAsync(concurrent_it)
+    let describe = concurrent_describe->describe
+    let testAsync = concurrent_test->testAsync
+    let itAsync = concurrent_it->itAsync
   })
 }
 
@@ -427,13 +427,13 @@ module Only = {
   external benchAsync: only_bench => benchAsyncDef = "only"
 
   include MakeRunner({
-    let describe = describe(only_describe)
-    let test = test(only_test)
-    let testAsync = testAsync(only_test)
-    let it = it(only_it)
-    let itAsync = itAsync(only_it)
-    let bench = bench(only_bench)
-    let benchAsync = benchAsync(only_bench)
+    let describe = only_describe->describe
+    let test = only_test->test
+    let testAsync = only_test->testAsync
+    let it = only_it->it
+    let itAsync = only_it->itAsync
+    let bench = only_bench->bench
+    let benchAsync = only_bench->benchAsync
   })
 
   module Concurrent = {
@@ -462,9 +462,9 @@ module Only = {
     external itAsync: concurrent_it => testAsyncDef = "concurrent"
 
     include MakeConcurrentRunner({
-      let describe = describe(only_describe->concurrent_describe)
-      let testAsync = testAsync(only_test->concurrent_test)
-      let itAsync = itAsync(only_it->concurrent_it)
+      let describe = only_describe->concurrent_describe->describe
+      let testAsync = only_test->concurrent_test->testAsync
+      let itAsync = only_it->concurrent_it->itAsync
     })
   }
 }
@@ -511,13 +511,13 @@ module Skip = {
   external benchAsync: skip_bench => benchAsyncDef = "skip"
 
   include MakeRunner({
-    let describe = describe(skip_describe)
-    let test = test(skip_test)
-    let testAsync = testAsync(skip_test)
-    let it = it(skip_it)
-    let itAsync = itAsync(skip_it)
-    let bench = bench(skip_bench)
-    let benchAsync = benchAsync(skip_bench)
+    let describe = skip_describe->describe
+    let test = skip_test->test
+    let testAsync = skip_test->testAsync
+    let it = skip_it->it
+    let itAsync = skip_it->itAsync
+    let bench = skip_bench->bench
+    let benchAsync = skip_bench->benchAsync
   })
 
   module Concurrent = {
@@ -546,9 +546,9 @@ module Skip = {
     external itAsync: concurrent_it => testAsyncDef = "concurrent"
 
     include MakeConcurrentRunner({
-      let describe = describe(skip_describe->concurrent_describe)
-      let testAsync = testAsync(skip_test->concurrent_test)
-      let itAsync = itAsync(skip_it->concurrent_it)
+      let describe = skip_describe->concurrent_describe->describe
+      let testAsync = skip_test->concurrent_test->testAsync
+      let itAsync = skip_it->concurrent_it->itAsync
     })
   }
 }
