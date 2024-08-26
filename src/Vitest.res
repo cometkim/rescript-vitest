@@ -1000,10 +1000,7 @@ module Expect = {
 
 module Assert = Vitest_Assert
 
-module Utils = Vitest_Utils
-
-@deprecated("use Utils instead.")
-module Vi = Vitest_Utils
+module Vi = Vitest_Helpers
 
 @scope("import.meta") @val
 external inSource: bool = "vitest"
