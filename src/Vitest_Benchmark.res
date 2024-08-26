@@ -20,16 +20,44 @@ type suiteDef = (string, suiteOptions, unit => unit) => unit
 type benchDef = (string, bench => unit, benchOptions) => unit
 type benchAsyncDef = (string, bench => promise<unit>, benchOptions) => unit
 
-module type Runner = {
+module type Bindings = {
   let describe: suiteDef
   let bench: benchDef
   let benchAsync: benchAsyncDef
 }
 
-module MakeRunner = (Runner: Runner) => {
+module type Runner = {
+  let describe: (
+    string,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    unit => unit,
+  ) => unit
+  let bench: (
+    string,
+    ~time: int=?,
+    ~iterations: int=?,
+    ~throws: bool=?,
+    ~warmupTime: int=?,
+    ~warmupIterations: int=?,
+    bench => unit,
+  ) => unit
+  let benchAsync: (
+    string,
+    ~time: int=?,
+    ~iterations: int=?,
+    ~throws: bool=?,
+    ~warmupTime: int=?,
+    ~warmupIterations: int=?,
+    bench => promise<unit>,
+  ) => unit
+}
+
+module MakeRunner = (Bindings: Bindings) => {
   @inline
   let describe = (name, ~skip=?, ~only=?, ~todo=?, callback) =>
-    Runner.describe(
+    Bindings.describe(
       name,
       {
         ?skip,
@@ -48,7 +76,7 @@ module MakeRunner = (Runner: Runner) => {
     ~warmupTime=?,
     ~warmupIterations=?,
     callback,
-  ) => Runner.bench(name, callback, {?time, ?iterations, ?throws, ?warmupTime, ?warmupIterations})
+  ) => Bindings.bench(name, callback, {?time, ?iterations, ?throws, ?warmupTime, ?warmupIterations})
 
   @inline
   let benchAsync = (
@@ -60,7 +88,7 @@ module MakeRunner = (Runner: Runner) => {
     ~warmupIterations=?,
     callback,
   ) =>
-    Runner.benchAsync(name, callback, {?time, ?iterations, ?throws, ?warmupTime, ?warmupIterations})
+    Bindings.benchAsync(name, callback, {?time, ?iterations, ?throws, ?warmupTime, ?warmupIterations})
 }
 
 include MakeRunner({
@@ -153,7 +181,7 @@ module Todo = {
   let bench = name => todo_bench->bench(name)
 
   @send
-  external benchAsync: (todo_bench, string) => promise<unit> = "todo"
+  external benchAsync: (todo_bench, string) => unit = "todo"
   @inline
   let benchAsync = name => todo_bench->benchAsync(name)
 }
