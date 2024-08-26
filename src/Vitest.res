@@ -86,9 +86,6 @@ module MakeRunner = (Runner: Runner) => {
   let testAsync = (name, ~timeout=?, callback) =>
     Runner.testAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  @deprecated("use testAsync instead")
-  let testPromise = testAsync
-
   @inline
   let it = (name, ~timeout=?, callback) =>
     Runner.it(
@@ -103,9 +100,6 @@ module MakeRunner = (Runner: Runner) => {
   @inline
   let itAsync = (name, ~timeout=?, callback) =>
     Runner.itAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
-
-  @deprecated("use itAsync instead")
-  let itPromise = itAsync
 
   @inline
   let bench = (name, ~time=?, ~iterations=?, ~warmupTime=?, ~warmupIterations=?, callback) =>
@@ -125,9 +119,6 @@ module MakeRunner = (Runner: Runner) => {
       () => callback(suite),
       Some({time, iterations, warmupTime, warmupIterations})->Js.Undefined.fromOption,
     )
-
-  @deprecated("use benchAsync instead")
-  let benchPromise = benchAsync
 }
 
 module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
@@ -146,15 +137,9 @@ module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
   let testAsync = (name, ~timeout=?, callback) =>
     Runner.testAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
 
-  @deprecated("use testAsync instead")
-  let test = testAsync
-
   @inline
   let itAsync = (name, ~timeout=?, callback) =>
     Runner.itAsync(name, () => callback(suite), timeout->Js.Undefined.fromOption)
-
-  @deprecated("use itAsync instead")
-  let it = itAsync
 }
 
 include MakeRunner({
