@@ -1,4 +1,5 @@
 open Vitest
+open! Vitest.Module
 
 describe("Assert", () => {
   test("assert_", _t => {

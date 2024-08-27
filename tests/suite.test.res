@@ -6,21 +6,19 @@ describe("suite name", () => {
     Assert.equal(Math.sqrt(4.0), 2.0)
   })
 
-  open! Vitest.Expect
+  open! Expect
 
-  it("bar", _ => {
-    expect(1 + 1)->eq(2)
+  it("bar", t => {
+    t->expect(1 + 1)->eq(2)
   })
 
-  it("not", _ => {
-    expect(1 + 2)->not->eq(4)
+  it("not", t => {
+    t->expect(1 + 2)->not->eq(4)
   })
 
-  it("snapshot", _ => {
-    expect({"foo": "bar"})->toMatchSnapshot
+  it("snapshot", t => {
+    t->expect({"foo": "bar"})->toMatchSnapshot
   })
-
-  ()
 })
 
 Todo.test("vi.fn()")

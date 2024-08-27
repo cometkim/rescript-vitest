@@ -1,4 +1,5 @@
 open Vitest
+open! Vitest.Module
 
 @val external nextTick: (unit => unit) => unit = "process.nextTick"
 

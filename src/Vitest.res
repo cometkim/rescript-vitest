@@ -1,34 +1,4 @@
-type vitest
-
-type suite
-
-@module("vitest") @val
-external suite: suite = "expect"
-
-@send external assertions: (suite, int) => unit = "assertions"
-
-@send external hasAssertions: suite => unit = "hasAssertions"
-
-/** Chai Assertion object */
-type assertion<'a>
-
-type expected<'a> = assertion<'a>
-
-@module("vitest") external expect: 'a => assertion<'a> = "expect"
-
-type reinforcement<'a, 'b> = (assertion<'a>, 'a => 'b) => assertion<'b>
-
-%%private(
-  external coerce_assertion: assertion<'a> => assertion<'b> = "%identity"
-
-  let dangerously_reinforce_assertion: reinforcement<'a, 'b> = %raw(`
-    function(assertion, cast) {
-      let inner = assertion.__flags;
-      inner.object = cast(inner.object);
-      return assertion;
-    }
-  `)
-)
+open Vitest_Types
 
 type suiteOptions = {
   timeout?: int,
@@ -55,8 +25,8 @@ type testOptions = {
 }
 
 type suiteDef = (string, suiteOptions, unit => unit) => unit
-type testDef = (string, testOptions, unit => unit) => unit
-type testAsyncDef = (string, testOptions, unit => promise<unit>) => unit
+type testDef = (string, testOptions, testCtx => unit) => unit
+type testAsyncDef = (string, testOptions, testCtx => promise<unit>) => unit
 
 module type Runner = {
   let describe: suiteDef
@@ -130,7 +100,7 @@ module MakeRunner = (Runner: Runner) => {
         ?todo,
         ?fails,
       },
-      () => callback(suite),
+      callback,
     )
 
   @inline
@@ -160,7 +130,7 @@ module MakeRunner = (Runner: Runner) => {
         ?todo,
         ?fails,
       },
-      () => callback(suite),
+      callback,
     )
 
   @inline
@@ -190,7 +160,7 @@ module MakeRunner = (Runner: Runner) => {
         ?todo,
         ?fails,
       },
-      () => callback(suite),
+      callback,
     )
 
   @inline
@@ -220,7 +190,7 @@ module MakeRunner = (Runner: Runner) => {
         ?todo,
         ?fails,
       },
-      () => callback(suite),
+      callback,
     )
 }
 
@@ -274,7 +244,7 @@ module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
         ?todo,
         ?fails,
       },
-      () => callback(suite),
+      callback,
     )
 
   @inline
@@ -300,7 +270,7 @@ module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
         ?todo,
         ?fails,
       },
-      () => callback(suite),
+      callback,
     )
 }
 
@@ -938,197 +908,55 @@ external afterAllAsync: (unit => promise<unit>, Js.Undefined.t<int>) => unit = "
 let afterAllAsync = (~timeout=?, callback) =>
   afterAllAsync(callback, timeout->Js.Undefined.fromOption)
 
-module Matchers = (
-  Config: {
-    type return<'a>
-    let emptyReturn: return<'a>
-  },
-) => {
-  @get external not: assertion<'a> => assertion<'a> = "not"
-
-  @send external toBe: (assertion<'a>, 'a) => Config.return<'a> = "toBe"
-
-  @send external eq: (assertion<'a>, 'a) => Config.return<'a> = "eq"
-
-  @send external toBeDefined: assertion<Js.undefined<'a>> => Config.return<'a> = "toBeDefined"
-
-  @send external toBeUndefined: assertion<Js.undefined<'a>> => Config.return<'a> = "toBeUndefined"
-
-  @send external toBeTruthy: assertion<'a> => Config.return<'a> = "toBeTruthy"
-
-  @send external toBeFalsy: assertion<'a> => Config.return<'a> = "toBeFalsy"
-
-  @send external toBeNull: assertion<Js.null<'a>> => Config.return<'a> = "toBeNull"
-
-  // @send external toBeInstanceOf: (assertion<'a>, ?) => Config.return<'a> = "toBeInstanceOf"
-
-  @send external toEqual: (assertion<'a>, 'a) => Config.return<'a> = "toEqual"
-
-  @inline
-  let toBeSome = (~some=?, expected: expected<option<'a>>) => {
-    switch some {
-    | Some(id) => expected->toEqual(id)
-    | None => expected->coerce_assertion->not->toBeUndefined
-    }
-  }
-
-  @inline
-  let toBeNone = (expected: assertion<option<'a>>) => {
-    expected->coerce_assertion->toBeUndefined
-  }
-
-  @send external toStrictEqual: (assertion<'a>, 'a) => Config.return<'a> = "toStrictEqual"
-
-  @send external toContain: (assertion<array<'a>>, 'a) => Config.return<'a> = "toContain"
-
-  @send external toContainEqual: (assertion<array<'a>>, 'a) => Config.return<'a> = "toContainEqual"
-
-  @send external toMatchSnapshot: assertion<'a> => Config.return<'a> = "toMatchSnapshot"
-
-  @send
-  external toThrow: (assertion<unit => 'a>, Js.undefined<string>) => Config.return<'a> = "toThrow"
-  @inline
-  let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
-
-  @send
-  external toThrowError: (assertion<unit => 'a>, Js.undefined<string>) => Config.return<'a> =
-    "toThrowError"
-  @inline
-  let toThrowError = (~message=?, expected) =>
-    expected->toThrowError(message->Js.Undefined.fromOption)
-
-  module Int = {
-    type t = int
-    type expected = assertion<t>
-
-    @send external toBeGreaterThan: (expected, t) => Config.return<'a> = "toBeGreaterThan"
-
-    @send
-    external toBeGreaterThanOrEqual: (expected, t) => Config.return<'a> = "toBeGreaterThanOrEqual"
-
-    @send external toBeLessThan: (expected, t) => Config.return<'a> = "toBeLessThan"
-
-    @send external toBeLessThanOrEqual: (expected, t) => Config.return<'a> = "toBeLessThanOrEqual"
-  }
-
-  module Float = {
-    type t = float
-    type expected = assertion<t>
-
-    @send external toBeNaN: expected => Config.return<'a> = "toBeNaN"
-
-    @send
-    external toBeCloseTo: (expected, t, int) => Config.return<'a> = "toBeCloseTo"
-
-    @send
-    external toBeGreaterThan: (expected, t) => Config.return<'a> = "toBeGreaterThan"
-
-    @send
-    external toBeGreaterThanOrEqual: (expected, t) => Config.return<'a> = "toBeGreaterThanOrEqual"
-
-    @send
-    external toBeLessThan: (expected, t) => Config.return<'a> = "toBeLessThan"
-
-    @send
-    external toBeLessThanOrEqual: (expected, t) => Config.return<'a> = "toBeLessThanOrEqual"
-  }
-
-  module String = {
-    type t = string
-    type expected = assertion<t>
-
-    @send external toContain: (expected, t) => Config.return<'a> = "toContain"
-
-    @send external toHaveLength: (expected, int) => Config.return<'a> = "toHaveLength"
-
-    @send external toMatch: (expected, Js.Re.t) => Config.return<'a> = "toMatch"
-  }
-
-  module Array = {
-    @send external toContain: (expected<array<'a>>, 'a) => Config.return<'a> = "toContain"
-
-    @send external toContainEqual: (expected<array<'a>>, 'a) => Config.return<'a> = "toContainEqual"
-
-    @send external toHaveLength: (expected<array<'a>>, int) => Config.return<'a> = "toHaveLength"
-
-    @send external toMatch: (expected<array<'a>>, array<'a>) => Config.return<'a> = "toMatchObject"
-  }
-
-  module List = {
-    @inline
-    let toContain = (expected, item) => {
-      expected
-      ->dangerously_reinforce_assertion(list => list->Belt.List.toArray)
-      ->Array.toContain(item)
-    }
-
-    @inline
-    let toContainEqual = (expected, item) => {
-      expected
-      ->dangerously_reinforce_assertion(list => list->Belt.List.toArray)
-      ->Array.toContainEqual(item)
-    }
-
-    @inline
-    let toHaveLength = (expected, length) => {
-      expected
-      ->dangerously_reinforce_assertion(list => list->Belt.List.toArray)
-      ->Array.toHaveLength(length)
-    }
-
-    @inline
-    let toMatch = (expected, list) => {
-      expected
-      ->dangerously_reinforce_assertion(list => list->Belt.List.toArray)
-      ->Array.toMatch(list->Belt.List.toArray)
-    }
-  }
-
-  module Dict = {
-    @send
-    external toHaveProperty: (expected<Js.Dict.t<'a>>, string, 'a) => Config.return<'a> =
-      "toHaveProperty"
-
-    @send
-    external toHaveKey: (expected<Js.Dict.t<'a>>, string) => Config.return<'a> = "toHaveProperty"
-
-    @send
-    external toMatch: (expected<Js.Dict.t<'a>>, Js.Dict.t<'a>) => Config.return<'a> =
-      "toMatchObject"
-  }
-}
-
-module Expect = {
-  include Matchers({
-    type return<'a> = unit
-    let emptyReturn = ()
-  })
-
-  module Promise = {
-    @get external rejects: expected<promise<'a>> => expected<'a> = "rejects"
-    @get external resolves: expected<promise<'a>> => expected<'a> = "resolves"
-
-    include Matchers({
-      type return<'a> = promise<unit>
-      let emptyReturn = Js.Promise2.resolve()
-    })
-
-    @send
-    external toThrow: (expected<'a>, Js.undefined<string>) => promise<unit> = "toThrow"
-    @inline
-    let toThrow = (~message=?, expected) => expected->toThrow(message->Js.Undefined.fromOption)
-
-    @send
-    external toThrowError: (expected<'a>, Js.undefined<string>) => promise<unit> = "toThrowError"
-    @inline
-    let toThrowError = (~message=?, expected) =>
-      expected->toThrowError(message->Js.Undefined.fromOption)
-  }
-}
+module Expect = Vitest_Matchers
 
 module Assert = Vitest_Assert
 
 module Vi = Vitest_Helpers
+
+@send
+external expect: (testCtx, 'a) => expected<'a> = "expect"
+
+@get
+external inner: testCtx => testCtxExpect = "expect"
+
+@send
+external assertions: (testCtxExpect, int) => unit = "assertions"
+@inline
+let assertions = (testCtx, n) => testCtx->inner->assertions(n)
+
+@send
+external hasAssertion: testCtxExpect => unit = "hasAssertion"
+@inline
+let hasAssertion = testCtx => testCtx->inner->hasAssertion
+
+module type TestSuite = {
+  let expect: 'a => expected<'a>
+  let assertions: int => unit
+  let hasAssertion: unit => unit
+}
+
+module Bind = (
+  Params: {
+    let ctx: testCtx
+  },
+) => {
+  let expect = x => Params.ctx->expect(x)
+  let assertions = x => Params.ctx->assertions(x)
+  let hasAssertion = () => Params.ctx->hasAssertion
+
+  module Expect = Vitest_Matchers
+}
+
+module Module = {
+  include Bind({
+    @module("vitest") @val
+    external ctx: testCtx = "expect"
+  })
+
+  @module("vitest")
+  external expect: 'a => expected<'a> = "expect"
+}
 
 @scope("import.meta") @val
 external inSource: bool = "vitest"
@@ -1142,7 +970,7 @@ module InSource = {
   external describe: (string, @uncurry unit => unit) => unit = "describe"
 
   @scope("import.meta.vitest") @val
-  external test: (string, @uncurry unit => unit) => unit = "test"
+  external test: (string, @uncurry testCtx => unit) => unit = "test"
 
   @scope("import.meta.vitest") @val
   external testAsync: (string, @uncurry unit => promise<unit>) => unit = "test"
@@ -1158,6 +986,11 @@ module InSource = {
 
   @scope("import.meta.vitest") @val
   external benchAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
+
+  @send
+  external expect: (testCtx, 'a) => expected<'a> = "expect"
+
+  module Expect = Vitest_Matchers
 }
 
 module Benchmark = Vitest_Benchmark
