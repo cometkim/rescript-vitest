@@ -84,6 +84,21 @@ describe("Hello, Vitest", t => {
 })
 ```
 
+You can use simple flags for `skip`, `concurrent`, and `only`.
+
+```
+Skip.test("This will be skipped", t => {
+  // ...
+})
+
+// Use simple flags instead.
+test(~skip=true, "This will be skipped", t => {
+  // ...
+})
+```
+
+Module bindings will be deprecated and removed in next major (v3)
+
 ## LICENCE
 
 MIT
