@@ -32,12 +32,6 @@ module InSource = {
   @scope("import.meta.vitest") @val
   external itAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
 
-  @scope("import.meta.vitest") @val
-  external bench: (string, @uncurry unit => unit) => unit = "it"
-
-  @scope("import.meta.vitest") @val
-  external benchAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
-
   @send
   external expect: (testCtx, 'a) => expected<'a> = "expect"
 
