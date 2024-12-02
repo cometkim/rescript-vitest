@@ -86,7 +86,7 @@ describe("Hello, Vitest", t => {
 
 You can use simple flags for `skip`, `concurrent`, and `only`.
 
-```
+```res
 Skip.test("This will be skipped", t => {
   // ...
 })
