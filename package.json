@@ -26,7 +26,14 @@
   "files": [
     "bsconfig.json",
     "rescript.json",
-    "src/Vitest.res"
+    "src/Vitest.res",
+    "src/Vitest_Assert.res",
+    "src/Vitest_Benchmark.res",
+    "src/Vitest_Benchmark.resi",
+    "src/Vitest_Bindings.res",
+    "src/Vitest_Helpers.res",
+    "src/Vitest_Matchers.res",
+    "src/Vitest_Types.res"
   ],
   "peerDependencies": {
     "rescript": "^10.1.0 || ^11.0.0-0 || ^12.0.0-0",
