@@ -1,7 +1,7 @@
 @@uncurried
 
 open Vitest
-open! Vitest.Module
+open! Bindings.BuiltIn
 
 @val external nextTick: (unit => unit) => unit = "process.nextTick"
 

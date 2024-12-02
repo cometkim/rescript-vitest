@@ -1,5 +1,5 @@
 open Vitest
-open! Vitest.Module
+open! Bindings.BuiltIn
 
 let sumObj = [{"a": 3, "b": 5, "sum": 8}, {"a": 6, "b": 2, "sum": 8}]
 let sum2 = [(1, "1"), (6, "6")]

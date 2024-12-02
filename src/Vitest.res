@@ -930,67 +930,11 @@ external hasAssertion: testCtxExpect => unit = "hasAssertion"
 @inline
 let hasAssertion = testCtx => testCtx->inner->hasAssertion
 
-module type TestSuite = {
-  let expect: 'a => expected<'a>
-  let assertions: int => unit
-  let hasAssertion: unit => unit
-}
-
-module Bind = (
-  Params: {
-    let ctx: testCtx
-  },
-) => {
-  let expect = x => Params.ctx->expect(x)
-  let assertions = x => Params.ctx->assertions(x)
-  let hasAssertion = () => Params.ctx->hasAssertion
-
-  module Expect = Vitest_Matchers
-}
-
-module Module = {
-  include Bind({
-    @module("vitest") @val
-    external ctx: testCtx = "expect"
-  })
-
-  @module("vitest")
-  external expect: 'a => expected<'a> = "expect"
-}
+module Bindings = Vitest_Bindings
 
 @scope("import.meta") @val
 external inSource: bool = "vitest"
 
-module InSource = {
-  // Note:
-  // If it goes out of module scope, `import.meta.vitest` will not be bound.
-  // Therefore, `MakeRunner` cannot be reused here.
-
-  @scope("import.meta.vitest") @val
-  external describe: (string, @uncurry unit => unit) => unit = "describe"
-
-  @scope("import.meta.vitest") @val
-  external test: (string, @uncurry testCtx => unit) => unit = "test"
-
-  @scope("import.meta.vitest") @val
-  external testAsync: (string, @uncurry unit => promise<unit>) => unit = "test"
-
-  @scope("import.meta.vitest") @val
-  external it: (string, @uncurry unit => unit) => unit = "it"
-
-  @scope("import.meta.vitest") @val
-  external itAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
-
-  @scope("import.meta.vitest") @val
-  external bench: (string, @uncurry unit => unit) => unit = "it"
-
-  @scope("import.meta.vitest") @val
-  external benchAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
-
-  @send
-  external expect: (testCtx, 'a) => expected<'a> = "expect"
-
-  module Expect = Vitest_Matchers
-}
+module InSource = Vitest_Bindings.InSource
 
 module Benchmark = Vitest_Benchmark

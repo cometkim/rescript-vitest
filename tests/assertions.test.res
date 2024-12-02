@@ -1,5 +1,5 @@
 open Vitest
-open! Vitest.Module
+open! Bindings.BuiltIn
 
 describe("Assert", () => {
   test("assert_", _t => {

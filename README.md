@@ -33,13 +33,13 @@ describe("Hello, Vitest", () => {
     t->assertions(3)
 
     // Test using the `Expect` module
-    expect(1 + 2)->Expect.toBe(3)
+    t->expect(1 + 2)->Expect.toBe(3)
 
     // There are some nested modules for specific type
-    expect([1, 2, 3])
+    t->expect([1, 2, 3])
     ->Expect.Array.toContain(2)
 
-    expect("Hello, ReScript-Vitest!")
+    t->expect("Hello, ReScript-Vitest!")
     ->Expect.String.toContain("ReScript")
 
   // You can specify timeout for a test suite
@@ -55,13 +55,33 @@ Vitest support [in-source testing](https://vitest.dev/guide/in-source)
 // This if block can be removed from production code.
 // You need to define `import.meta.vitest` to `undefined`
 if Vitest.inSource {
-  open Vitest
   open Vitest.InSource
 
-  test("In-source testing", _ => {
-    expect(1 + 2)->Expect.toBe(3)
+  test("In-source testing", t => {
+    t->expect(1 + 2)->Expect.toBe(3)
   })
 }
+```
+
+### Migration from 1.x
+
+You need to bind test context `t` explicitly.
+
+If you're migrating from 1.x, there is a built-in context binding in `Vitest.Bindings.BuiltIn`.
+
+```diff
+open Vitest
++open Vitest.Bindings.BuiltIn
+
+describe("Hello, Vitest", t => {
+  test("This is a test case", t => {
+-    t->assertions(3)
++    assertions(3)
+
+-    t->expect(1 + 2)->Expect.toBe(3)
++    expect(1 + 2)->Expect.toBe(3)
+  })
+})
 ```
 
 ## LICENCE
