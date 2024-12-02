@@ -1773,23 +1773,25 @@ __metadata:
   resolution: "rescript-vitest@workspace:."
   dependencies:
     "@jihchi/vite-plugin-rescript": "npm:^6.0.0"
-    rescript: "npm:^11.1.3"
+    rescript: "npm:12.0.0-alpha.5"
     vite: "npm:^5.4.2"
     vitest: "npm:^2.0.5"
   peerDependencies:
-    rescript: ^10.1.0 || ^11.0.0-0
+    rescript: ^10.1.0 || ^11.0.0-0 || ^12.0.0-0
     vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
   languageName: unknown
   linkType: soft
 
-"rescript@npm:^11.1.3":
-  version: 11.1.3
-  resolution: "rescript@npm:11.1.3"
+"rescript@npm:12.0.0-alpha.5":
+  version: 12.0.0-alpha.5
+  resolution: "rescript@npm:12.0.0-alpha.5"
   bin:
-    bsc: bsc
+    bsc: cli/bsc
     bstracing: lib/bstracing
-    rescript: rescript
-  checksum: 10c0/11b2370427bc4b55a754b054e6146b7e7b75bfe29b788934623aa4e825293ee65dd2121224a3b72523e28056ea6ebe8a6d6599c8671a8cb1e3f6b492a08b32b7
+    rescript: cli/rescript
+    rescript-tools: cli/rescript-tools
+    rewatch: cli/rewatch
+  checksum: 10c0/49977ce3bf4f016e8f00fa5b769d0fff100b8a425fb2bd1a8e4cb3fc35dfd2dd7928e06e514ea53f0f44a8c1e61bf26901280719568deee96a88c964ba74bc5b
   languageName: node
   linkType: hard
 

@@ -1,3 +1,5 @@
+@@uncurried
+
 open Vitest
 open! Vitest.Module
 
@@ -128,7 +130,7 @@ describe("Vi", () => {
     let sleep = ms => {
       Js.Promise2.make(
         (~resolve, ~reject as _) => {
-          let _ = Js.Global.setTimeout(() => resolve(), ms)
+          let _ = Js.Global.setTimeout(() => resolve(. ()), ms)
         },
       )
     }
