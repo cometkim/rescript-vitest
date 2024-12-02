@@ -914,6 +914,8 @@ module Assert = Vitest_Assert
 
 module Vi = Vitest_Helpers
 
+module Bindings = Vitest_Bindings
+
 @send
 external expect: (testCtx, 'a) => expected<'a> = "expect"
 
@@ -929,8 +931,6 @@ let assertions = (testCtx, n) => testCtx->inner->assertions(n)
 external hasAssertion: testCtxExpect => unit = "hasAssertion"
 @inline
 let hasAssertion = testCtx => testCtx->inner->hasAssertion
-
-module Bindings = Vitest_Bindings
 
 @scope("import.meta") @val
 external inSource: bool = "vitest"

@@ -7,8 +7,12 @@ module BuiltIn = {
   @module("vitest")
   external expect: 'a => expected<'a> = "expect"
 
-  let expect = x => testCtx->expect(x)
+  @send
+  external assertions: (testCtx, int) => unit = "assertions"
   let assertions = x => testCtx->assertions(x)
+
+  @send
+  external hasAssertion: testCtx => unit = "hasAssertion"
   let hasAssertion = () => testCtx->hasAssertion
 }
 
