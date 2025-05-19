@@ -10,7 +10,7 @@
 
 ReScript v10.1+ is required since v1.0.0. To use `Js.Promise2` and `async`/`await` for tests.
 
-ReScript v11.x with the [uncurried mode](https://rescript-lang.org/blog/uncurried-mode) is supported since v2.x (unreleased).
+ReScript v11.x with the [uncurried mode](https://rescript-lang.org/blog/uncurried-mode) is supported since v2.x.
 
 ## Config
 
