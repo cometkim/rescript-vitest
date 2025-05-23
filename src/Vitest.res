@@ -845,6 +845,117 @@ module Each: EachType = {
     )
 }
 
+module type ForType = {
+  let test: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
+  let testAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+
+  let it: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
+  let itAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+
+  let describe: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
+  let describeAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+}
+
+module For: ForType = {
+  module Ext = {
+    type test
+    type it
+    type describe
+
+    @module("vitest") @val
+    external test: test = "test"
+
+    @module("vitest") @val
+    external it: it = "it"
+
+    @module("vitest") @val
+    external describe: describe = "describe"
+
+    @send
+    external testObj: (
+      ~test: test,
+      ~cases: array<'a>,
+    ) => (~name: string, ~f: @uncurry ('a, testCtx) => unit, ~timeout: Js.undefined<int>) => unit =
+      "for"
+
+    @send
+    external testObjAsync: (
+      ~test: test,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~f: @uncurry ('a, testCtx) => promise<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "for"
+
+    @send
+    external itObj: (
+      ~it: it,
+      ~cases: array<'a>,
+    ) => (~name: string, ~f: @uncurry ('a, testCtx) => unit, ~timeout: Js.undefined<int>) => unit =
+      "for"
+
+    @send
+    external itObjAsync: (
+      ~it: it,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~f: @uncurry ('a, testCtx) => promise<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "for"
+
+    @send
+    external describeObj: (
+      ~describe: describe,
+      ~cases: array<'a>,
+    ) => (~name: string, ~f: @uncurry ('a, testCtx) => unit, ~timeout: Js.undefined<int>) => unit =
+      "for"
+
+    @send
+    external describeObjAsync: (
+      ~describe: describe,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~f: @uncurry ('a, testCtx) => promise<unit>,
+      ~timeout: Js.undefined<int>,
+    ) => unit = "for"
+  }
+
+  @inline
+  let test = (cases, name, ~timeout=?, f) =>
+    Ext.testObj(~test=Ext.test, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let testAsync = (cases, name, ~timeout=?, f) =>
+    Ext.testObjAsync(~test=Ext.test, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let it = (cases, name, ~timeout=?, f) =>
+    Ext.itObj(~it=Ext.it, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let itAsync = (cases, name, ~timeout=?, f) =>
+    Ext.itObjAsync(~it=Ext.it, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+
+  @inline
+  let describe = (cases, name, ~timeout=?, f) =>
+    Ext.describeObj(~describe=Ext.describe, ~cases)(
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let describeAsync = (cases, name, ~timeout=?, f) =>
+    Ext.describeObjAsync(~describe=Ext.describe, ~cases)(
+      ~name,
+      ~f,
+      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+}
+
 module Todo = {
   type todo_describe
   type todo_test
