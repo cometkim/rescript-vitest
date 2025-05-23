@@ -17,8 +17,8 @@ sum2->For.test("test: %i=%s", ((a, b), t) => {
 })
 
 sum3->For.test("test: sum %i+%i=%s", ((a, b, sum), t) => {
-  expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-  expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum4->For.test("test: sum %i+%i+%i=%s", ((a, b, c, sum), t) => {
@@ -82,8 +82,8 @@ sum5->For.it("it: sum %i+%i+%i+%i=%s", ((a, b, c, d, sum), t) => {
 })
 
 sumObj->For.itAsync("itAsync: sum $a+$b=$sum", async (i, t) => {
-  t->expect(t, i["a"] + i["b"])->Expect.toBe(i["sum"])
-  t->expect(t, i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
+  t->expect(i["a"] + i["b"])->Expect.toBe(i["sum"])
+  t->expect(i["a"] + i["b"] + 1)->Expect.not->Expect.toBe(i["sum"])
 })
 
 sum2->For.itAsync("itAsync: %i=%s", async ((a, b), t) => {
