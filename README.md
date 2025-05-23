@@ -67,19 +67,16 @@ if Vitest.inSource {
 
 You need to bind test context `t` explicitly.
 
-If you're migrating from 1.x, there is a built-in context binding in `Vitest.Bindings.BuiltIn`.
-
 ```diff
 open Vitest
-+open Vitest.Bindings.BuiltIn
 
 describe("Hello, Vitest", t => {
   test("This is a test case", t => {
--    t->assertions(3)
-+    assertions(3)
+-    assertions(3)
++    t->assertions(3)
 
--    t->expect(1 + 2)->Expect.toBe(3)
-+    expect(1 + 2)->Expect.toBe(3)
+-    expect(1 + 2)->Expect.toBe(3)
++    t->expect(1 + 2)->Expect.toBe(3)
   })
 })
 ```

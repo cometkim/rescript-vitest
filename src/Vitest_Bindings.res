@@ -1,5 +1,6 @@
 open Vitest_Types
 
+@deprecated("Implicit `BuiltIn` binding is deprecated, please bind the `t` context explicitly.")
 module BuiltIn = {
   @module("vitest") @val
   external testCtx: testCtx = "expect"
