@@ -70,8 +70,10 @@ You need to bind test context `t` explicitly.
 ```diff
 open Vitest
 
-describe("Hello, Vitest", t => {
-  test("This is a test case", t => {
+describe("Hello, Vitest", () => {
+-  test("This is a test case", _ => {
++  test("This is a test case", t => {
+
 -    assertions(3)
 +    t->assertions(3)
 
