@@ -25,6 +25,18 @@ type testOptions = {
   fails?: bool,
 }
 
+type testCollectorOptions = {
+  timeout?: int,
+  retry?: int,
+  repeats?: int,
+  concurrent?: bool,
+  sequential?: bool,
+  skip?: bool,
+  only?: bool,
+  todo?: bool,
+  fails?: bool,
+}
+
 type suiteDef = (string, suiteOptions, unit => unit) => unit
 type testDef = (string, testOptions, testCtx => unit) => unit
 type testAsyncDef = (string, testOptions, testCtx => promise<unit>) => unit
@@ -851,14 +863,92 @@ module Each: EachType = {
 }
 
 module type ForType = {
-  let describe: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
-  let describeAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+  let describe: (
+    array<'a>,
+    string,
+    ~timeout: int=?,
+    ~retry: int=?,
+    ~repeats: int=?,
+    ~concurrent: bool=?,
+    ~sequential: bool=?,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    ~fails: bool=?,
+    ('a, testCtx) => unit,
+  ) => unit
+  let describeAsync: (
+    array<'a>,
+    string,
+    ~timeout: int=?,
+    ~retry: int=?,
+    ~repeats: int=?,
+    ~concurrent: bool=?,
+    ~sequential: bool=?,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    ~fails: bool=?,
+    ('a, testCtx) => promise<unit>,
+  ) => unit
 
-  let test: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
-  let testAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+  let test: (
+    array<'a>,
+    string,
+    ~timeout: int=?,
+    ~retry: int=?,
+    ~repeats: int=?,
+    ~concurrent: bool=?,
+    ~sequential: bool=?,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    ~fails: bool=?,
+    ('a, testCtx) => unit,
+  ) => unit
+  let testAsync: (
+    array<'a>,
+    string,
+    ~timeout: int=?,
+    ~retry: int=?,
+    ~repeats: int=?,
+    ~concurrent: bool=?,
+    ~sequential: bool=?,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    ~fails: bool=?,
+    ('a, testCtx) => promise<unit>,
+  ) => unit
 
-  let it: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
-  let itAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+  let it: (
+    array<'a>,
+    string,
+    ~timeout: int=?,
+    ~retry: int=?,
+    ~repeats: int=?,
+    ~concurrent: bool=?,
+    ~sequential: bool=?,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    ~fails: bool=?,
+    ('a, testCtx) => unit,
+  ) => unit
+  let itAsync: (
+    array<'a>,
+    string,
+    ~timeout: int=?,
+    ~retry: int=?,
+    ~repeats: int=?,
+    ~concurrent: bool=?,
+    ~sequential: bool=?,
+    ~skip: bool=?,
+    ~only: bool=?,
+    ~todo: bool=?,
+    ~fails: bool=?,
+    ('a, testCtx) => promise<unit>,
+  ) => unit
 }
 
 module For: ForType = {
@@ -895,41 +985,47 @@ module For: ForType = {
       ~options: testCollectorOptions,
       ~f: @uncurry ('a, testCtx) => promise<unit>,
     ) => unit = "for"
+
+    @send
+    external testObj: (
+      ~test: test,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~options: testCollectorOptions,
+      ~f: @uncurry ('a, testCtx) => unit,
+    ) => unit = "for"
+
+    @send
+    external testObjAsync: (
+      ~test: test,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~options: testCollectorOptions,
+      ~f: @uncurry ('a, testCtx) => promise<unit>,
+    ) => unit = "for"
+
+    @send
+    external itObj: (
+      ~it: it,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~options: testCollectorOptions,
+      ~f: @uncurry ('a, testCtx) => unit,
+    ) => unit = "for"
+
+    @send
+    external itObjAsync: (
+      ~it: it,
+      ~cases: array<'a>,
+    ) => (
+      ~name: string,
+      ~options: testCollectorOptions,
+      ~f: @uncurry ('a, testCtx) => promise<unit>,
+    ) => unit = "for"
   }
-
-  @send
-  external testObj: (
-    ~test: test,
-    ~cases: array<'a>,
-  ) => (~name: string, ~options: testCollectorOptions, ~f: @uncurry ('a, testCtx) => unit) => unit =
-    "for"
-
-  @send
-  external testObjAsync: (
-    ~test: test,
-    ~cases: array<'a>,
-  ) => (
-    ~name: string,
-    ~options: testCollectorOptions,
-    ~f: @uncurry ('a, testCtx) => promise<unit>,
-  ) => unit = "for"
-
-  @send
-  external itObj: (
-    ~it: it,
-    ~cases: array<'a>,
-  ) => (~name: string, ~options: testCollectorOptions, ~f: @uncurry ('a, testCtx) => unit) => unit =
-    "for"
-
-  @send
-  external itObjAsync: (
-    ~it: it,
-    ~cases: array<'a>,
-  ) => (
-    ~name: string,
-    ~options: testCollectorOptions,
-    ~f: @uncurry ('a, testCtx) => promise<unit>,
-  ) => unit = "for"
 
   @inline
   let describe = (
@@ -938,7 +1034,6 @@ module For: ForType = {
     ~timeout=?,
     ~retry=?,
     ~repeats=?,
-    ~shuffle=?,
     ~concurrent=?,
     ~sequential=?,
     ~skip=?,
@@ -950,9 +1045,9 @@ module For: ForType = {
     Ext.describeObj(~describe=Ext.describe, ~cases)(
       ~name,
       ~options={
+        ?timeout,
         ?retry,
         ?repeats,
-        ?shuffle,
         ?concurrent,
         ?sequential,
         ?skip,
@@ -970,7 +1065,6 @@ module For: ForType = {
     ~timeout=?,
     ~retry=?,
     ~repeats=?,
-    ~shuffle=?,
     ~concurrent=?,
     ~sequential=?,
     ~skip=?,
@@ -982,9 +1076,9 @@ module For: ForType = {
     Ext.describeObjAsync(~describe=Ext.describe, ~cases)(
       ~name,
       ~options={
+        ?timeout,
         ?retry,
         ?repeats,
-        ?shuffle,
         ?concurrent,
         ?sequential,
         ?skip,
@@ -1013,6 +1107,7 @@ module For: ForType = {
     Ext.testObj(~test=Ext.test, ~cases)(
       ~name,
       ~options={
+        ?timeout,
         ?retry,
         ?repeats,
         ?concurrent,
@@ -1043,6 +1138,7 @@ module For: ForType = {
     Ext.testObjAsync(~test=Ext.test, ~cases)(
       ~name,
       ~options={
+        ?timeout,
         ?retry,
         ?repeats,
         ?concurrent,
@@ -1073,6 +1169,7 @@ module For: ForType = {
     Ext.itObj(~it=Ext.it, ~cases)(
       ~name,
       ~options={
+        ?timeout,
         ?retry,
         ?repeats,
         ?concurrent,
@@ -1103,6 +1200,7 @@ module For: ForType = {
     Ext.itObjAsync(~it=Ext.it, ~cases)(
       ~name,
       ~options={
+        ?timeout,
         ?retry,
         ?repeats,
         ?concurrent,
