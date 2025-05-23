@@ -851,21 +851,24 @@ module Each: EachType = {
 }
 
 module type ForType = {
+  let describe: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
+  let describeAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
+
   let test: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
   let testAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
 
   let it: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
   let itAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
-
-  let describe: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => unit) => unit
-  let describeAsync: (array<'a>, string, ~timeout: int=?, ('a, testCtx) => promise<unit>) => unit
 }
 
 module For: ForType = {
   module Ext = {
+    type describe
     type test
     type it
-    type describe
+
+    @module("vitest") @val
+    external describe: describe = "describe"
 
     @module("vitest") @val
     external test: test = "test"
@@ -873,49 +876,15 @@ module For: ForType = {
     @module("vitest") @val
     external it: it = "it"
 
-    @module("vitest") @val
-    external describe: describe = "describe"
-
-    @send
-    external testObj: (
-      ~test: test,
-      ~cases: array<'a>,
-    ) => (~name: string, ~f: @uncurry ('a, testCtx) => unit, ~timeout: Js.undefined<int>) => unit =
-      "for"
-
-    @send
-    external testObjAsync: (
-      ~test: test,
-      ~cases: array<'a>,
-    ) => (
-      ~name: string,
-      ~f: @uncurry ('a, testCtx) => promise<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "for"
-
-    @send
-    external itObj: (
-      ~it: it,
-      ~cases: array<'a>,
-    ) => (~name: string, ~f: @uncurry ('a, testCtx) => unit, ~timeout: Js.undefined<int>) => unit =
-      "for"
-
-    @send
-    external itObjAsync: (
-      ~it: it,
-      ~cases: array<'a>,
-    ) => (
-      ~name: string,
-      ~f: @uncurry ('a, testCtx) => promise<unit>,
-      ~timeout: Js.undefined<int>,
-    ) => unit = "for"
-
     @send
     external describeObj: (
       ~describe: describe,
       ~cases: array<'a>,
-    ) => (~name: string, ~f: @uncurry ('a, testCtx) => unit, ~timeout: Js.undefined<int>) => unit =
-      "for"
+    ) => (
+      ~name: string,
+      ~options: testCollectorOptions,
+      ~f: @uncurry ('a, testCtx) => unit,
+    ) => unit = "for"
 
     @send
     external describeObjAsync: (
@@ -923,41 +892,227 @@ module For: ForType = {
       ~cases: array<'a>,
     ) => (
       ~name: string,
+      ~options: testCollectorOptions,
       ~f: @uncurry ('a, testCtx) => promise<unit>,
-      ~timeout: Js.undefined<int>,
     ) => unit = "for"
   }
 
-  @inline
-  let test = (cases, name, ~timeout=?, f) =>
-    Ext.testObj(~test=Ext.test, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
+  @send
+  external testObj: (
+    ~test: test,
+    ~cases: array<'a>,
+  ) => (~name: string, ~options: testCollectorOptions, ~f: @uncurry ('a, testCtx) => unit) => unit =
+    "for"
+
+  @send
+  external testObjAsync: (
+    ~test: test,
+    ~cases: array<'a>,
+  ) => (
+    ~name: string,
+    ~options: testCollectorOptions,
+    ~f: @uncurry ('a, testCtx) => promise<unit>,
+  ) => unit = "for"
+
+  @send
+  external itObj: (
+    ~it: it,
+    ~cases: array<'a>,
+  ) => (~name: string, ~options: testCollectorOptions, ~f: @uncurry ('a, testCtx) => unit) => unit =
+    "for"
+
+  @send
+  external itObjAsync: (
+    ~it: it,
+    ~cases: array<'a>,
+  ) => (
+    ~name: string,
+    ~options: testCollectorOptions,
+    ~f: @uncurry ('a, testCtx) => promise<unit>,
+  ) => unit = "for"
 
   @inline
-  let testAsync = (cases, name, ~timeout=?, f) =>
-    Ext.testObjAsync(~test=Ext.test, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
-  let it = (cases, name, ~timeout=?, f) =>
-    Ext.itObj(~it=Ext.it, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
-  let itAsync = (cases, name, ~timeout=?, f) =>
-    Ext.itObjAsync(~it=Ext.it, ~cases)(~name, ~f, ~timeout=timeout->Js.Undefined.fromOption)
-
-  @inline
-  let describe = (cases, name, ~timeout=?, f) =>
+  let describe = (
+    cases,
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~shuffle=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    f,
+  ) =>
     Ext.describeObj(~describe=Ext.describe, ~cases)(
       ~name,
+      ~options={
+        ?retry,
+        ?repeats,
+        ?shuffle,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
       ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
     )
 
   @inline
-  let describeAsync = (cases, name, ~timeout=?, f) =>
+  let describeAsync = (
+    cases,
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~shuffle=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    f,
+  ) =>
     Ext.describeObjAsync(~describe=Ext.describe, ~cases)(
       ~name,
+      ~options={
+        ?retry,
+        ?repeats,
+        ?shuffle,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
       ~f,
-      ~timeout=timeout->Js.Undefined.fromOption,
+    )
+
+  @inline
+  let test = (
+    cases,
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    f,
+  ) =>
+    Ext.testObj(~test=Ext.test, ~cases)(
+      ~name,
+      ~options={
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      ~f,
+    )
+
+  @inline
+  let testAsync = (
+    cases,
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    f,
+  ) =>
+    Ext.testObjAsync(~test=Ext.test, ~cases)(
+      ~name,
+      ~options={
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      ~f,
+    )
+
+  @inline
+  let it = (
+    cases,
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    f,
+  ) =>
+    Ext.itObj(~it=Ext.it, ~cases)(
+      ~name,
+      ~options={
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      ~f,
+    )
+
+  @inline
+  let itAsync = (
+    cases,
+    name,
+    ~timeout=?,
+    ~retry=?,
+    ~repeats=?,
+    ~concurrent=?,
+    ~sequential=?,
+    ~skip=?,
+    ~only=?,
+    ~todo=?,
+    ~fails=?,
+    f,
+  ) =>
+    Ext.itObjAsync(~it=Ext.it, ~cases)(
+      ~name,
+      ~options={
+        ?retry,
+        ?repeats,
+        ?concurrent,
+        ?sequential,
+        ?skip,
+        ?only,
+        ?todo,
+        ?fails,
+      },
+      ~f,
     )
 }
 
