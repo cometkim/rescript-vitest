@@ -308,6 +308,7 @@ include MakeRunner({
   external itAsync: testAsyncDef = "it"
 })
 
+@deprecated("Use `~concurrent` argument instead.")
 module Concurrent = {
   type concurrent_describe
   type concurrent_test
@@ -340,6 +341,7 @@ module Concurrent = {
   })
 }
 
+@deprecated("Use `~only` argument instead.")
 module Only = {
   type only_describe
   type only_test
@@ -412,6 +414,7 @@ module Only = {
   }
 }
 
+@deprecated("Use `~skip` argument or `t->skip` API instead.")
 module Skip = {
   type skip_describe
   type skip_test
