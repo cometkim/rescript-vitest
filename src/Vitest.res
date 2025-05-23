@@ -1302,6 +1302,12 @@ external hasAssertion: testCtxExpect => unit = "hasAssertion"
 @inline
 let hasAssertion = testCtx => testCtx->inner->hasAssertion
 
+@send external skip: (testCtx, ~note: string=?) => unit = "skip"
+
+@send external skipIf: (testCtx, bool, ~note: string=?) => unit = "skip"
+@inline
+let skipIf = (testCtx, ~note=?, condition) => testCtx->skipIf(condition, ~note?)
+
 @scope("import.meta") @val
 external inSource: bool = "vitest"
 

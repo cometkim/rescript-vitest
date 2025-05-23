@@ -35,3 +35,21 @@ let throwExn = () => {
 test("Exn", t => {
   t->expect(() => throwExn())->Expect.toThrowError
 })
+
+test(~skip=true, "Skip 1", t => {
+  t->expect(true)->Expect.toBeTruthy
+})
+
+test("Skip 2", t => {
+  t->skip(~note="Skipping this test")
+  t->expect(true)->Expect.toBeFalsy
+})
+
+test("Skip 3", t => {
+  t->skipIf(true)
+  t->expect(true)->Expect.toBeFalsy
+})
+
+test(~fails=true, "Fails", t => {
+  t->expect(true)->Expect.toBeFalsy
+})
