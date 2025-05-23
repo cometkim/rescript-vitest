@@ -229,6 +229,7 @@ module MakeConcurrentRunner = (Runner: ConcurrentRunner) => {
         ?timeout,
         ?retry,
         ?repeats,
+        ?shuffle,
         ?skip,
         ?only,
         ?todo,
