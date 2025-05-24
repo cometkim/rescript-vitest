@@ -879,7 +879,7 @@ module type ForType = {
     ~only: bool=?,
     ~todo: bool=?,
     ~fails: bool=?,
-    ('a, testCtx) => unit,
+    'a => unit,
   ) => unit
   let describeAsync: (
     array<'a>,
@@ -893,7 +893,7 @@ module type ForType = {
     ~only: bool=?,
     ~todo: bool=?,
     ~fails: bool=?,
-    ('a, testCtx) => promise<unit>,
+    'a => promise<unit>,
   ) => unit
 
   let test: (
@@ -974,11 +974,7 @@ module For: ForType = {
     external describeObj: (
       ~describe: describe,
       ~cases: array<'a>,
-    ) => (
-      ~name: string,
-      ~options: testCollectorOptions,
-      ~f: @uncurry ('a, testCtx) => unit,
-    ) => unit = "for"
+    ) => (~name: string, ~options: testCollectorOptions, ~f: @uncurry ('a => unit)) => unit = "for"
 
     @send
     external describeObjAsync: (
@@ -987,7 +983,7 @@ module For: ForType = {
     ) => (
       ~name: string,
       ~options: testCollectorOptions,
-      ~f: @uncurry ('a, testCtx) => promise<unit>,
+      ~f: @uncurry ('a => promise<unit>),
     ) => unit = "for"
 
     @send
