@@ -1818,7 +1818,7 @@ __metadata:
     vitest: "npm:^4.0.0"
   peerDependencies:
     rescript: ^10.1.0 || ^11.0.0-0 || ^12.0.0-0
-    vite: ^6.0.0 || ^7.0.0
+    vite: ^6.0.0 || ^7.0.0 || ^8.0.0
   languageName: unknown
   linkType: soft
 
