@@ -26,7 +26,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build ReScript
-        run: yarn rescript build -with-deps
+        run: yarn rescript build
 
       - name: Execute Tests
         run: yarn test run

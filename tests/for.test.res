@@ -12,23 +12,23 @@ sumObj->For.test("test: sum $a+$b=$sum", (i, t) => {
 })
 
 sum2->For.test("test: %i=%s", ((a, b), t) => {
-  t->expect(a->Js.Int.toString)->Expect.toBe(b)
-  t->expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+  t->expect(a->Int.toString)->Expect.toBe(b)
+  t->expect((a + 1)->Int.toString)->Expect.not->Expect.toBe(b)
 })
 
 sum3->For.test("test: sum %i+%i=%s", ((a, b, sum), t) => {
-  t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum4->For.test("test: sum %i+%i+%i=%s", ((a, b, c, sum), t) => {
-  t->expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum5->For.test("test: sum %i+%i+%i+%i=%s", ((a, b, c, d, sum), t) => {
-  t->expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c + d)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + d + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sumObj->For.testAsync("testAsync: sum $a+$b=$sum", async (i, t) => {
@@ -37,23 +37,23 @@ sumObj->For.testAsync("testAsync: sum $a+$b=$sum", async (i, t) => {
 })
 
 sum2->For.testAsync("testAsync: %i=%s", async ((a, b), t) => {
-  t->expect(a->Js.Int.toString)->Expect.toBe(b)
-  t->expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+  t->expect(a->Int.toString)->Expect.toBe(b)
+  t->expect((a + 1)->Int.toString)->Expect.not->Expect.toBe(b)
 })
 
 sum3->For.testAsync("testAsync: sum %i+%i=%s", async ((a, b, sum), t) => {
-  t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum4->For.testAsync("testAsync: sum %i+%i+%i=%s", async ((a, b, c, sum), t) => {
-  t->expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum5->For.testAsync("testAsync: sum %i+%i+%i+%i=%s", async ((a, b, c, d, sum), t) => {
-  t->expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c + d)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + d + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sumObj->For.it("it: sum $a+$b=$sum", (i, t) => {
@@ -62,23 +62,23 @@ sumObj->For.it("it: sum $a+$b=$sum", (i, t) => {
 })
 
 sum2->For.it("it: %i=%s", ((a, b), t) => {
-  t->expect(a->Js.Int.toString)->Expect.toBe(b)
-  t->expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+  t->expect(a->Int.toString)->Expect.toBe(b)
+  t->expect((a + 1)->Int.toString)->Expect.not->Expect.toBe(b)
 })
 
 sum3->For.it("it: sum %i+%i=%s", ((a, b, sum), t) => {
-  t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum4->For.it("it: sum %i+%i+%i=%s", ((a, b, c, sum), t) => {
-  t->expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum5->For.it("it: sum %i+%i+%i+%i=%s", ((a, b, c, d, sum), t) => {
-  t->expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c + d)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + d + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sumObj->For.itAsync("itAsync: sum $a+$b=$sum", async (i, t) => {
@@ -87,23 +87,23 @@ sumObj->For.itAsync("itAsync: sum $a+$b=$sum", async (i, t) => {
 })
 
 sum2->For.itAsync("itAsync: %i=%s", async ((a, b), t) => {
-  t->expect(a->Js.Int.toString)->Expect.toBe(b)
-  t->expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+  t->expect(a->Int.toString)->Expect.toBe(b)
+  t->expect((a + 1)->Int.toString)->Expect.not->Expect.toBe(b)
 })
 
 sum3->For.itAsync("itAsync: sum %i+%i=%s", async ((a, b, sum), t) => {
-  t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum4->For.itAsync("itAsync: sum %i+%i+%i=%s", async ((a, b, c, sum), t) => {
-  t->expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sum5->For.itAsync("itAsync: sum %i+%i+%i+%i=%s", async ((a, b, c, d, sum), t) => {
-  t->expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-  t->expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+  t->expect((a + b + c + d)->Int.toString)->Expect.toBe(sum)
+  t->expect((a + b + c + d + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
 })
 
 sumObj->For.describe("sum $a+$b=$sum", i => {
@@ -115,29 +115,29 @@ sumObj->For.describe("sum $a+$b=$sum", i => {
 
 sum2->For.describe("%i=%s", ((a, b)) => {
   test("inner test", t => {
-    t->expect(a->Js.Int.toString)->Expect.toBe(b)
-    t->expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+    t->expect(a->Int.toString)->Expect.toBe(b)
+    t->expect((a + 1)->Int.toString)->Expect.not->Expect.toBe(b)
   })
 })
 
 sum3->For.describe("sum %i+%i=%s", ((a, b, sum)) => {
   test("inner test", t => {
-    t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-    t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    t->expect((a + b)->Int.toString)->Expect.toBe(sum)
+    t->expect((a + b + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
   })
 })
 
 sum4->For.describe("sum %i+%i+%i=%s", ((a, b, c, sum)) => {
   test("inner test", t => {
-    t->expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-    t->expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    t->expect((a + b + c)->Int.toString)->Expect.toBe(sum)
+    t->expect((a + b + c + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
   })
 })
 
 sum5->For.describe("sum %i+%i+%i+%i=%s", ((a, b, c, d, sum)) => {
   test("inner test", t => {
-    t->expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-    t->expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    t->expect((a + b + c + d)->Int.toString)->Expect.toBe(sum)
+    t->expect((a + b + c + d + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
   })
 })
 
@@ -150,28 +150,28 @@ sumObj->For.describeAsync("sum $a+$b=$sum", async i => {
 
 sum2->For.describeAsync("%i=%s", async ((a, b)) => {
   test("inner test", t => {
-    t->expect(a->Js.Int.toString)->Expect.toBe(b)
-    t->expect((a + 1)->Js.Int.toString)->Expect.not->Expect.toBe(b)
+    t->expect(a->Int.toString)->Expect.toBe(b)
+    t->expect((a + 1)->Int.toString)->Expect.not->Expect.toBe(b)
   })
 })
 
 sum3->For.describeAsync("sum %i+%i=%s", async ((a, b, sum)) => {
   test("inner test", t => {
-    t->expect((a + b)->Js.Int.toString)->Expect.toBe(sum)
-    t->expect((a + b + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    t->expect((a + b)->Int.toString)->Expect.toBe(sum)
+    t->expect((a + b + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
   })
 })
 
 sum4->For.describeAsync("sum %i+%i+%i=%s", async ((a, b, c, sum)) => {
   test("inner test", t => {
-    t->expect((a + b + c)->Js.Int.toString)->Expect.toBe(sum)
-    t->expect((a + b + c + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    t->expect((a + b + c)->Int.toString)->Expect.toBe(sum)
+    t->expect((a + b + c + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
   })
 })
 
 sum5->For.describeAsync("sum %i+%i+%i+%i=%s", async ((a, b, c, d, sum)) => {
   test("inner test", t => {
-    t->expect((a + b + c + d)->Js.Int.toString)->Expect.toBe(sum)
-    t->expect((a + b + c + d + 1)->Js.Int.toString)->Expect.not->Expect.toBe(sum)
+    t->expect((a + b + c + d)->Int.toString)->Expect.toBe(sum)
+    t->expect((a + b + c + d + 1)->Int.toString)->Expect.not->Expect.toBe(sum)
   })
 })

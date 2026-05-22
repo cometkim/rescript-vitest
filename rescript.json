@@ -14,9 +14,5 @@
   "package-specs": {
     "module": "esmodule",
     "in-source": true
-  },
-  "bs-dependencies": [
-  ],
-  "bs-dev-dependencies": [
-  ]
+  }
 }

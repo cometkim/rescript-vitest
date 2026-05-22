@@ -11,7 +11,7 @@ describe("Assert", () => {
 
   test("unreachable", _t => {
     try {
-      let _ = Js.Exn.raiseError("error")
+      let _ = JsError.throwWithMessage("error")
       Assert.unreachable()
     } catch {
     | _ => Assert.assert_(~message="threw error", true)
@@ -20,7 +20,7 @@ describe("Assert", () => {
     try {
       expect(true)->Expect.toBe(true)
     } catch {
-      | _ => Assert.unreachable()
+    | _ => Assert.unreachable()
     }
   })
 })
@@ -78,7 +78,7 @@ describe("Expect", () => {
   })
 
   test("toBeNull", _t => {
-    Js.Null.empty->expect->Expect.toBeNull
+    Null.null->expect->Expect.toBeNull
   })
 
   test("toEqual", _t => {
@@ -140,11 +140,11 @@ describe("Expect", () => {
   })
 
   test("toThrow", _t => {
-    expect(() => raise(Js.Exn.raiseError("error")))->Expect.toThrow
+    expect(() => throw(JsError.throwWithMessage("error")))->Expect.toThrow
   })
 
   test("toThrowError", _t => {
-    expect(() => raise(Js.Exn.raiseError("error")))->Expect.toThrowError(~message="error")
+    expect(() => throw(JsError.throwWithMessage("error")))->Expect.toThrowError(~message="error")
   })
 
   describe("Int", () => {
@@ -194,7 +194,7 @@ describe("Expect", () => {
     test(
       "toBeNaN",
       _t => {
-        expect(Js.Math.acos(2.))->Expect.Float.toBeNaN
+        expect(Math.acos(2.))->Expect.Float.toBeNaN
       },
     )
 
@@ -265,9 +265,9 @@ describe("Expect", () => {
     test(
       "toMatch",
       _t => {
-        expect("hello")->Expect.String.toMatch(%re("/h.*o/"))
-        expect("world")->Expect.String.toMatch(%re("/w.*d/"))
-        expect("hello")->Expect.not->Expect.String.toMatch(%re("/x.*y/"))
+        expect("hello")->Expect.String.toMatch(/h.*o/)
+        expect("world")->Expect.String.toMatch(/w.*d/)
+        expect("hello")->Expect.not->Expect.String.toMatch(/x.*y/)
       },
     )
   })
@@ -359,8 +359,8 @@ describe("Expect", () => {
     test(
       "toHaveProperty",
       _t => {
-        let dict = Js.Dict.empty()
-        Js.Dict.set(dict, "key", "value")
+        let dict = Dict.make()
+        dict->Dict.set("key", "value")
         expect(dict)->Expect.Dict.toHaveProperty("key", "value")
         expect(dict)->Expect.not->Expect.Dict.toHaveProperty("nonexistent", "value")
       },
@@ -369,8 +369,8 @@ describe("Expect", () => {
     test(
       "toHaveKey",
       _t => {
-        let dict = Js.Dict.empty()
-        Js.Dict.set(dict, "key", "value")
+        let dict = Dict.make()
+        dict->Dict.set("key", "value")
         expect(dict)->Expect.Dict.toHaveKey("key")
         expect(dict)->Expect.not->Expect.Dict.toHaveKey("nonexistent")
       },
@@ -379,15 +379,13 @@ describe("Expect", () => {
     test(
       "toMatch",
       _t => {
-        let dict = Js.Dict.empty()
-        Js.Dict.set(dict, "key1", "value1")
-        Js.Dict.set(dict, "key2", "value2")
-        expect(dict)->Expect.Dict.toMatch(
-          Js.Dict.fromArray([("key1", "value1"), ("key2", "value2")]),
-        )
-        expect(dict)->Expect.Dict.toMatch(Js.Dict.fromArray([("key1", "value1")]))
-        expect(dict)->Expect.Dict.toMatch(Js.Dict.fromArray([("key2", "value2")]))
-        expect(dict)->Expect.not->Expect.Dict.toMatch(Js.Dict.fromArray([("key1", "value2")]))
+        let dict = Dict.make()
+        dict->Dict.set("key1", "value1")
+        dict->Dict.set("key2", "value2")
+        expect(dict)->Expect.Dict.toMatch(Dict.fromArray([("key1", "value1"), ("key2", "value2")]))
+        expect(dict)->Expect.Dict.toMatch(Dict.fromArray([("key1", "value1")]))
+        expect(dict)->Expect.Dict.toMatch(Dict.fromArray([("key2", "value2")]))
+        expect(dict)->Expect.not->Expect.Dict.toMatch(Dict.fromArray([("key1", "value2")]))
       },
     )
   })
@@ -396,7 +394,7 @@ describe("Expect", () => {
     testAsync(
       "rejects",
       async _t => {
-        let promise = () => Js.Promise.reject(%raw(`new Error("hi")`))
+        let promise = () => Promise.reject(%raw(`new Error("hi")`))
         await expect(promise())->Expect.Promise.rejects->Expect.Promise.toThrow(~message="hi")
         await expect(promise())->Expect.Promise.rejects->Expect.Promise.toThrowError(~message="hi")
       },
@@ -405,7 +403,7 @@ describe("Expect", () => {
     testAsync(
       "resolves",
       async _t => {
-        let promise = () => Js.Promise.resolve(1)
+        let promise = () => Promise.resolve(1)
         await expect(promise())->Expect.Promise.resolves->Expect.Promise.toEqual(1)
       },
     )

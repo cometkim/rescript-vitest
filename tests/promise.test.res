@@ -2,8 +2,8 @@ let echoAsync = async msg => msg
 
 exception TestError
 
-let throwAsync: unit => Js.Promise2.t<string> = async () => {
-  raise(TestError)
+let throwAsync: unit => Promise.t<string> = async () => {
+  throw(TestError)
 }
 
 open Vitest

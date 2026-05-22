@@ -14,7 +14,7 @@ describe("Vi", () => {
     let _ = Vi.useRealTimers()
   })
 
-  let _promise = () => Js.Promise2.resolve()
+  let _promise = () => Promise.resolve()
 
   itAsync("should compile fake timers correctly", async _t => {
     let _ = Vi.useFakeTimers()
@@ -23,8 +23,8 @@ describe("Vi", () => {
     let called = ref(false)
     let called2 = ref(false)
 
-    let _ = Js.Global.setTimeout(() => called := true, 100)
-    let _ = Js.Global.setTimeout(() => called2 := true, 200)
+    let _ = setTimeout(() => called := true, 100)
+    let _ = setTimeout(() => called2 := true, 200)
     let _ = Vi.advanceTimersByTime(10)
     called->expect->Expect.toEqual({contents: false})
     called2->expect->Expect.toEqual({contents: false})
@@ -39,8 +39,8 @@ describe("Vi", () => {
     called2 := false
     Vi.getTimerCount()->expect->Expect.toBe(0)
 
-    let _ = Js.Global.setTimeout(() => called := true, 1000)
-    let _ = Js.Global.setTimeout(() => called2 := true, 2000)
+    let _ = setTimeout(() => called := true, 1000)
+    let _ = setTimeout(() => called2 := true, 2000)
     Vi.getTimerCount()->expect->Expect.toBe(2)
     let _ = Vi.runAllTimers()
     called->expect->Expect.toEqual({contents: true})
@@ -48,8 +48,8 @@ describe("Vi", () => {
     called := false
     called2 := false
 
-    let _ = Js.Global.setTimeout(() => called := true, 1000)
-    let _ = Js.Global.setTimeout(() => called2 := true, 2000)
+    let _ = setTimeout(() => called := true, 1000)
+    let _ = setTimeout(() => called2 := true, 2000)
     Vi.getTimerCount()->expect->Expect.toBe(2)
     let _ = await Vi.runAllTimersAsync()
     called->expect->Expect.toEqual({contents: true})
@@ -57,20 +57,20 @@ describe("Vi", () => {
     called := false
     called2 := false
 
-    let _ = Js.Global.setTimeout(() => called := true, 1000)
+    let _ = setTimeout(() => called := true, 1000)
     Vi.getTimerCount()->expect->Expect.toBe(1)
     let _ = Vi.runOnlyPendingTimers()
     called->expect->Expect.toEqual({contents: true})
     called := false
 
-    let _ = Js.Global.setTimeout(() => called := true, 1000)
+    let _ = setTimeout(() => called := true, 1000)
     Vi.getTimerCount()->expect->Expect.toBe(1)
     let _ = await Vi.runOnlyPendingTimersAsync()
     called->expect->Expect.toEqual({contents: true})
     called := false
 
-    let _ = Js.Global.setTimeout(() => called := true, 1000)
-    let _ = Js.Global.setTimeout(() => called2 := true, 2000)
+    let _ = setTimeout(() => called := true, 1000)
+    let _ = setTimeout(() => called2 := true, 2000)
     Vi.getTimerCount()->expect->Expect.toBe(2)
     let _ = Vi.advanceTimersToNextTimer()
     called->expect->Expect.toEqual({contents: true})
@@ -79,7 +79,7 @@ describe("Vi", () => {
     let _ = await Vi.advanceTimersToNextTimerAsync()
     called2.contents->expect->Expect.toBe(true)
 
-    let _ = Js.Global.setTimeout(() => called := true, 1000)
+    let _ = setTimeout(() => called := true, 1000)
     Vi.getTimerCount()->expect->Expect.toBe(1)
     let _ = Vi.clearAllTimers()
     Vi.getTimerCount()->expect->Expect.toBe(0)
@@ -92,28 +92,28 @@ describe("Vi", () => {
 
   itAsync("should compile waitFor correctly", async _t => {
     let called = ref(false)
-    let _ = Js.Global.setTimeout(() => called := true, 100)
+    let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ())
     called->expect->Expect.toEqual({contents: true})
 
     let called = ref(false)
-    let _ = Js.Global.setTimeout(() => called := true, 100)
+    let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ~timeout=200, ())
     called->expect->Expect.toEqual({contents: true})
 
     let called = ref(false)
-    let _ = Js.Global.setTimeout(() => called := true, 100)
+    let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ~interval=50, ())
     called->expect->Expect.toEqual({contents: true})
 
     let called = ref(false)
-    let _ = Js.Global.setTimeout(() => called := true, 100)
+    let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ~timeout=200, ~interval=50, ())
     called->expect->Expect.toEqual({contents: true})
 
     let run = async () => {
       let called = ref(false)
-      let _ = Js.Global.setTimeout(() => called := true, 100)
+      let _ = setTimeout(() => called := true, 100)
       await Vi.waitFor(() => Assert.assert_(called.contents == true), ~timeout=50, ())
       called->expect->Expect.toEqual({contents: false})
     }
@@ -128,9 +128,9 @@ describe("Vi", () => {
     let _ = Vi.useFakeTimers()
 
     let sleep = ms => {
-      Js.Promise2.make(
-        (~resolve, ~reject as _) => {
-          let _ = Js.Global.setTimeout(() => resolve(. ()), ms)
+      Promise.make(
+        (resolve, _reject) => {
+          let _ = setTimeout(() => resolve(), ms)
         },
       )
     }
@@ -151,10 +151,10 @@ describe("Vi", () => {
   it("compile mocking system time correctly", _t => {
     Vi.getMockedSystemTime()->expect->Expect.toBeNone
 
-    let date = Js.Date.makeWithYMD(~year=2021., ~month=1., ~date=1., ())
+    let date = Date.makeWithYMD(~year=2021, ~month=1, ~day=1)
     let _ = Vi.setSystemTime(#Date(date))
     Vi.getMockedSystemTime()->expect->Expect.toBeSome(~some=Some(date))
-    Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThan(Js.Date.getTime(date))
+    Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThan(Date.getTime(date))
 
     Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThanOrEqual(0.0)
     let _ = Vi.useRealTimers()

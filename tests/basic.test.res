@@ -1,4 +1,3 @@
-open Js
 open Vitest
 
 test("Math.sqrt()", t => {
@@ -8,7 +7,7 @@ test("Math.sqrt()", t => {
 
   t->expect(Math.sqrt(4.0))->toBe(2.0)
   t->expect(Math.sqrt(144.0))->toBe(12.0)
-  t->expect(Math.sqrt(2.0))->toBe(Math._SQRT2)
+  t->expect(Math.sqrt(2.0))->toBe(Math.Constants.sqrt2)
 })
 
 @scope("JSON") @val external parse: string => 'a = "parse"
@@ -29,7 +28,7 @@ test("JSON", t => {
 exception TestError
 
 let throwExn = () => {
-  raise(TestError)
+  throw(TestError)
 }
 
 test("Exn", t => {
