@@ -1,7 +1,6 @@
 @@uncurried
 
 open Vitest
-open! Bindings.BuiltIn
 
 @val external nextTick: (unit => unit) => unit = "process.nextTick"
 
@@ -16,9 +15,9 @@ describe("Vi", () => {
 
   let _promise = () => Promise.resolve()
 
-  itAsync("should compile fake timers correctly", async _t => {
+  itAsync("should compile fake timers correctly", async t => {
     let _ = Vi.useFakeTimers()
-    Vi.isFakeTimers()->expect->Expect.toBe(true)
+    t->expect(Vi.isFakeTimers())->Expect.toBe(true)
 
     let called = ref(false)
     let called2 = ref(false)
@@ -26,105 +25,105 @@ describe("Vi", () => {
     let _ = setTimeout(() => called := true, 100)
     let _ = setTimeout(() => called2 := true, 200)
     let _ = Vi.advanceTimersByTime(10)
-    called->expect->Expect.toEqual({contents: false})
-    called2->expect->Expect.toEqual({contents: false})
+    t->expect(called)->Expect.toEqual({contents: false})
+    t->expect(called2)->Expect.toEqual({contents: false})
 
     let _ = Vi.advanceTimersByTime(100)
-    called->expect->Expect.toEqual({contents: true})
-    called2->expect->Expect.toEqual({contents: false})
+    t->expect(called)->Expect.toEqual({contents: true})
+    t->expect(called2)->Expect.toEqual({contents: false})
     called := false
 
     let _ = await Vi.advanceTimersByTimeAsync(1000)
-    called2->expect->Expect.toEqual({contents: true})
+    t->expect(called2)->Expect.toEqual({contents: true})
     called2 := false
-    Vi.getTimerCount()->expect->Expect.toBe(0)
+    t->expect(Vi.getTimerCount())->Expect.toBe(0)
 
     let _ = setTimeout(() => called := true, 1000)
     let _ = setTimeout(() => called2 := true, 2000)
-    Vi.getTimerCount()->expect->Expect.toBe(2)
+    t->expect(Vi.getTimerCount())->Expect.toBe(2)
     let _ = Vi.runAllTimers()
-    called->expect->Expect.toEqual({contents: true})
-    called2->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
+    t->expect(called2)->Expect.toEqual({contents: true})
     called := false
     called2 := false
 
     let _ = setTimeout(() => called := true, 1000)
     let _ = setTimeout(() => called2 := true, 2000)
-    Vi.getTimerCount()->expect->Expect.toBe(2)
+    t->expect(Vi.getTimerCount())->Expect.toBe(2)
     let _ = await Vi.runAllTimersAsync()
-    called->expect->Expect.toEqual({contents: true})
-    called2->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
+    t->expect(called2)->Expect.toEqual({contents: true})
     called := false
     called2 := false
 
     let _ = setTimeout(() => called := true, 1000)
-    Vi.getTimerCount()->expect->Expect.toBe(1)
+    t->expect(Vi.getTimerCount())->Expect.toBe(1)
     let _ = Vi.runOnlyPendingTimers()
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
     called := false
 
     let _ = setTimeout(() => called := true, 1000)
-    Vi.getTimerCount()->expect->Expect.toBe(1)
+    t->expect(Vi.getTimerCount())->Expect.toBe(1)
     let _ = await Vi.runOnlyPendingTimersAsync()
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
     called := false
 
     let _ = setTimeout(() => called := true, 1000)
     let _ = setTimeout(() => called2 := true, 2000)
-    Vi.getTimerCount()->expect->Expect.toBe(2)
+    t->expect(Vi.getTimerCount())->Expect.toBe(2)
     let _ = Vi.advanceTimersToNextTimer()
-    called->expect->Expect.toEqual({contents: true})
-    called2.contents->expect->Expect.toBe(false)
+    t->expect(called)->Expect.toEqual({contents: true})
+    t->expect(called2.contents)->Expect.toBe(false)
 
     let _ = await Vi.advanceTimersToNextTimerAsync()
-    called2.contents->expect->Expect.toBe(true)
+    t->expect(called2.contents)->Expect.toBe(true)
 
     let _ = setTimeout(() => called := true, 1000)
-    Vi.getTimerCount()->expect->Expect.toBe(1)
+    t->expect(Vi.getTimerCount())->Expect.toBe(1)
     let _ = Vi.clearAllTimers()
-    Vi.getTimerCount()->expect->Expect.toBe(0)
+    t->expect(Vi.getTimerCount())->Expect.toBe(0)
 
     nextTick(() => called := true)
     let _ = Vi.runAllTicks()
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
     called := false
   })
 
-  itAsync("should compile waitFor correctly", async _t => {
+  itAsync("should compile waitFor correctly", async t => {
     let called = ref(false)
     let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ())
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
 
     let called = ref(false)
     let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ~timeout=200, ())
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
 
     let called = ref(false)
     let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ~interval=50, ())
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
 
     let called = ref(false)
     let _ = setTimeout(() => called := true, 100)
     await Vi.waitFor(() => Assert.assert_(called.contents == true), ~timeout=200, ~interval=50, ())
-    called->expect->Expect.toEqual({contents: true})
+    t->expect(called)->Expect.toEqual({contents: true})
 
     let run = async () => {
       let called = ref(false)
       let _ = setTimeout(() => called := true, 100)
       await Vi.waitFor(() => Assert.assert_(called.contents == true), ~timeout=50, ())
-      called->expect->Expect.toEqual({contents: false})
+      t->expect(called)->Expect.toEqual({contents: false})
     }
 
-    await run()
-    ->expect
+    await t
+    ->expect(run())
     ->Expect.Promise.rejects
     ->Expect.Promise.toThrow
   })
 
-  itAsync("should compile waitForAsync correctly", async _t => {
+  itAsync("should compile waitForAsync correctly", async t => {
     let _ = Vi.useFakeTimers()
 
     let sleep = ms => {
@@ -142,23 +141,23 @@ describe("Vi", () => {
 
     let run = () => Vi.waitForAsync(() => sleep(100), ~timeout=50, ())
 
-    await run()
-    ->expect
+    await t
+    ->expect(run())
     ->Expect.Promise.rejects
     ->Expect.Promise.toThrow
   })
 
-  it("compile mocking system time correctly", _t => {
-    Vi.getMockedSystemTime()->expect->Expect.toBeNone
+  it("compile mocking system time correctly", t => {
+    t->expect(Vi.getMockedSystemTime())->Expect.toBeNone
 
     let date = Date.makeWithYMD(~year=2021, ~month=1, ~day=1)
     let _ = Vi.setSystemTime(#Date(date))
-    Vi.getMockedSystemTime()->expect->Expect.toBeSome(~some=Some(date))
-    Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThan(Date.getTime(date))
+    t->expect(Vi.getMockedSystemTime())->Expect.toBeSome(~some=Some(date))
+    t->expect(Vi.getRealSystemTime())->Expect.Float.toBeGreaterThan(Date.getTime(date))
 
-    Vi.getRealSystemTime()->expect->Expect.Float.toBeGreaterThanOrEqual(0.0)
+    t->expect(Vi.getRealSystemTime())->Expect.Float.toBeGreaterThanOrEqual(0.0)
     let _ = Vi.useRealTimers()
-    Vi.isFakeTimers()->expect->Expect.toBe(false)
-    Vi.getMockedSystemTime()->expect->Expect.toBeNone
+    t->expect(Vi.isFakeTimers())->Expect.toBe(false)
+    t->expect(Vi.getMockedSystemTime())->Expect.toBeNone
   })
 })

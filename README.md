@@ -63,41 +63,6 @@ if Vitest.inSource {
 }
 ```
 
-### Migration from 1.x
-
-You need to bind test context `t` explicitly.
-
-```diff
-open Vitest
-
-describe("Hello, Vitest", () => {
--  test("This is a test case", _ => {
-+  test("This is a test case", t => {
-
--    assertions(3)
-+    t->assertions(3)
-
--    expect(1 + 2)->Expect.toBe(3)
-+    t->expect(1 + 2)->Expect.toBe(3)
-  })
-})
-```
-
-You can use simple flags for `skip`, `concurrent`, and `only`.
-
-```res
-Skip.test("This will be skipped", t => {
-  // ...
-})
-
-// Use simple flags instead.
-test(~skip=true, "This will be skipped", t => {
-  // ...
-})
-```
-
-Module bindings will be deprecated and removed in next major (v3)
-
 ## LICENCE
 
 MIT

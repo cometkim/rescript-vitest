@@ -1,22 +1,5 @@
 open Vitest_Types
 
-@deprecated("Implicit `BuiltIn` binding is deprecated, please bind the `t` context explicitly.")
-module BuiltIn = {
-  @module("vitest") @val
-  external testCtx: testCtx = "expect"
-
-  @module("vitest")
-  external expect: 'a => expected<'a> = "expect"
-
-  @send
-  external assertions: (testCtx, int) => unit = "assertions"
-  let assertions = x => testCtx->assertions(x)
-
-  @send
-  external hasAssertion: testCtx => unit = "hasAssertion"
-  let hasAssertion = () => testCtx->hasAssertion
-}
-
 module InSource = {
   @scope("import.meta.vitest") @val
   external describe: (string, @uncurry unit => unit) => unit = "describe"
