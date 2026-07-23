@@ -1,3 +1,5 @@
+/// <reference types="vitest/config" />
+
 import { defineConfig } from 'vite';
 import { configDefaults } from 'vitest/config';
 import rescript from '@jihchi/vite-plugin-rescript';
