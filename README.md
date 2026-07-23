@@ -14,9 +14,33 @@ ReScript v11.x with the [uncurried mode](https://rescript-lang.org/blog/uncurrie
 
 ## Config
 
-Configure with plain `vite.config.js`.
+Configure with plain `vite.config.js` or `vitest.config.js`.
 
 You can use [vite-plugin-rescript](https://github.com/jihchi/vite-plugin-rescript) to build ReScript automatically before the test.
+
+> [!NOTE]
+> You may need to exclude `lib/bs` directory manually, otherwise some build artifacts can be picked by Vitest and fail.
+> See [#36](https://github.com/cometkim/rescript-vitest/pull/36) for details.
+
+Example config:
+
+```js
+// vitest.config.js
+import { configDefaults, defineConfig } from 'vitest/config';
+import rescript from 'vite-plugin-rescript';
+
+export default defineConfig({
+  test: {
+    exclude: [
+      ...configDefaults.exclude, 
+      'lib/bs/**',
+    ],
+  },
+  plugins: [
+    rescript(),
+  ],
+});
+```
 
 ## Usage
 
