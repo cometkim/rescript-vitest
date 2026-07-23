@@ -1,7 +1,7 @@
 # rescript-vitest
 
-[![npm](https://img.shields.io/npm/v/rescript-vitest)](https://www.npmjs.com/package/rescript-vitest)
-[![npm downloads](https://img.shields.io/npm/dm/rescript-vitest)](https://www.npmjs.com/package/rescript-vitest)
+[![npm](https://img.shields.io/npm/v/rescript-vitest)](https://npmx.dev/package/rescript-vitest)
+[![npm downloads](https://img.shields.io/npm/dm/rescript-vitest)](https://npmx.dev/package/rescript-vitest)
 [![license](https://img.shields.io/github/license/cometkim/rescript-vitest)](#LICENSE)
 
 [ReScript](https://rescript-lang.org) bindings to [Vitest](https://vitest.dev)
