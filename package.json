@@ -50,7 +50,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "provenance": true
   },
   "packageManager": "yarn@4.17.1"
 }
