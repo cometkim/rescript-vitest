@@ -8,13 +8,13 @@ module InSource = {
   external test: (string, @uncurry testCtx => unit) => unit = "test"
 
   @scope("import.meta.vitest") @val
-  external testAsync: (string, @uncurry unit => promise<unit>) => unit = "test"
+  external testAsync: (string, @uncurry testCtx => promise<unit>) => unit = "test"
 
   @scope("import.meta.vitest") @val
-  external it: (string, @uncurry unit => unit) => unit = "it"
+  external it: (string, @uncurry testCtx => unit) => unit = "it"
 
   @scope("import.meta.vitest") @val
-  external itAsync: (string, @uncurry unit => promise<unit>) => unit = "it"
+  external itAsync: (string, @uncurry testCtx => promise<unit>) => unit = "it"
 
   @send
   external expect: (testCtx, 'a) => expected<'a> = "expect"
